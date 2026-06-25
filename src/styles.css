@@ -28,13 +28,14 @@ a { text-decoration: none; cursor: pointer; }
   --r-md:   8px;
   --r-lg:   12px;
 
-  --font-body: 'Noto Sans', sans-serif;
-  --font-ui:   'Inter', sans-serif;
-  --font-disp: 'IBM Plex Sans', sans-serif;
+  /* Tarmac type system — all roles use Noto Sans (--Font_Family-body/heading/caption/display) */
+  --font-body: var(--Font_Family-body, 'Noto Sans'), sans-serif;
+  --font-ui:   var(--Font_Family-caption, 'Noto Sans'), sans-serif;
+  --font-disp: var(--Font_Family-heading, 'Noto Sans'), sans-serif;
 }
 
 /* ── Shell ── */
-body { font-family: var(--font-body); background: var(--surface); color: var(--ink); font-size: 14px; line-height: 1.5; }
+body { font-family: var(--font-body); background: var(--surface); color: var(--ink); font-size: 14px; line-height: 1.5; font-weight: 400; -webkit-font-smoothing: antialiased; }
 .app  { display: flex; min-height: 100vh; }
 
 /* ── Sidebar ── */
