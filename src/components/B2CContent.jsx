@@ -358,12 +358,10 @@ export default function B2CContent() {
               <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)' }}>Finance</span>
             </div>
             <ClaimSection title="Loss & Damage Claims" icon={<IcoShield />} rows={[
-              { label: 'Approved (L30D)', value: '18', amount: '₹45,600', amtColor: 'var(--green)', bg: '#F4FBF8' },
               { label: 'Need your input', value: '7',  amount: '₹18,200', amtColor: 'var(--yellow)', bg: '#FDFAF2', cta: 'Respond' },
               { label: 'Rejected',        value: '3',  amount: '₹9,400',  amtColor: 'var(--red)',   bg: '#FDF2F3' },
             ]} />
             <ClaimSection title="Weight Disputes" icon={<IcoScale />} rows={[
-              { label: 'Approved (L30D)', value: '12', amount: '₹32,100', amtColor: 'var(--green)', bg: '#F4FBF8' },
               { label: 'Need your input', value: '5',  amount: '₹14,800', amtColor: 'var(--yellow)', bg: '#FDFAF2', cta: 'Respond' },
               { label: 'Rejected',        value: '2',  amount: '₹6,500',  amtColor: 'var(--red)',   bg: '#FDF2F3' },
             ]} />
