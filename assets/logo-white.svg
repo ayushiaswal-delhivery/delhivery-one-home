@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" fill="none">
+  
+  <g>
+    <path d="M0 0 L14 0 L14 48 L0 48 Z" fill="#FFFFFF"></path>
+    <path d="M14 0 L28 0 L28 8 L14 8 Z" fill="#FFFFFF"></path>
+    <path d="M14 40 L28 40 L28 48 L14 48 Z" fill="#FFFFFF"></path>
+    <path d="M28 0 L36 0 L36 6 L28 6 Z" fill="#FFFFFF"></path>
+    <path d="M28 42 L36 42 L36 48 L28 48 Z" fill="#FFFFFF"></path>
+    <path d="M36 6 L42 6 L42 12 L36 12 Z" fill="#FFFFFF"></path>
+    <path d="M36 36 L42 36 L42 42 L36 42 Z" fill="#FFFFFF"></path>
+    <path d="M42 12 L46 12 L46 36 L42 36 Z" fill="#FFFFFF"></path>
+    <rect x="28" y="20" width="10" height="10" fill="#ED1B36"></rect>
+  </g>
+  <text x="56" y="36" font-family="&#39;Noto Sans&#39;, &#39;IBM Plex Sans&#39;, sans-serif" font-weight="700" font-size="28" fill="#FFFFFF" letter-spacing="-0.5">delhivery</text>
+</svg>
