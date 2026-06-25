@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Badge, Chip, Alert, Card, FilterDropdown } from '@delhivery/tarmac'
+import { Button, Badge, Chip, Alert, Card } from '@delhivery/tarmac'
 
 // ── Inline SVG icons (Tarmac icon set style) ──────────────────────────────────
 const IcoWarning  = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -24,6 +24,31 @@ const IcoStop     = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="
 const IcoRain     = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="16" y1="13" x2="16" y2="21"/><line x1="8" y1="13" x2="8" y2="21"/><line x1="12" y1="15" x2="12" y2="23"/><path d="M20 16.58A5 5 0 0018 7h-1.26A8 8 0 104 15.25"/></svg>
 const IcoStarOut  = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
 const IcoInfo     = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+
+// ── Date filter trigger (matches Figma --surface/bg_coal/weaker style) ────────
+function DateFilter() {
+  const [open, setOpen] = useState(false)
+  const [label, setLabel] = useState('Last 7 days')
+  const opts = ['Last 7 days', 'Last 14 days', 'Last 30 days', 'Last 90 days']
+  return (
+    <div style={{ position: 'relative' }}>
+      <button onClick={() => setOpen(o => !o)} style={{ display: 'flex', alignItems: 'center', gap: 4, background: '#eff1f5', border: 'none', borderRadius: 4, padding: '8px 12px', fontSize: 14, fontWeight: 500, color: '#343c51', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>
+        {label}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      {open && (
+        <div style={{ position: 'absolute', right: 0, top: '100%', marginTop: 4, background: '#fff', border: '1px solid #e6e6e6', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.1)', zIndex: 200, minWidth: 140, overflow: 'hidden' }}>
+          {opts.map(o => (
+            <div key={o} onClick={() => { setLabel(o); setOpen(false) }} style={{ padding: '10px 16px', fontSize: 13, color: o === label ? '#ed1b36' : '#2b2b2b', fontWeight: o === label ? 600 : 400, cursor: 'pointer', background: o === label ? '#fde8eb' : 'transparent', fontFamily: '"Noto Sans", sans-serif' }}
+              onMouseEnter={e => { if (o !== label) e.currentTarget.style.background = '#f7f7f7' }}
+              onMouseLeave={e => { if (o !== label) e.currentTarget.style.background = 'transparent' }}
+            >{o}</div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 
 // ── Stat Card (uses Tarmac Badge for the label chip) ──────────────────────────
 function StatCard({ icon, iconBg, iconColor, label, value, children }) {
@@ -202,103 +227,39 @@ export default function B2CContent() {
       </div>
 
       {/* ── Orders Summary hero card (Figma node 1327:4800) ── */}
-      <div style={{
-        background: 'var(--Surface-BG_Primary-Default, #fff)',
-        border: '1px solid var(--Border-Neutral-Tertiary, #e6e6e6)',
-        borderRadius: 'var(--Radius-Large, 12px)',
-        padding: 'var(--Spacing-16, 16px)',
-        marginBottom: 24,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 10,
-      }}>
+      <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, padding: 16, marginBottom: 24 }}>
         {/* Header row */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{
-            fontSize: 'var(--Scale-700, 20px)',
-            fontWeight: 600,
-            lineHeight: 'var(--Scale-825, 26px)',
-            color: 'var(--Text-Heading-Tertiary, #2b2b2b)',
-            fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif',
-          }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+          <span style={{ fontSize: 20, fontWeight: 600, lineHeight: '26px', color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>
             Orders Summary
           </span>
-          <FilterDropdown
-            placeholder="Last 7 days"
-            size="sm"
-            options={[
-              { value: '7d',  label: 'Last 7 days' },
-              { value: '14d', label: 'Last 14 days' },
-              { value: '30d', label: 'Last 30 days' },
-              { value: '90d', label: 'Last 90 days' },
-            ]}
-          />
+          {/* Date filter — styled per Figma (--surface/bg_coal/weaker trigger) */}
+          <DateFilter />
         </div>
-
-        {/* Metric tiles row */}
-        <div style={{ display: 'flex', gap: 16 }}>
+        {/* Metric tiles — explicit row layout */}
+        <div style={{ display: 'flex', flexDirection: 'row', gap: 12, flexWrap: 'nowrap' }}>
           {[
-            { label: 'Pending manifest', value: '312',   delta: '+8%',  deltaDir: 'up' },
-            { label: 'To be shipped',    value: '156',   delta: '+3%',  deltaDir: 'up' },
-            { label: 'In Transit',       value: '1,088', delta: '+50%', deltaDir: 'up' },
-            { label: 'Delivered',        value: '2,981', delta: '+12%', deltaDir: 'up' },
-            { label: 'NDR',              value: '84',    delta: '-2%',  deltaDir: 'down' },
+            { label: 'Pending manifest', value: '312',   delta: '+8%',  up: true },
+            { label: 'To be shipped',    value: '156',   delta: '+3%',  up: true },
+            { label: 'In Transit',       value: '1,088', delta: '+50%', up: true },
+            { label: 'Delivered',        value: '2,981', delta: '+12%', up: true },
+            { label: 'NDR',              value: '84',    delta: '-2%',  up: false },
           ].map((tile, i) => (
-            <div key={i} style={{
-              flex: '1 0 0',
-              background: 'var(--Surface-BG_Primary-Weakest, #f9f9fb)',
-              borderRadius: 'var(--Radius-Default, 6px)',
-              padding: 'var(--Spacing-12, 12px)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 10,
-              overflow: 'hidden',
-            }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <span style={{
-                  fontSize: 'var(--Scale-500, 12px)',
-                  fontWeight: 400,
-                  lineHeight: 'var(--Scale-600, 16px)',
-                  color: 'var(--Text-Caption-Primary, #454545)',
-                  fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif',
-                  whiteSpace: 'nowrap',
-                }}>
-                  {tile.label}
-                </span>
-                <span style={{
-                  fontSize: 'var(--Scale-700, 20px)',
-                  fontWeight: 700,
-                  lineHeight: 'var(--Scale-825, 26px)',
-                  color: 'var(--Text-Body-Primary, #2b2b2b)',
-                  fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif',
-                }}>
-                  {tile.value}
-                </span>
+            <div key={i} style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 6, padding: 12 }}>
+              <div style={{ fontSize: 12, fontWeight: 400, lineHeight: '16px', color: '#454545', marginBottom: 6, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {tile.label}
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span style={{
-                  fontSize: 'var(--Scale-450, 10px)',
-                  fontWeight: 500,
-                  lineHeight: 'var(--Scale-500, 12px)',
-                  color: tile.deltaDir === 'up' ? 'var(--Text-Success-Primary, #1ba86e)' : 'var(--Text-Error-Primary, #ed1b36)',
-                  fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif',
-                  display: 'flex', alignItems: 'center', gap: 1,
-                }}>
+              <div style={{ fontSize: 20, fontWeight: 700, lineHeight: '26px', color: '#2b2b2b', marginBottom: 8 }}>
+                {tile.value}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                <span style={{ fontSize: 10, fontWeight: 500, color: tile.up ? '#1ba86e' : '#ed1b36', display: 'flex', alignItems: 'center', gap: 1 }}>
                   {tile.delta}
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ transform: tile.deltaDir === 'down' ? 'rotate(90deg)' : 'none' }}>
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ transform: tile.up ? 'none' : 'rotate(90deg)' }}>
                     <path d="M7 17L17 7M17 7H7M17 7v10"/>
                   </svg>
                 </span>
-                <span style={{
-                  fontSize: 'var(--Scale-450, 10px)',
-                  fontWeight: 500,
-                  lineHeight: 'var(--Scale-500, 12px)',
-                  color: 'var(--Text-Caption-Base, #808080)',
-                  fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif',
-                  whiteSpace: 'nowrap',
-                }}>
-                  vs last week
-                </span>
+                <span style={{ fontSize: 10, fontWeight: 500, color: '#808080' }}>vs last week</span>
               </div>
             </div>
           ))}
