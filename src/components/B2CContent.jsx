@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Badge, Chip, Alert, Card } from '@delhivery/tarmac'
+import { Button, Badge, Chip, Alert, Card, FilterDropdown } from '@delhivery/tarmac'
 
 // ── Inline SVG icons (Tarmac icon set style) ──────────────────────────────────
 const IcoWarning  = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -168,30 +168,142 @@ export default function B2CContent() {
   return (
     <div className="content" style={{ position: 'relative' }}>
 
-      {/* ── Business Overview ── */}
-      <Card isHoverable={false} style={{ marginBottom: 24, borderRadius: 12, border: '1px solid var(--rule)', overflow: 'hidden' }}>
-        <div style={{ padding: '16px 20px 12px', borderBottom: '1px solid var(--rule)' }}>
-          <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)' }}>Business Overview</div>
-          <div style={{ fontSize: 12, color: 'var(--ink-4)', marginTop: 2 }}>Last 30 days performance</div>
+      {/* ── Business Overview (Revenue KPIs) ── */}
+      <div style={{
+        background: 'var(--Surface-BG_Primary-Default, #fff)',
+        border: '1px solid var(--Border-Neutral-Tertiary, #e6e6e6)',
+        borderRadius: 'var(--Radius-Large, 12px)',
+        overflow: 'hidden',
+        marginBottom: 16,
+      }}>
+        <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--Border-Neutral-Tertiary, #e6e6e6)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--Text-Heading-Primary, #1a1a1a)', fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif' }}>Business Overview</div>
+            <div style={{ fontSize: 12, fontWeight: 400, color: 'var(--Text-Caption-Primary, #454545)', marginTop: 2, fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>Last 30 days performance</div>
+          </div>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
           {[
-            { icon: <IcoTrendUp />, iconColor: 'var(--green)', label: 'Revenue (OMS)',           value: '₹42.8L', delta: '+12% vs L30D', deltaColor: 'var(--green)' },
-            { icon: <IcoBox />,     iconColor: 'var(--blue)',  label: 'AOV',                     value: '₹1,247', delta: '+7% vs L30D',  deltaColor: 'var(--green)' },
-            { icon: <IcoBox />,     iconColor: '#7C3AED',      label: 'Total orders',             value: '3,432',  delta: '+2% vs L30D',  deltaColor: 'var(--green)' },
-            { icon: <IcoTruck />,   iconColor: '#E77337',      label: 'Shipped with Delhivery',   value: '1,544',  delta: '45% of total', deltaColor: 'var(--ink-4)' },
+            { icon: <IcoTrendUp />, iconColor: 'var(--Text-Success-Primary, #1ba86e)', label: 'Revenue (OMS)',         value: '₹42.8L', delta: '+12% vs L30D', deltaColor: 'var(--Text-Success-Primary, #1ba86e)' },
+            { icon: <IcoBox />,     iconColor: 'var(--Text-Accent-Primary, #2396fb)',  label: 'AOV',                   value: '₹1,247', delta: '+7% vs L30D',  deltaColor: 'var(--Text-Success-Primary, #1ba86e)' },
+            { icon: <IcoBox />,     iconColor: '#7C3AED',                              label: 'Total orders',           value: '3,432',  delta: '+2% vs L30D',  deltaColor: 'var(--Text-Success-Primary, #1ba86e)' },
+            { icon: <IcoTruck />,   iconColor: 'var(--Text-Warning-Primary, #cf9f02)', label: 'Shipped with Delhivery', value: '1,544',  delta: '45% of total', deltaColor: 'var(--Text-Caption-Base, #808080)' },
           ].map((m, i, arr) => (
-            <div key={i} style={{ padding: '16px 20px', borderRight: i < arr.length - 1 ? '1px solid var(--rule)' : 'none' }}>
+            <div key={i} style={{ padding: '16px 20px', borderRight: i < arr.length - 1 ? '1px solid var(--Border-Neutral-Tertiary, #e6e6e6)' : 'none' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
                 <span style={{ color: m.iconColor }}>{m.icon}</span>
-                <span style={{ fontSize: 12, color: 'var(--ink-3)', fontFamily: 'var(--font-ui)' }}>{m.label}</span>
+                <span style={{ fontSize: 12, fontWeight: 400, color: 'var(--Text-Caption-Primary, #454545)', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>{m.label}</span>
               </div>
-              <div style={{ fontSize: 26, fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-disp)', letterSpacing: -0.5, lineHeight: 1, marginBottom: 6 }}>{m.value}</div>
-              <div style={{ fontSize: 12, fontWeight: 600, color: m.deltaColor }}>{m.delta}</div>
+              <div style={{ fontSize: 20, fontWeight: 700, lineHeight: '26px', letterSpacing: 0, color: 'var(--Text-Body-Primary, #2b2b2b)', fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif', marginBottom: 6 }}>{m.value}</div>
+              <div style={{ fontSize: 10, fontWeight: 500, lineHeight: '12px', color: m.deltaColor, fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>{m.delta}</div>
             </div>
           ))}
         </div>
-      </Card>
+      </div>
+
+      {/* ── Orders Summary hero card (Figma node 1327:4800) ── */}
+      <div style={{
+        background: 'var(--Surface-BG_Primary-Default, #fff)',
+        border: '1px solid var(--Border-Neutral-Tertiary, #e6e6e6)',
+        borderRadius: 'var(--Radius-Large, 12px)',
+        padding: 'var(--Spacing-16, 16px)',
+        marginBottom: 24,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 10,
+      }}>
+        {/* Header row */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{
+            fontSize: 'var(--Scale-700, 20px)',
+            fontWeight: 600,
+            lineHeight: 'var(--Scale-825, 26px)',
+            color: 'var(--Text-Heading-Tertiary, #2b2b2b)',
+            fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif',
+          }}>
+            Orders Summary
+          </span>
+          <FilterDropdown
+            placeholder="Last 7 days"
+            size="sm"
+            options={[
+              { value: '7d',  label: 'Last 7 days' },
+              { value: '14d', label: 'Last 14 days' },
+              { value: '30d', label: 'Last 30 days' },
+              { value: '90d', label: 'Last 90 days' },
+            ]}
+          />
+        </div>
+
+        {/* Metric tiles row */}
+        <div style={{ display: 'flex', gap: 16 }}>
+          {[
+            { label: 'Pending manifest', value: '312',   delta: '+8%',  deltaDir: 'up' },
+            { label: 'To be shipped',    value: '156',   delta: '+3%',  deltaDir: 'up' },
+            { label: 'In Transit',       value: '1,088', delta: '+50%', deltaDir: 'up' },
+            { label: 'Delivered',        value: '2,981', delta: '+12%', deltaDir: 'up' },
+            { label: 'NDR',              value: '84',    delta: '-2%',  deltaDir: 'down' },
+          ].map((tile, i) => (
+            <div key={i} style={{
+              flex: '1 0 0',
+              background: 'var(--Surface-BG_Primary-Weakest, #f9f9fb)',
+              borderRadius: 'var(--Radius-Default, 6px)',
+              padding: 'var(--Spacing-12, 12px)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 10,
+              overflow: 'hidden',
+            }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <span style={{
+                  fontSize: 'var(--Scale-500, 12px)',
+                  fontWeight: 400,
+                  lineHeight: 'var(--Scale-600, 16px)',
+                  color: 'var(--Text-Caption-Primary, #454545)',
+                  fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif',
+                  whiteSpace: 'nowrap',
+                }}>
+                  {tile.label}
+                </span>
+                <span style={{
+                  fontSize: 'var(--Scale-700, 20px)',
+                  fontWeight: 700,
+                  lineHeight: 'var(--Scale-825, 26px)',
+                  color: 'var(--Text-Body-Primary, #2b2b2b)',
+                  fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif',
+                }}>
+                  {tile.value}
+                </span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span style={{
+                  fontSize: 'var(--Scale-450, 10px)',
+                  fontWeight: 500,
+                  lineHeight: 'var(--Scale-500, 12px)',
+                  color: tile.deltaDir === 'up' ? 'var(--Text-Success-Primary, #1ba86e)' : 'var(--Text-Error-Primary, #ed1b36)',
+                  fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif',
+                  display: 'flex', alignItems: 'center', gap: 1,
+                }}>
+                  {tile.delta}
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ transform: tile.deltaDir === 'down' ? 'rotate(90deg)' : 'none' }}>
+                    <path d="M7 17L17 7M17 7H7M17 7v10"/>
+                  </svg>
+                </span>
+                <span style={{
+                  fontSize: 'var(--Scale-450, 10px)',
+                  fontWeight: 500,
+                  lineHeight: 'var(--Scale-500, 12px)',
+                  color: 'var(--Text-Caption-Base, #808080)',
+                  fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif',
+                  whiteSpace: 'nowrap',
+                }}>
+                  vs last week
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* ── Greeting ── */}
       <div style={{ marginBottom: 24 }}>
