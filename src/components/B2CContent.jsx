@@ -25,6 +25,34 @@ const IcoRain     = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="
 const IcoStarOut  = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
 const IcoInfo     = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
 
+// ── Shared tile helpers ───────────────────────────────────────────────────────
+function DeltaBadge({ delta, up }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+      <span style={{ fontSize: 10, fontWeight: 500, color: up ? '#1ba86e' : '#ed1b36', display: 'flex', alignItems: 'center', gap: 1 }}>
+        {delta}
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ transform: up ? 'none' : 'rotate(90deg)' }}>
+          <path d="M7 17L17 7M17 7H7M17 7v10"/>
+        </svg>
+      </span>
+      <span style={{ fontSize: 10, fontWeight: 500, color: '#808080' }}>vs last week</span>
+    </div>
+  )
+}
+
+function SubRow({ label, value, link, linkColor }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 12 }}>
+      <span style={{ color: '#666' }}>{label} <strong style={{ color: '#2b2b2b', fontWeight: 600 }}>{value}</strong></span>
+      {link && (
+        <a style={{ fontWeight: 600, color: linkColor || '#2396fb', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 2, whiteSpace: 'nowrap', flexShrink: 0, marginLeft: 6 }}>
+          {link} <IcoChevR />
+        </a>
+      )}
+    </div>
+  )
+}
+
 // ── Date filter trigger (matches Figma --surface/bg_coal/weaker style) ────────
 function DateFilter() {
   const [open, setOpen] = useState(false)
@@ -226,80 +254,86 @@ export default function B2CContent() {
         </div>
       </div>
 
-      {/* ── Orders Summary hero card (Figma node 1327:4800) ── */}
+      {/* ── Orders Summary — rich tiles with CTAs ── */}
       <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, padding: 16, marginBottom: 24 }}>
-        {/* Header row */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-          <span style={{ fontSize: 20, fontWeight: 600, lineHeight: '26px', color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>
-            Orders Summary
-          </span>
-          {/* Date filter — styled per Figma (--surface/bg_coal/weaker trigger) */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+          <span style={{ fontSize: 20, fontWeight: 600, lineHeight: '26px', color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>Orders Summary</span>
           <DateFilter />
         </div>
-        {/* Metric tiles — explicit row layout */}
-        <div style={{ display: 'flex', flexDirection: 'row', gap: 12, flexWrap: 'nowrap' }}>
-          {[
-            { label: 'Pending manifest', value: '312',   delta: '+8%',  up: true },
-            { label: 'To be shipped',    value: '156',   delta: '+3%',  up: true },
-            { label: 'In Transit',       value: '1,088', delta: '+50%', up: true },
-            { label: 'Delivered',        value: '2,981', delta: '+12%', up: true },
-            { label: 'NDR',              value: '84',    delta: '-2%',  up: false },
-          ].map((tile, i) => (
-            <div key={i} style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 6, padding: 12 }}>
-              <div style={{ fontSize: 12, fontWeight: 400, lineHeight: '16px', color: '#454545', marginBottom: 6, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {tile.label}
-              </div>
-              <div style={{ fontSize: 20, fontWeight: 700, lineHeight: '26px', color: '#2b2b2b', marginBottom: 8 }}>
-                {tile.value}
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                <span style={{ fontSize: 10, fontWeight: 500, color: tile.up ? '#1ba86e' : '#ed1b36', display: 'flex', alignItems: 'center', gap: 1 }}>
-                  {tile.delta}
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ transform: tile.up ? 'none' : 'rotate(90deg)' }}>
-                    <path d="M7 17L17 7M17 7H7M17 7v10"/>
-                  </svg>
-                </span>
-                <span style={{ fontSize: 10, fontWeight: 500, color: '#808080' }}>vs last week</span>
-              </div>
+        <div style={{ display: 'flex', flexDirection: 'row', gap: 12, alignItems: 'stretch' }}>
+
+          {/* Pending manifest */}
+          <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+              <div style={{ width: 24, height: 24, borderRadius: 4, background: '#fde8eb', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ed1b36', flexShrink: 0 }}><IcoWarning /></div>
+              <span style={{ fontSize: 12, color: '#454545' }}>Pending manifest</span>
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ── Greeting ── */}
-      <div style={{ marginBottom: 24 }}>
-        <h1 style={{ fontFamily: 'var(--font-disp)', fontSize: 26, fontWeight: 700, color: 'var(--ink)', lineHeight: 1.2 }}>Welcome back, Anjali</h1>
-      </div>
-
-      {/* ── 5 stat cards ── */}
-      <div style={{ display: 'flex', gap: 12, marginBottom: 24, alignItems: 'stretch' }}>
-        <StatCard icon={<IcoWarning />} iconBg="var(--red-bg)"   iconColor="var(--red)"   label="Pending manifest"          value="312">
-          <StatRow label="Bad address"      value="47" link="Fix now" />
-          <StatRow label="High risk orders" value="23" link="Review" />
-        </StatCard>
-
-        <StatCard icon={<IcoBox />}     iconBg="#FFF3EC"          iconColor="#E77337"       label="To be shipped"             value="156">
-          <StatRow label="High risk AWBs" value="12" link="Review" />
-        </StatCard>
-
-        <StatCard icon={<IcoClock />}   iconBg="var(--blue-bg)"  iconColor="var(--blue)"  label="Awaiting pickup"            value="9">
-          <Button variant="black" size="sm" style={{ width: '100%', justifyContent: 'center', marginTop: 4 }}>Schedule now</Button>
-        </StatCard>
-
-        <StatCard icon={<IcoChat />}    iconBg="#F3F0FF"          iconColor="#7C3AED"       label="NDR — awaiting your input" value="84">
-          <div style={{ marginBottom: 8 }}>
-            <Chip text="Automate NDR" chipType="coal" chipVariant="outlined" size="sm" />
+            <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>312</div>
+            <DeltaBadge delta="+8%" up />
+            <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
+              <SubRow label="Bad address" value="47" link="Fix now" linkColor="#ed1b36" />
+              <SubRow label="High risk orders" value="23" link="Review" />
+            </div>
           </div>
-          <Button size="sm" style={{ width: '100%', justifyContent: 'center', background: '#7C3AED', borderColor: '#7C3AED', color: '#fff' }}>
-            Activate SmartNDR
-          </Button>
-        </StatCard>
 
-        <StatCard icon={<IcoHeadset />} iconBg="var(--green-bg)" iconColor="var(--green)" label="Support tickets"            value="18">
-          <StatRow label="Recently resolved" value="32" link="See resolution" />
-          <StatRow label="Need your input"   value="11" link="Respond" />
-        </StatCard>
-      </div>
+          {/* To be shipped */}
+          <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+              <div style={{ width: 24, height: 24, borderRadius: 4, background: '#fff3ec', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#e77337', flexShrink: 0 }}><IcoBox /></div>
+              <span style={{ fontSize: 12, color: '#454545' }}>To be shipped</span>
+            </div>
+            <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>156</div>
+            <DeltaBadge delta="+3%" up />
+            <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, flex: 1 }}>
+              <SubRow label="High risk AWBs" value="12" link="Review" />
+            </div>
+          </div>
+
+          {/* Awaiting pickup */}
+          <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+              <div style={{ width: 24, height: 24, borderRadius: 4, background: '#e6f3fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2396fb', flexShrink: 0 }}><IcoClock /></div>
+              <span style={{ fontSize: 12, color: '#454545' }}>Awaiting pickup</span>
+            </div>
+            <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>9</div>
+            <DeltaBadge delta="+1" up />
+            <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, flex: 1 }}>
+              <Button variant="black" size="sm" style={{ width: '100%', justifyContent: 'center' }}>Schedule now</Button>
+            </div>
+          </div>
+
+          {/* NDR */}
+          <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+              <div style={{ width: 24, height: 24, borderRadius: 4, background: '#f3f0ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed', flexShrink: 0 }}><IcoChat /></div>
+              <span style={{ fontSize: 12, color: '#454545' }}>NDR</span>
+            </div>
+            <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>84</div>
+            <DeltaBadge delta="-2%" up={false} />
+            <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
+              <Chip text="Automate NDR" chipType="coal" chipVariant="outlined" size="sm" />
+              <Button size="sm" style={{ width: '100%', justifyContent: 'center', background: '#7c3aed', borderColor: '#7c3aed', color: '#fff' }}>
+                Activate SmartNDR
+              </Button>
+            </div>
+          </div>
+
+          {/* Support tickets */}
+          <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+              <div style={{ width: 24, height: 24, borderRadius: 4, background: '#ecf8f3', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1ba86e', flexShrink: 0 }}><IcoHeadset /></div>
+              <span style={{ fontSize: 12, color: '#454545' }}>Support tickets</span>
+            </div>
+            <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>18</div>
+            <DeltaBadge delta="-3" up={false} />
+            <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
+              <SubRow label="Recently resolved" value="32" link="See resolution" />
+              <SubRow label="Need your input" value="11" link="Respond" linkColor="#ed1b36" />
+            </div>
+          </div>
+
+        </div>{/* end tiles row */}
+      </div>{/* end Orders Summary card */}
 
       {/* ── Main 2-col grid ── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 20, alignItems: 'start' }}>
