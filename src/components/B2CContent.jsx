@@ -319,7 +319,6 @@ function DisruptionRow({ icon, title, meta, severity }) {
 
 // ── Main B2C component ─────────────────────────────────────────────────────────
 export default function B2CContent() {
-  const [subTab, setSubTab] = useState('Overview')
   const [carouselIdx, setCarouselIdx] = useState(0)
 
   const carouselSlides = [
@@ -357,10 +356,41 @@ export default function B2CContent() {
 
   return (
     <div className="content" style={{ position: 'relative' }}>
-      <SubTabs active={subTab} onChange={setSubTab} />
 
-      {subTab === 'Overview' && (
-        <>
+      {/* Business Overview */}
+      <div style={{
+        background: 'var(--white)', border: '1px solid var(--rule)',
+        borderRadius: 'var(--r-lg)', marginBottom: 24, overflow: 'hidden',
+      }}>
+        <div style={{ padding: '16px 20px 12px', borderBottom: '1px solid var(--rule)' }}>
+          <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)' }}>Business Overview</div>
+          <div style={{ fontSize: 12, color: 'var(--ink-4)', marginTop: 2 }}>Last 30 days performance</div>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)' }}>
+          {[
+            { icon: <IcoTrendUp />, iconColor: 'var(--green)', label: 'Revenue (OMS)', value: '₹42.8L', delta: '+12% vs L30D', deltaColor: 'var(--green)' },
+            { icon: <IcoBox />, iconColor: 'var(--blue)', label: 'AOV', value: '₹1,247', delta: '+7% vs L30D', deltaColor: 'var(--green)' },
+            { icon: <IcoBox />, iconColor: '#7C3AED', label: 'Total orders', value: '3,432', delta: '+2% vs L30D', deltaColor: 'var(--green)' },
+            { icon: <IcoTruck />, iconColor: '#E77337', label: 'Shipped with Delhivery', value: '1,544', delta: '45% of total', deltaColor: 'var(--ink-4)' },
+          ].map((m, i, arr) => (
+            <div key={i} style={{
+              padding: '16px 20px',
+              borderRight: i < arr.length - 1 ? '1px solid var(--rule)' : 'none',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+                <span style={{ color: m.iconColor }}>{m.icon}</span>
+                <span style={{ fontSize: 12, color: 'var(--ink-3)', fontFamily: 'var(--font-ui)' }}>{m.label}</span>
+              </div>
+              <div style={{ fontSize: 26, fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-disp)', letterSpacing: -0.5, lineHeight: 1, marginBottom: 6 }}>
+                {m.value}
+              </div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: m.deltaColor }}>{m.delta}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <>
           {/* Greeting */}
           <div style={{ marginBottom: 24 }}>
             <h1 style={{ fontFamily: 'var(--font-disp)', fontSize: 26, fontWeight: 700, color: 'var(--ink)', lineHeight: 1.2 }}>
@@ -675,27 +705,6 @@ export default function B2CContent() {
             </div>
           </div>
         </>
-      )}
-
-      {subTab === 'Insights' && (
-        <div className="tab-placeholder">
-          <div className="tab-placeholder-icon" style={{ background: '#F3F0FF', color: '#7C3AED' }}>
-            <IcoTrendUp />
-          </div>
-          <h3>Insights</h3>
-          <p>Deep-dive analytics and trend data for your B2C shipments.</p>
-        </div>
-      )}
-
-      {subTab === 'Peer Benchmarking' && (
-        <div className="tab-placeholder">
-          <div className="tab-placeholder-icon" style={{ background: 'var(--blue-bg)', color: 'var(--blue)' }}>
-            <IcoStar />
-          </div>
-          <h3>Peer Benchmarking</h3>
-          <p>See how your delivery performance compares to peers in your category.</p>
-        </div>
-      )}
 
       {/* Floating SmartAssist button */}
       <button style={{
