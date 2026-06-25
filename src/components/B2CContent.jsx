@@ -133,41 +133,52 @@ function ClaimSection({ title, icon, rows }) {
   )
 }
 
-// ── Pickup day row ─────────────────────────────────────────────────────────────
-function PickupDay({ day, date, count, countColor, tag, tagColor, warning, actions }) {
+// ── Pickup column card (new Figma design) ─────────────────────────────────────
+function PickupCol({ dayLabel, dayName, date, pickupId, statusLabel, statusVariant, accentColor, buttons }) {
+  const pillBg   = statusVariant === 'error'   ? 'var(--Surface-BG_Error-Weakest, #fdf2f4)'
+                 : statusVariant === 'warning' ? 'var(--Surface-BG_Warning-Weakest, #fefaec)'
+                 :                               'var(--Surface-BG_Blue-Weakest, #f0f8ff)'
+  const pillText = statusVariant === 'error'   ? 'var(--Text-Error-Tertiary, #930d28)'
+                 : statusVariant === 'warning' ? 'var(--Text-Warning-Primary, #7b6414)'
+                 :                               'var(--Text-Info_Blue-Tertiary, #1764a7)'
   return (
-    <div style={{ padding: '14px 0', borderBottom: '1px solid var(--rule)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)' }}>{day}</span>
-          {tag && (
-            <Chip text={tag} chipType="error" chipVariant="outlined" size="sm" />
-          )}
+    <div style={{ flex: '1 1 0', minWidth: 0, border: '1px solid var(--Border-Neutral-Primary, #e6e6e6)', borderRadius: 12, paddingBottom: 12, overflow: 'hidden' }}>
+      {/* header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 12px 6px', background: '#fff' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--Text-Caption-Base, #808080)', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>{dayLabel}, </span>
+          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--Text-Caption-Primary, #454545)', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>{dayName}</span>
         </div>
-        <span style={{ fontSize: 12, fontWeight: 600, color: countColor || 'var(--blue)' }}>{count}</span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--Text-Caption-Base, #808080)', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>{date}</span>
       </div>
-      <div style={{ fontSize: 12, color: 'var(--ink-4)', marginBottom: 10 }}>{date}</div>
-      {warning && (
-        <Alert
-          variant="error"
-          alertStyle="subtle"
-          size="sm"
-          description={<><strong>Reason: </strong>{warning}</>}
-          style={{ marginBottom: 10 }}
-        />
-      )}
-      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${actions.length}, 1fr)`, gap: 8 }}>
-        {actions.map((a, i) => (
-          <Button
-            key={i}
-            variant={a.dark ? 'black' : 'outline'}
-            size="sm"
-            leadingIcon={a.icon}
-            style={{ width: '100%', justifyContent: 'center' }}
-          >
-            {a.label}
-          </Button>
-        ))}
+      <div style={{ height: 1, background: 'var(--Border-Neutral-Primary, #e6e6e6)', margin: '0 12px' }} />
+      {/* content */}
+      <div style={{ margin: '12px 12px 0', background: 'var(--Surface-BG_Coal-Weakest, #f9f9fb)', borderRadius: 12, padding: '8px 8px 8px 12px', display: 'flex', gap: 8, alignItems: 'center' }}>
+        {/* left accent bar */}
+        <div style={{ width: 2, height: 72, borderRadius: 999, background: accentColor, flexShrink: 0 }} />
+        {/* info */}
+        <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+            <div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--Text-Info_Blue-Primary, #2396fb)', fontFamily: 'var(--Font_Family-body, "Noto Sans"), sans-serif', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{pickupId}</div>
+              <div style={{ fontSize: 10, fontWeight: 500, color: 'var(--Text-Caption-Base, #808080)', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif', marginTop: 1 }}>PICKUP ID</div>
+            </div>
+            {/* status pill */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 2, background: pillBg, borderRadius: 999, padding: '4px 8px', flexShrink: 0 }}>
+              <span style={{ fontSize: 10, fontWeight: 500, color: pillText, fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif', whiteSpace: 'nowrap' }}>{statusLabel}</span>
+            </div>
+          </div>
+          {/* action buttons */}
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            {buttons.map((b, i) => (
+              <Button key={i} variant={b.primary ? 'black' : 'outline'} size="sm"
+                leadingIcon={b.icon}
+                style={{ background: b.primary ? undefined : '#fff', whiteSpace: 'nowrap', padding: '6px' }}>
+                {b.label}
+              </Button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -387,23 +398,43 @@ export default function B2CContent() {
           </Card>
 
           {/* Upcoming Pickups */}
-          <Card isHoverable={false} style={{ marginBottom: 20, borderRadius: 12, border: '1px solid var(--rule)', padding: '16px 18px 0' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-              <span style={{ color: 'var(--ink-3)' }}><IcoTruck /></span>
-              <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)' }}>Upcoming Pickups</span>
+          <Card isHoverable={false} style={{ marginBottom: 20, borderRadius: 12, border: '1px solid var(--rule)', padding: 24 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+              <span style={{ fontSize: 20, fontWeight: 600, lineHeight: '26px', color: 'var(--Text-Body-Primary, #2b2b2b)', fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif' }}>Upcoming Pickups</span>
+              <a style={{ fontSize: 12, fontWeight: 500, color: 'var(--Text-Info_Blue-Primary, #2396fb)', cursor: 'pointer', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>View all</a>
             </div>
-            <PickupDay day="Yesterday" date="May 12, 2026" count="1 pickup" countColor="var(--red)"
-              warning="Shipment not ready"
-              actions={[{ label: 'Reschedule', dark: true }]}
-            />
-            <PickupDay day="Today" date="May 13, 2026" count="9 pickups"
-              tag="Cut-off in 2h 14m" tagColor="var(--red)"
-              actions={[{ icon: <IcoPhone />, label: 'Call FE' }, { icon: <IcoPrint />, label: 'Print labels' }]}
-            />
-            <PickupDay day="Tomorrow" date="May 14, 2026" count="3 pickups"
-              actions={[{ icon: <IcoPrint />, label: 'Print labels' }]}
-            />
-            <div style={{ height: 16 }} />
+            <div style={{ display: 'flex', gap: 20 }}>
+              <PickupCol
+                dayLabel="YESTERDAY" dayName="SUN" date="24 May"
+                pickupId="896232"
+                statusLabel="Not Picked" statusVariant="error"
+                accentColor="var(--delhivery-red, #ed1b36)"
+                buttons={[
+                  { label: 'Reschedule', primary: false },
+                  { icon: <IcoHeadset />, label: undefined, primary: false },
+                ]}
+              />
+              <PickupCol
+                dayLabel="TODAY" dayName="MON" date="25 May"
+                pickupId="896233"
+                statusLabel="Out for Pickup" statusVariant="info"
+                accentColor="var(--delhivery-blue, #2396fb)"
+                buttons={[
+                  { label: 'Print  Labels', primary: false },
+                  { label: 'Call Executive', primary: false },
+                ]}
+              />
+              <PickupCol
+                dayLabel="TOMORROW" dayName="TUE" date="26 May"
+                pickupId="896222"
+                statusLabel="Scheduled" statusVariant="warning"
+                accentColor="var(--warning, #e9a900)"
+                buttons={[
+                  { label: 'Print  Labels', primary: false },
+                  { icon: <IcoHeadset />, label: undefined, primary: false },
+                ]}
+              />
+            </div>
           </Card>
 
           {/* SmartAssist Insights */}
