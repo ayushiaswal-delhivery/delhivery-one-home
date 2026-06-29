@@ -481,78 +481,107 @@ const ACTION_ITEMS = [
   { sev: 'normal',   icon: <IcoShield />,   title: 'Claims & disputes', count: 12,  unit: 'items',     desc: '7 L&D claims + 5 weight disputes awaiting response',      cta: 'View claims'    },
 ]
 
+function ActionRow({ item, isLast }) {
+  const cfg = SEVERITY[item.sev]
+  return (
+    <div
+      style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '13px 20px 13px 17px', borderBottom: isLast ? 'none' : '1px solid #f5f5f5', borderLeft: `3px solid ${cfg.color}`, cursor: 'pointer', transition: 'background 100ms', background: 'transparent' }}
+      onMouseEnter={e => e.currentTarget.style.background = cfg.lightBg}
+      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+    >
+      <div style={{ width: 34, height: 34, borderRadius: 8, background: cfg.bg, color: cfg.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        {item.icon}
+      </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
+          <span style={{ fontSize: 13, fontWeight: 600, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>{item.title}</span>
+          <span style={{ fontSize: 11, fontWeight: 700, color: cfg.color, background: cfg.bg, borderRadius: 999, padding: '1px 7px', fontFamily: '"Noto Sans", sans-serif' }}>
+            {item.count} {item.unit}
+          </span>
+        </div>
+        <span style={{ fontSize: 12, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>{item.desc}</span>
+      </div>
+      <a style={{ fontSize: 12, fontWeight: 700, color: cfg.color, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, whiteSpace: 'nowrap', flexShrink: 0, fontFamily: '"Noto Sans", sans-serif' }}>
+        {item.cta} <IcoArrow />
+      </a>
+    </div>
+  )
+}
+
 function NeedsAttentionSection() {
-  const bySev = {
-    critical: ACTION_ITEMS.filter(i => i.sev === 'critical'),
-    urgent:   ACTION_ITEMS.filter(i => i.sev === 'urgent'),
-    normal:   ACTION_ITEMS.filter(i => i.sev === 'normal'),
-  }
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const critical = ACTION_ITEMS.filter(i => i.sev === 'critical')
+  const rest      = ACTION_ITEMS.filter(i => i.sev !== 'critical')
 
   return (
-    <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, marginBottom: 24, overflow: 'hidden' }}>
-      {/* ── Header ── */}
-      <div style={{ padding: '14px 20px', borderBottom: '1px solid #f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 15, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>Needs your attention</span>
-          <span style={{ fontSize: 12, fontWeight: 600, color: '#ed1b36', background: '#fde8eb', borderRadius: 999, padding: '2px 9px', fontFamily: '"Noto Sans", sans-serif' }}>
-            {ACTION_ITEMS.length} to action
-          </span>
-          <div style={{ display: 'flex', gap: 6 }}>
-            {(['critical', 'urgent', 'normal']).map(sev => {
-              const cfg = SEVERITY[sev]
-              return (
-                <span key={sev} style={{ fontSize: 11, fontWeight: 600, color: cfg.color, background: cfg.bg, borderRadius: 999, padding: '2px 8px', fontFamily: '"Noto Sans", sans-serif' }}>
-                  {bySev[sev].length} {cfg.label.charAt(0) + cfg.label.slice(1).toLowerCase()}
-                </span>
-              )
-            })}
+    <>
+      <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, marginBottom: 24, overflow: 'hidden' }}>
+        {/* ── Header ── */}
+        <div style={{ padding: '12px 20px', borderBottom: '1px solid #f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span style={{ fontSize: 14, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>Needs your attention</span>
+            <span style={{ fontSize: 11, fontWeight: 600, color: '#ed1b36', background: '#fde8eb', borderRadius: 999, padding: '2px 8px', fontFamily: '"Noto Sans", sans-serif' }}>
+              {critical.length} critical
+            </span>
           </div>
+          <button
+            onClick={() => setDrawerOpen(true)}
+            style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'none', border: '1px solid #e6e6e6', borderRadius: 6, padding: '5px 12px', fontSize: 12, fontWeight: 600, color: '#454545', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', transition: 'border-color 120ms' }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = '#aaa'}
+            onMouseLeave={e => e.currentTarget.style.borderColor = '#e6e6e6'}
+          >
+            View all {ACTION_ITEMS.length} <IcoChevR />
+          </button>
         </div>
-        <a style={{ fontSize: 12, fontWeight: 600, color: '#2396fb', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>
-          View all <IcoChevR />
-        </a>
+
+        {/* ── Critical items only ── */}
+        {critical.map((item, idx) => (
+          <ActionRow key={idx} item={item} isLast={idx === critical.length - 1} />
+        ))}
       </div>
 
-      {/* ── Severity groups ── */}
-      {['critical', 'urgent', 'normal'].map(sev => {
-        const cfg = SEVERITY[sev]
-        const items = bySev[sev]
-        return (
-          <div key={sev}>
-            {/* Group label bar */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 20px', background: cfg.lightBg, borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', borderLeft: `3px solid ${cfg.color}` }}>
-              <div style={{ width: 7, height: 7, borderRadius: '50%', background: cfg.color, flexShrink: 0 }} />
-              <span style={{ fontSize: 10, fontWeight: 700, color: cfg.color, letterSpacing: 1, textTransform: 'uppercase', fontFamily: '"Noto Sans", sans-serif' }}>{cfg.label}</span>
-              <span style={{ fontSize: 10, color: '#bbb', fontFamily: '"Noto Sans", sans-serif' }}>{items.length} {items.length === 1 ? 'item' : 'items'}</span>
-            </div>
-            {/* Items */}
-            {items.map((item, idx) => (
-              <div key={idx}
-                style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '11px 20px 11px 17px', borderBottom: '1px solid #f5f5f5', borderLeft: `3px solid ${cfg.color}`, cursor: 'pointer', transition: 'background 100ms', background: 'transparent' }}
-                onMouseEnter={e => e.currentTarget.style.background = cfg.lightBg}
-                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-              >
-                <div style={{ width: 34, height: 34, borderRadius: 8, background: cfg.bg, color: cfg.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  {item.icon}
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
-                    <span style={{ fontSize: 13, fontWeight: 600, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>{item.title}</span>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: cfg.color, background: cfg.bg, borderRadius: 999, padding: '1px 7px', fontFamily: '"Noto Sans", sans-serif' }}>
-                      {item.count} {item.unit}
-                    </span>
-                  </div>
-                  <span style={{ fontSize: 12, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>{item.desc}</span>
-                </div>
-                <a style={{ fontSize: 12, fontWeight: 700, color: cfg.color, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, whiteSpace: 'nowrap', flexShrink: 0, fontFamily: '"Noto Sans", sans-serif' }}>
-                  {item.cta} <IcoArrow />
-                </a>
+      {/* ── Side drawer — all items ── */}
+      {drawerOpen && (
+        <>
+          <div
+            onClick={() => setDrawerOpen(false)}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.35)', zIndex: 800, animation: 'fadeIn 150ms ease' }}
+          />
+          <div style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: 420, background: '#fff', zIndex: 900, display: 'flex', flexDirection: 'column', boxShadow: '-8px 0 32px rgba(0,0,0,0.12)', animation: 'slideInRight 200ms ease' }}>
+            {/* Drawer header */}
+            <div style={{ padding: '18px 20px', borderBottom: '1px solid #f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+              <div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>All actions</div>
+                <div style={{ fontSize: 12, color: '#808080', marginTop: 2, fontFamily: '"Noto Sans", sans-serif' }}>{ACTION_ITEMS.length} items need your attention</div>
               </div>
-            ))}
+              <button onClick={() => setDrawerOpen(false)} style={{ width: 30, height: 30, borderRadius: 6, background: '#f4f4f6', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#454545' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+
+            {/* Drawer body — scrollable */}
+            <div style={{ flex: 1, overflowY: 'auto' }}>
+              {['critical', 'urgent', 'normal'].map(sev => {
+                const cfg   = SEVERITY[sev]
+                const items = ACTION_ITEMS.filter(i => i.sev === sev)
+                return (
+                  <div key={sev}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 20px', background: cfg.lightBg, borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', borderLeft: `3px solid ${cfg.color}` }}>
+                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: cfg.color }} />
+                      <span style={{ fontSize: 10, fontWeight: 700, color: cfg.color, letterSpacing: 1, textTransform: 'uppercase', fontFamily: '"Noto Sans", sans-serif' }}>{cfg.label}</span>
+                      <span style={{ fontSize: 10, color: '#bbb', fontFamily: '"Noto Sans", sans-serif' }}>{items.length} {items.length === 1 ? 'item' : 'items'}</span>
+                    </div>
+                    {items.map((item, idx) => (
+                      <ActionRow key={idx} item={item} isLast={idx === items.length - 1} />
+                    ))}
+                  </div>
+                )
+              })}
+            </div>
           </div>
-        )
-      })}
-    </div>
+        </>
+      )}
+    </>
   )
 }
 
