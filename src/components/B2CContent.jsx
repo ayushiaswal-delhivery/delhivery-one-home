@@ -243,15 +243,16 @@ const PERF_DATA = [
 ]
 const CHART_MAX = 300
 
-function PerformanceSection() {
+function PerformanceSection({ onSeeAnalysis }) {
   const [filter, setFilter] = useState('Last 7 days')
   const [filterOpen, setFilterOpen] = useState(false)
+  const [tooltip, setTooltip] = useState(null) // { index, x, y }
   const filterOpts = ['Last 7 days', 'Last 14 days', 'Last 30 days', 'Last 90 days']
   const kpis = [
-    { label: 'Delivered',        value: '1,234', delta: '+50%', up: true },
-    { label: 'First attempt',    value: '1,101', delta: '+50%', up: true },
-    { label: 'Avg delivery time', value: '2.4 days', delta: '+50%', up: true },
-    { label: 'Avg pickup time',  value: '3.1 hrs', delta: '+50%', up: true },
+    { label: 'Delivered',         value: '1,234',    delta: '+11%',    up: true  },
+    { label: 'First attempt',     value: '1,101',    delta: '-3%',     up: false },
+    { label: 'Avg delivery time', value: '2.4 days', delta: '+0.2d',   up: false },
+    { label: 'Avg pickup time',   value: '3.1 hrs',  delta: '-18 min', up: true  },
   ]
   const yLabels = [300, 240, 180, 120, 60, 0]
 
@@ -288,14 +289,21 @@ function PerformanceSection() {
           <div key={i} style={{ flex: '1 1 0', background: '#f9f9fb', borderRadius: 6, padding: 12 }}>
             <div style={{ fontSize: 12, fontWeight: 400, color: 'var(--Text-Caption-Primary, #454545)', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif', marginBottom: 6 }}>{k.label}</div>
             <div style={{ fontSize: 20, fontWeight: 700, lineHeight: '26px', color: 'var(--Text-Body-Primary, #2b2b2b)', fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif', marginBottom: 6 }}>{k.value}</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <span style={{ fontSize: 10, fontWeight: 500, color: k.up ? '#1ba86e' : '#ed1b36', display: 'flex', alignItems: 'center' }}>
-                {k.delta}
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ transform: k.up ? 'none' : 'rotate(90deg)' }}>
-                  <path d="M7 17L17 7M17 7H7M17 7v10"/>
-                </svg>
-              </span>
-              <span style={{ fontSize: 10, fontWeight: 500, color: '#808080', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>vs last month</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <span style={{ fontSize: 10, fontWeight: 500, color: k.up ? '#1ba86e' : '#ed1b36', display: 'flex', alignItems: 'center' }}>
+                  {k.delta}
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ transform: k.up ? 'none' : 'rotate(90deg)' }}>
+                    <path d="M7 17L17 7M17 7H7M17 7v10"/>
+                  </svg>
+                </span>
+                <span style={{ fontSize: 10, fontWeight: 500, color: '#808080', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>vs last month</span>
+              </div>
+              {onSeeAnalysis && (
+                <a onClick={onSeeAnalysis} style={{ fontSize: 10, fontWeight: 600, color: '#2396fb', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 2, fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>
+                  See trend <IcoChevR />
+                </a>
+              )}
             </div>
           </div>
         ))}
@@ -324,20 +332,53 @@ function PerformanceSection() {
                 {PERF_DATA.map((d, i) => {
                   const total = d.inTransit + d.delivered + d.returned
                   const pct = (v) => `${(v / CHART_MAX) * 100}%`
+                  const isHovered = tooltip?.index === i
                   return (
-                    <div key={i} style={{ flex: 1, display: 'flex', justifyContent: 'center', height: '100%', alignItems: 'flex-end' }}>
-                      <div style={{ width: '55%', height: pct(total), display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-                        {/* returned (top, lightest) */}
-                        <div style={{ height: pct(d.returned), background: '#e0e3eb', borderRadius: '4px 4px 0 0', minHeight: d.returned > 0 ? 2 : 0 }} />
-                        {/* delivered (mid, darker) */}
-                        <div style={{ height: pct(d.delivered), background: '#5a688c', minHeight: d.delivered > 0 ? 2 : 0 }} />
-                        {/* inTransit (bottom, darkest) */}
-                        <div style={{ height: pct(d.inTransit), background: '#98a2bc', minHeight: d.inTransit > 0 ? 2 : 0 }} />
+                    <div key={i} style={{ flex: 1, display: 'flex', justifyContent: 'center', height: '100%', alignItems: 'flex-end', position: 'relative' }}
+                      onMouseEnter={e => {
+                        const rect = e.currentTarget.getBoundingClientRect()
+                        setTooltip({ index: i, x: rect.left + rect.width / 2, y: rect.top })
+                      }}
+                      onMouseLeave={() => setTooltip(null)}
+                    >
+                      <div style={{ width: isHovered ? '65%' : '55%', height: pct(total), display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', transition: 'width 100ms', cursor: 'default' }}>
+                        <div style={{ height: pct(d.returned), background: isHovered ? '#c8ccd8' : '#e0e3eb', borderRadius: '4px 4px 0 0', minHeight: d.returned > 0 ? 2 : 0, transition: 'background 100ms' }} />
+                        <div style={{ height: pct(d.delivered), background: isHovered ? '#3d4f7a' : '#5a688c', minHeight: d.delivered > 0 ? 2 : 0, transition: 'background 100ms' }} />
+                        <div style={{ height: pct(d.inTransit), background: isHovered ? '#7a8aaa' : '#98a2bc', minHeight: d.inTransit > 0 ? 2 : 0, transition: 'background 100ms' }} />
                       </div>
                     </div>
                   )
                 })}
               </div>
+
+              {/* Tooltip */}
+              {tooltip && (() => {
+                const d = PERF_DATA[tooltip.index]
+                const week = PERF_WEEKS[tooltip.index]
+                return (
+                  <div style={{ position: 'fixed', left: tooltip.x, top: tooltip.y - 8, transform: 'translate(-50%, -100%)', background: '#1a1a1a', color: '#fff', borderRadius: 8, padding: '10px 14px', fontSize: 12, fontFamily: '"Noto Sans", sans-serif', zIndex: 9999, pointerEvents: 'none', boxShadow: '0 4px 16px rgba(0,0,0,0.2)', minWidth: 140, lineHeight: 1.6 }}>
+                    <div style={{ fontWeight: 700, marginBottom: 6, color: '#fff' }}>{week}</div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16 }}>
+                      <span style={{ color: '#a0a8bc' }}>Delivered</span>
+                      <span style={{ fontWeight: 600, color: '#7ed4a4' }}>{d.delivered}</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16 }}>
+                      <span style={{ color: '#a0a8bc' }}>In transit</span>
+                      <span style={{ fontWeight: 600, color: '#c8d0e0' }}>{d.inTransit}</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16 }}>
+                      <span style={{ color: '#a0a8bc' }}>Returned</span>
+                      <span style={{ fontWeight: 600, color: '#ff8fa0' }}>{d.returned}</span>
+                    </div>
+                    <div style={{ borderTop: '1px solid #333', marginTop: 6, paddingTop: 6, display: 'flex', justifyContent: 'space-between', gap: 16 }}>
+                      <span style={{ color: '#a0a8bc' }}>Return rate</span>
+                      <span style={{ fontWeight: 700, color: d.returned / (d.delivered + d.returned) > 0.15 ? '#ff6b6b' : '#7ed4a4' }}>
+                        {Math.round(d.returned / (d.delivered + d.returned) * 100)}%
+                      </span>
+                    </div>
+                  </div>
+                )
+              })()}
               {/* X axis labels */}
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 28, display: 'flex' }}>
                 {PERF_WEEKS.map(w => (
@@ -400,9 +441,9 @@ const GEO_COLS = [
   { key: 'orderMix',     label: 'ORDER MIX',      align: 'right', color: null },
   { key: 'rto',          label: 'RTO %',          align: 'right', color: 'red' },
   { key: 'cod',          label: 'COD %',          align: 'right', color: null },
-  { key: 'ttd50',        label: 'TTD 50p',        align: 'right', color: null },
-  { key: 'ttd75',        label: 'TTD 75p',        align: 'right', color: null },
-  { key: 'ttd95',        label: 'TTD 95p',        align: 'right', color: null },
+  { key: 'ttd50',        label: 'TYPICAL',        align: 'right', color: null },
+  { key: 'ttd75',        label: 'USUAL',          align: 'right', color: null },
+  { key: 'ttd95',        label: 'WORST CASE',     align: 'right', color: null },
   { key: 'firstAttempt', label: 'FIRST ATTEMPT %', align: 'right', color: 'green' },
 ]
 
@@ -888,9 +929,9 @@ export default function B2CContent() {
             <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>84</div>
             <DeltaBadge delta="-2%" up={false} />
             <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
-              <Button size="sm" style={{ width: '100%', justifyContent: 'center', background: '#7c3aed', borderColor: '#7c3aed', color: '#fff' }}>
-                Activate SmartNDR
-              </Button>
+              <button onClick={() => setTab('analysis')} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, fontSize: 12, fontWeight: 600, color: '#2396fb', fontFamily: '"Noto Sans", sans-serif' }}>
+                See trend <IcoChevR />
+              </button>
             </div>
           </div>
 
@@ -909,6 +950,13 @@ export default function B2CContent() {
           </div>
 
         </div>{/* end tiles row */}
+
+        {/* Footer link to Analysis */}
+        <div style={{ borderTop: '1px solid #f0f0f0', marginTop: 12, paddingTop: 10, display: 'flex', justifyContent: 'flex-end' }}>
+          <button onClick={() => setTab('analysis')} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, color: '#2396fb', fontFamily: '"Noto Sans", sans-serif', padding: 0 }}>
+            See delivery trends in Analysis <IcoChevR />
+          </button>
+        </div>
       </div>{/* end Orders Summary card */}
 
       {/* ── Orders Summary 2 ── */}
@@ -923,7 +971,11 @@ export default function B2CContent() {
           {/* Finance */}
           <div style={{ marginBottom: 20 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-              <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)', fontFamily: '"Noto Sans", sans-serif' }}>Finance</span>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
+                <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)', fontFamily: '"Noto Sans", sans-serif' }}>Finance</span>
+                <span style={{ fontSize: 12, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>Total at risk:</span>
+                <span style={{ fontSize: 15, fontWeight: 700, color: '#ed1b36', fontFamily: '"Noto Sans", sans-serif' }}>₹48,900</span>
+              </div>
             </div>
             <div style={{ display: 'flex', gap: 16 }}>
               <ClaimCard title="Loss & Damage Claims" total={10} inputCount={7}  inputAmt="₹18,200" rejectedCount={3} rejectedAmt="₹9,400" />
