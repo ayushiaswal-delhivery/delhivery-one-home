@@ -614,6 +614,149 @@ function NeedsAttentionSection() {
   )
 }
 
+// ── Orders Summary 2 ─────────────────────────────────────────────────────────
+function OrdersSummary2() {
+  const IcoFire = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M12 2c0 0-5 4-5 9a5 5 0 0010 0c0-5-5-9-5-9z"/><path d="M12 12c0 0-2 1.5-2 3a2 2 0 004 0c0-1.5-2-3-2-3z"/></svg>
+  const IcoArrow = () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+
+  const items = [
+    {
+      id: 'ndr',
+      urgency: 'critical',
+      accentColor: '#ed1b36',
+      accentBg: '#fde8eb',
+      headline: '₹84,000 at risk',
+      subline: 'from 84 undelivered orders',
+      why: 'Customers couldn\'t be reached. Every day without action increases return probability.',
+      metric: { label: 'Avg. at risk per order', value: '₹1,000' },
+      cta: 'Respond to NDRs',
+    },
+    {
+      id: 'manifest',
+      urgency: 'urgent',
+      accentColor: '#e07230',
+      accentBg: '#fff3ec',
+      headline: '312 orders not booked',
+      subline: 'manifests pending dispatch',
+      why: 'These shipments haven\'t been picked up yet. Delays here push your delivery dates out.',
+      metric: { label: 'Bad addresses blocking', value: '47 orders' },
+      cta: 'Book manifests',
+    },
+    {
+      id: 'rto',
+      urgency: 'normal',
+      accentColor: '#a07000',
+      accentBg: '#fef9e7',
+      headline: '23 high-risk orders',
+      subline: 'likely to RTO before dispatch',
+      why: 'AI flagged these as return-prone. Review before pickup to avoid wasted shipping cost.',
+      metric: { label: 'Estimated RTO cost if ignored', value: '~₹3,450' },
+      cta: 'Review orders',
+    },
+    {
+      id: 'tickets',
+      urgency: 'info',
+      accentColor: '#2396fb',
+      accentBg: '#e6f3fe',
+      headline: '11 tickets need your reply',
+      subline: 'out of 18 open support cases',
+      why: 'Unresolved tickets affect your seller rating and customer trust.',
+      metric: { label: 'Recently resolved', value: '32 tickets' },
+      cta: 'Open tickets',
+    },
+  ]
+
+  const urgencyLabel = { critical: 'Act now', urgent: 'Today', normal: 'Review', info: 'FYI' }
+
+  return (
+    <div style={{ marginBottom: 24 }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 14 }}>
+        <div>
+          <span style={{ fontSize: 20, fontWeight: 600, color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>Orders Summary</span>
+          <span style={{ fontSize: 12, color: '#808080', fontFamily: '"Noto Sans", sans-serif', marginLeft: 8 }}>— v2</span>
+        </div>
+        <div style={{ fontSize: 12, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>
+          Today · May 13, 2026
+        </div>
+      </div>
+
+      {/* Hero risk banner */}
+      <div style={{
+        background: 'linear-gradient(135deg, #fff8f8 0%, #fde8eb 100%)',
+        border: '1px solid #f5c0c8', borderRadius: 10, padding: '14px 18px',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 32, height: 32, borderRadius: 8, background: '#fde8eb', border: '1px solid #f5c0c8', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ed1b36' }}>
+            <IcoFire />
+          </div>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 500, color: '#ed1b36', fontFamily: '"Noto Sans", sans-serif', letterSpacing: '0.04em', textTransform: 'uppercase' }}>Revenue at risk today</div>
+            <div style={{ fontSize: 24, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.2, letterSpacing: -0.5 }}>₹87,450</div>
+          </div>
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <div style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif', marginBottom: 3 }}>across NDR + RTO risk</div>
+          <div style={{ fontSize: 11, fontWeight: 600, color: '#ed1b36', fontFamily: '"Noto Sans", sans-serif' }}>107 shipments affected</div>
+        </div>
+      </div>
+
+      {/* Action cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+        {items.map(item => (
+          <div key={item.id} style={{
+            background: '#fff', border: '1px solid #e8e8e8', borderRadius: 10,
+            overflow: 'hidden', display: 'flex', flexDirection: 'column',
+            transition: 'box-shadow 150ms',
+          }}
+            onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.08)'}
+            onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
+          >
+            {/* Accent top bar */}
+            <div style={{ height: 3, background: item.accentColor }} />
+
+            <div style={{ padding: '14px 14px 12px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+              {/* Urgency pill */}
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: item.accentBg, borderRadius: 4, padding: '2px 7px', marginBottom: 10, alignSelf: 'flex-start' }}>
+                <div style={{ width: 6, height: 6, borderRadius: '50%', background: item.accentColor }} />
+                <span style={{ fontSize: 10, fontWeight: 700, color: item.accentColor, fontFamily: '"Noto Sans", sans-serif', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{urgencyLabel[item.urgency]}</span>
+              </div>
+
+              {/* Main number / headline */}
+              <div style={{ fontSize: 16, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.25, marginBottom: 3 }}>{item.headline}</div>
+              <div style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif', marginBottom: 10 }}>{item.subline}</div>
+
+              {/* Why it matters */}
+              <div style={{ fontSize: 11, color: '#454545', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.5, marginBottom: 10, flex: 1 }}>{item.why}</div>
+
+              {/* Context metric */}
+              <div style={{ background: '#f7f7f9', borderRadius: 6, padding: '7px 10px', marginBottom: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>{item.metric.label}</span>
+                <span style={{ fontSize: 11, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>{item.metric.value}</span>
+              </div>
+
+              {/* CTA */}
+              <button style={{
+                width: '100%', padding: '8px 0', background: item.accentColor, color: '#fff',
+                border: 'none', borderRadius: 6, fontSize: 12, fontWeight: 600,
+                fontFamily: '"Noto Sans", sans-serif', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                transition: 'opacity 150ms',
+              }}
+                onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
+                onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+              >
+                {item.cta} <IcoArrow />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function B2CContent() {
   const [tab, setTab] = useState('overview')
@@ -767,6 +910,9 @@ export default function B2CContent() {
 
         </div>{/* end tiles row */}
       </div>{/* end Orders Summary card */}
+
+      {/* ── Orders Summary 2 ── */}
+      <OrdersSummary2 />
 
       {/* ── Main 2-col grid ── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 20, alignItems: 'start' }}>
