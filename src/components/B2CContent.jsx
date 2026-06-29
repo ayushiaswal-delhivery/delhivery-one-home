@@ -633,7 +633,6 @@ export default function B2CContent() {
         <div style={{ display: 'flex' }}>
           {[
             { id: 'overview',  label: 'Overview' },
-            { id: 'overview2', label: 'Overview 2' },
             { id: 'analysis',  label: 'Analysis' },
           ].map(t => (
             <button key={t.id} onClick={() => setTab(t.id)} style={{
@@ -642,12 +641,9 @@ export default function B2CContent() {
               color: tab === t.id ? 'var(--ink)' : 'var(--ink-3)',
               borderBottom: tab === t.id ? '2px solid var(--red)' : '2px solid transparent',
               marginBottom: -1, fontFamily: '"Noto Sans", sans-serif',
-              transition: 'color 120ms', position: 'relative',
+              transition: 'color 120ms',
             }}>
               {t.label}
-              {t.id === 'overview2' && (
-                <span style={{ position: 'absolute', top: 6, right: 6, width: 6, height: 6, borderRadius: '50%', background: '#ed1b36' }} />
-              )}
             </button>
           ))}
         </div>
@@ -688,6 +684,9 @@ export default function B2CContent() {
       </>}
 
       {tab === 'overview' && <>
+
+      {/* ── Action Center ── */}
+      <NeedsAttentionSection />
 
       {/* ── Orders Summary — rich tiles with CTAs ── */}
       <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, padding: 16, marginBottom: 24 }}>
@@ -938,241 +937,6 @@ export default function B2CContent() {
       <button style={{ position: 'fixed', bottom: 24, right: 24, height: 44, padding: '0 18px', background: 'var(--dark)', color: '#fff', border: 'none', borderRadius: 999, fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', zIndex: 300, boxShadow: '0 4px 14px rgba(0,0,0,0.25)' }}>
         <span style={{ color: '#7C3AED' }}><IcoSpark /></span>Ask SmartAssist
       </button>
-      </>}
-
-      {/* ═══════════════════════════════════════════════════════════════════ */}
-      {/* OVERVIEW 2 — Action-first layout                                   */}
-      {/* ═══════════════════════════════════════════════════════════════════ */}
-      {tab === 'overview2' && <>
-
-        {/* ── Action Center ── */}
-        <NeedsAttentionSection />
-
-        {/* ── Orders Summary — status only, no action CTAs ── */}
-        <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, padding: 16, marginBottom: 24 }}>
-          <div style={{ marginBottom: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: 15, fontWeight: 700, color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>Orders Summary</span>
-            <span style={{ fontSize: 11, color: '#aaa', fontFamily: '"Noto Sans", sans-serif' }}>Status overview · actions surfaced above</span>
-          </div>
-          <div style={{ display: 'flex', gap: 12, alignItems: 'stretch' }}>
-
-            {/* Pending manifest — read-only */}
-            <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                <div style={{ width: 24, height: 24, borderRadius: 4, background: '#fde8eb', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ed1b36', flexShrink: 0 }}><IcoWarning /></div>
-                <span style={{ fontSize: 12, color: '#454545' }}>Pending manifest</span>
-              </div>
-              <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>312</div>
-              <DeltaBadge delta="+8%" up />
-              <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
-                  <span style={{ color: '#666' }}>Bad address <strong style={{ color: '#ed1b36' }}>47</strong></span>
-                  <span style={{ fontSize: 10, color: '#aaa', fontStyle: 'italic' }}>↑ in action center</span>
-                </div>
-                <div style={{ fontSize: 12, color: '#666' }}>High risk orders <strong style={{ color: '#2b2b2b' }}>23</strong></div>
-              </div>
-            </div>
-
-            {/* To be shipped — read-only */}
-            <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                <div style={{ width: 24, height: 24, borderRadius: 4, background: '#fff3ec', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#e77337', flexShrink: 0 }}><IcoBox /></div>
-                <span style={{ fontSize: 12, color: '#454545' }}>To be shipped</span>
-              </div>
-              <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>156</div>
-              <DeltaBadge delta="+3%" up />
-              <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, flex: 1 }}>
-                <div style={{ fontSize: 12, color: '#666' }}>High risk AWBs <strong style={{ color: '#2b2b2b' }}>12</strong></div>
-              </div>
-            </div>
-
-            {/* Awaiting pickup — read-only */}
-            <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                <div style={{ width: 24, height: 24, borderRadius: 4, background: '#e6f3fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2396fb', flexShrink: 0 }}><IcoClock /></div>
-                <span style={{ fontSize: 12, color: '#454545' }}>Awaiting pickup</span>
-              </div>
-              <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>9</div>
-              <DeltaBadge delta="+1" up />
-            </div>
-
-            {/* NDR — read-only, no Activate SmartNDR */}
-            <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                <div style={{ width: 24, height: 24, borderRadius: 4, background: '#f3f0ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed', flexShrink: 0 }}><IcoChat /></div>
-                <span style={{ fontSize: 12, color: '#454545' }}>NDR</span>
-              </div>
-              <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>84</div>
-              <DeltaBadge delta="-2%" up={false} />
-              <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, flex: 1 }}>
-                <span style={{ fontSize: 10, color: '#aaa', fontStyle: 'italic' }}>84 awaiting action ↑ in action center</span>
-              </div>
-            </div>
-
-            {/* Support tickets — read-only, no Respond link */}
-            <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                <div style={{ width: 24, height: 24, borderRadius: 4, background: '#ecf8f3', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1ba86e', flexShrink: 0 }}><IcoHeadset /></div>
-                <span style={{ fontSize: 12, color: '#454545' }}>Support tickets</span>
-              </div>
-              <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>18</div>
-              <DeltaBadge delta="-3" up={false} />
-              <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
-                <div style={{ fontSize: 12, color: '#666' }}>Recently resolved <strong style={{ color: '#2b2b2b' }}>32</strong></div>
-                <div style={{ fontSize: 12, color: '#666' }}>Need your input <strong style={{ color: '#ed1b36' }}>11</strong>
-                  <span style={{ marginLeft: 6, fontSize: 10, color: '#aaa', fontStyle: 'italic' }}>↑ action center</span>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        {/* ── Main 2-col grid ── */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 20, alignItems: 'start' }}>
-
-          {/* LEFT */}
-          <div>
-
-            {/* Finance — read-only, no Respond CTA */}
-            <div style={{ marginBottom: 20 }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-                <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)', fontFamily: '"Noto Sans", sans-serif' }}>Finance</span>
-                <span style={{ fontSize: 11, color: '#aaa', fontFamily: '"Noto Sans", sans-serif' }}>Respond via action center above</span>
-              </div>
-              <div style={{ display: 'flex', gap: 16 }}>
-                <ClaimCard title="Loss & Damage Claims" total={10} inputCount={7}  inputAmt="₹18,200" rejectedCount={3} rejectedAmt="₹9,400" showCta={false} />
-                <ClaimCard title="Weight Disputes"       total={7}  inputCount={5}  inputAmt="₹14,800" rejectedCount={2} rejectedAmt="₹6,500" showCta={false} />
-              </div>
-            </div>
-
-            {/* Pickups — Yesterday (missed) has no action buttons */}
-            <Card isHoverable={false} style={{ marginBottom: 20, borderRadius: 12, border: '1px solid var(--rule)', padding: 24 }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-                <span style={{ fontSize: 20, fontWeight: 600, lineHeight: '26px', color: 'var(--Text-Body-Primary, #2b2b2b)', fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif' }}>Upcoming Pickups</span>
-                <a style={{ fontSize: 12, fontWeight: 500, color: 'var(--Text-Info_Blue-Primary, #2396fb)', cursor: 'pointer', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>View all</a>
-              </div>
-              <div style={{ display: 'flex', gap: 20 }}>
-                <PickupCol
-                  dayLabel="YESTERDAY" dayName="SUN" date="24 May"
-                  pickupId="896232"
-                  statusLabel="Not Picked" statusVariant="error"
-                  accentColor="var(--delhivery-red, #ed1b36)"
-                  buttons={[]}
-                />
-                <PickupCol
-                  dayLabel="TODAY" dayName="MON" date="25 May"
-                  pickupId="896233"
-                  statusLabel="Out for Pickup" statusVariant="info"
-                  accentColor="var(--delhivery-blue, #2396fb)"
-                  buttons={[
-                    { label: 'Print Labels', primary: false },
-                    { label: 'Call Executive', primary: false },
-                  ]}
-                />
-                <PickupCol
-                  dayLabel="TOMORROW" dayName="TUE" date="26 May"
-                  pickupId="896222"
-                  statusLabel="Scheduled" statusVariant="warning"
-                  accentColor="var(--warning, #e9a900)"
-                  buttons={[
-                    { label: 'Print Labels', primary: false },
-                    { icon: <IcoHeadset />, label: undefined, primary: false },
-                  ]}
-                />
-              </div>
-            </Card>
-
-          </div>
-
-          {/* RIGHT RAIL */}
-          <div>
-
-            {/* Wallet — same but COD finlock has no CTA (handled in action center) */}
-            <Card isHoverable={false} style={{ marginBottom: 16, borderRadius: 12, border: '1px solid var(--rule)', padding: '16px 18px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-                <span style={{ color: 'var(--ink-3)' }}><IcoWallet /></span>
-                <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)' }}>Wallet</span>
-              </div>
-              <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 4 }}>Available balance</div>
-              <div style={{ fontSize: 28, fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-disp)', letterSpacing: -1, marginBottom: 4 }}>₹12,456</div>
-              <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 12 }}>Last recharged: ₹50,000 on May 8, 2026</div>
-              <Alert
-                variant="warning"
-                alertStyle="subtle"
-                size="sm"
-                title="Low balance alert"
-                description="Recharge now to avoid service interruption"
-                style={{ marginBottom: 12 }}
-              />
-              <Button variant="black" size="sm" style={{ width: '100%', justifyContent: 'center', marginBottom: 8 }}>
-                Recharge wallet ↗
-              </Button>
-              <a style={{ fontSize: 12, fontWeight: 600, color: 'var(--blue)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3 }}>
-                View transaction history <IcoChevR />
-              </a>
-
-              {/* COD Remittance */}
-              <div style={{ borderTop: '1px solid var(--rule)', marginTop: 16, paddingTop: 16 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                  <span style={{ color: 'var(--blue)' }}><IcoCod /></span>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>COD Remittance</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 12 }}>
-                  <div>
-                    <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 4 }}>Remitted (L30D)</div>
-                    <div style={{ fontSize: 24, fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-disp)', letterSpacing: -0.5 }}>₹8,45,600</div>
-                  </div>
-                  <a style={{ fontSize: 12, fontWeight: 600, color: 'var(--blue)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3 }}>View details <IcoChevR /></a>
-                </div>
-                <div style={{ background: 'var(--surface)', borderRadius: 8, padding: '12px 14px', marginBottom: 12 }}>
-                  <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 4 }}>Next remittance</div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)' }}>May 15, 2026</div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--green)', marginTop: 2 }}>₹1,24,500</div>
-                </div>
-                {/* Finlock alert — shown for context, action is in the action center above */}
-                <Alert
-                  variant="error"
-                  alertStyle="subtle"
-                  size="sm"
-                  title="Anomaly detected"
-                  description="Finlock on account — see action center above to resolve"
-                />
-              </div>
-            </Card>
-
-          </div>
-        </div>
-
-        {/* ── Quick links ── */}
-        <div style={{ height: 1, background: 'var(--rule)', margin: '8px 0 20px' }} />
-        <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
-          {[
-            { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>, title: 'Help Center', sub: 'FAQs, guides & support' },
-            { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 7H6a2 2 0 00-2 2v9a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2h-3"/><rect x="9" y="3" width="6" height="8" rx="1"/><path d="M9 12h6M9 16h4"/></svg>, title: 'Rate Calculator', sub: 'Estimate shipping costs' },
-            { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>, title: 'Book a Training Session', sub: 'Learn the platform with an expert' },
-          ].map((item, i) => (
-            <button key={i} style={{ flex: '1 1 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '14px 16px', background: '#fff', border: '1px solid var(--rule)', borderRadius: 12, cursor: 'pointer', textAlign: 'left', transition: 'box-shadow 150ms, border-color 150ms' }}
-              onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor = '#ccc' }}
-              onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = 'var(--rule)' }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{ width: 40, height: 40, borderRadius: 10, background: '#f4f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#454545', flexShrink: 0 }}>{item.icon}</div>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink)', fontFamily: '"Noto Sans", sans-serif' }}>{item.title}</div>
-                  <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: '"Noto Sans", sans-serif', marginTop: 2 }}>{item.sub}</div>
-                </div>
-              </div>
-              <IcoChevR />
-            </button>
-          ))}
-        </div>
-
-        {/* Floating SmartAssist */}
-        <button style={{ position: 'fixed', bottom: 24, right: 24, height: 44, padding: '0 18px', background: 'var(--dark)', color: '#fff', border: 'none', borderRadius: 999, fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', zIndex: 300, boxShadow: '0 4px 14px rgba(0,0,0,0.25)' }}>
-          <span style={{ color: '#7C3AED' }}><IcoSpark /></span>Ask SmartAssist
-        </button>
-
       </>}
     </div>
   )
