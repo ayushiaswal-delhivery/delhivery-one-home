@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Badge, Chip, Alert, Card } from '@delhivery/tarmac'
+import { Button, Badge, Chip, Alert, Card, Pill, ProgressBar, FilterDropdown, Divider } from '@delhivery/tarmac'
 
 // ── Inline SVG icons (Tarmac icon set style) ──────────────────────────────────
 const IcoWarning  = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -359,7 +359,28 @@ const GEO_ZONES = [
   { id: 'ne',      label: 'North East', states: 'AS · MN · NL · MZ',      rate: 68, shipments: 190,  cx: 162, cy: 62,  r: 14 },
 ]
 
-function zoneColor(rate) {
+const GEO_FILTER_OPTS = [
+  { value: '7d',  label: 'Last 7 days' },
+  { value: '14d', label: 'Last 14 days' },
+  { value: '30d', label: 'Last 30 days' },
+  { value: '90d', label: 'Last 90 days' },
+]
+
+function pillVariantForRate(rate) {
+  if (rate >= 88) return 'success'
+  if (rate >= 80) return 'blue'
+  if (rate >= 72) return 'warning'
+  return 'error'
+}
+
+function progressVariantForRate(rate) {
+  if (rate >= 88) return 'success'
+  if (rate >= 80) return 'info'
+  if (rate >= 72) return 'warning'
+  return 'error'
+}
+
+function svgColorForRate(rate) {
   if (rate >= 88) return { fill: '#dcf5ec', stroke: '#1ba86e', text: '#1ba86e' }
   if (rate >= 80) return { fill: '#e6f3fe', stroke: '#2396fb', text: '#2396fb' }
   if (rate >= 72) return { fill: '#fefaec', stroke: '#e9a900', text: '#cf9f02' }
@@ -367,10 +388,8 @@ function zoneColor(rate) {
 }
 
 function PerformanceByGeographySection() {
-  const [filter, setFilter] = useState('Last 7 days')
-  const [filterOpen, setFilterOpen] = useState(false)
+  const [filterVal, setFilterVal] = useState(['7d'])
   const [hovered, setHovered] = useState(null)
-  const filterOpts = ['Last 7 days', 'Last 14 days', 'Last 30 days', 'Last 90 days']
   const sorted = [...GEO_ZONES].sort((a, b) => b.rate - a.rate)
 
   return (
@@ -381,53 +400,46 @@ function PerformanceByGeographySection() {
           <div style={{ fontSize: 20, fontWeight: 600, lineHeight: '26px', color: 'var(--Text-Heading-Tertiary, #2b2b2b)', fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif' }}>Performance by Geography</div>
           <div style={{ fontSize: 12, fontWeight: 400, color: 'var(--Text-Heading-Base, #666)', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif', marginTop: 4 }}>Delivery rates across India</div>
         </div>
-        <div style={{ position: 'relative' }}>
-          <button onClick={() => setFilterOpen(o => !o)} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'var(--Surface-BG_Coal-Weaker, #eff1f5)', border: 'none', borderRadius: 4, padding: '8px 12px', fontSize: 14, fontWeight: 500, color: 'var(--Text-Coal-Primary, #343c51)', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>
-            {filter}
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          {filterOpen && (
-            <div style={{ position: 'absolute', right: 0, top: '100%', marginTop: 4, background: '#fff', border: '1px solid #e6e6e6', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.1)', zIndex: 200, minWidth: 140, overflow: 'hidden' }}>
-              {filterOpts.map(o => (
-                <div key={o} onClick={() => { setFilter(o); setFilterOpen(false) }}
-                  style={{ padding: '10px 16px', fontSize: 13, color: o === filter ? '#ed1b36' : '#2b2b2b', fontWeight: o === filter ? 600 : 400, cursor: 'pointer', background: o === filter ? '#fde8eb' : 'transparent', fontFamily: '"Noto Sans", sans-serif' }}
-                  onMouseEnter={e => { if (o !== filter) e.currentTarget.style.background = '#f7f7f7' }}
-                  onMouseLeave={e => { if (o !== filter) e.currentTarget.style.background = 'transparent' }}
-                >{o}</div>
-              ))}
-            </div>
-          )}
-        </div>
+        <FilterDropdown
+          options={GEO_FILTER_OPTS}
+          value={filterVal}
+          onChange={v => setFilterVal(v)}
+          size="sm"
+          multiple={false}
+        />
       </div>
 
       {/* body: map + table */}
       <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: 24, alignItems: 'start' }}>
 
         {/* India map SVG */}
-        <div style={{ position: 'relative' }}>
+        <div>
           <svg viewBox="0 0 210 230" style={{ width: '100%', height: 'auto', display: 'block' }}>
-            {/* India outline (approximate) */}
             <path d="M58,14 L72,5 L107,8 L142,22 L178,40 L186,76 L178,120 L165,155 L145,185 L125,215 L110,220 L95,210 L75,186 L60,156 L45,122 L35,82 L30,56 L42,32 Z" fill="#f4f5f7" stroke="#d0d3db" strokeWidth="1.5" />
-            {/* Zone bubbles */}
             {GEO_ZONES.map(z => {
-              const c = zoneColor(z.rate)
+              const c = svgColorForRate(z.rate)
               const isHov = hovered === z.id
               return (
                 <g key={z.id} style={{ cursor: 'pointer' }} onMouseEnter={() => setHovered(z.id)} onMouseLeave={() => setHovered(null)}>
-                  <circle cx={z.cx} cy={z.cy} r={isHov ? z.r + 3 : z.r} fill={c.fill} stroke={c.stroke} strokeWidth={isHov ? 2 : 1.5} style={{ transition: 'r 120ms, stroke-width 120ms' }} />
-                  <text x={z.cx} y={z.cy - 2} textAnchor="middle" fontSize={isHov ? 10 : 9} fontWeight="700" fill={c.text} fontFamily="Noto Sans, sans-serif">{z.rate}%</text>
+                  <circle cx={z.cx} cy={z.cy} r={isHov ? z.r + 3 : z.r} fill={c.fill} stroke={c.stroke} strokeWidth={isHov ? 2 : 1.5} style={{ transition: 'r 120ms' }} />
+                  <text x={z.cx} y={z.cy - 2} textAnchor="middle" fontSize={9} fontWeight="700" fill={c.text} fontFamily="Noto Sans, sans-serif">{z.rate}%</text>
                   <text x={z.cx} y={z.cy + 8} textAnchor="middle" fontSize={7} fill={c.text} fontFamily="Noto Sans, sans-serif" opacity="0.85">{z.label}</text>
                 </g>
               )
             })}
           </svg>
 
-          {/* Legend */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 10px', marginTop: 12 }}>
-            {[['#1ba86e', '≥88% Excellent'], ['#2396fb', '80–87% Good'], ['#e9a900', '72–79% Fair'], ['#ed1b36', '<72% Low']].map(([color, label]) => (
-              <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: '#666', fontFamily: '"Noto Sans", sans-serif' }}>
-                <div style={{ width: 8, height: 8, borderRadius: 999, background: color }} />
-                {label}
+          {/* Legend using Pill */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 12 }}>
+            {[
+              ['success', '≥88%', 'Excellent'],
+              ['blue',    '80–87%', 'Good'],
+              ['warning', '72–79%', 'Fair'],
+              ['error',   '<72%',   'Low'],
+            ].map(([variant, range, label]) => (
+              <div key={variant} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Pill pillVariant={variant} pillType="subtle" size="sm" text={range} />
+                <span style={{ fontSize: 11, color: 'var(--Text-Caption-Base, #808080)', fontFamily: '"Noto Sans", sans-serif' }}>{label}</span>
               </div>
             ))}
           </div>
@@ -435,59 +447,68 @@ function PerformanceByGeographySection() {
 
         {/* Zone ranked table */}
         <div>
-          {/* Table header */}
-          <div style={{ display: 'grid', gridTemplateColumns: '24px 1fr 80px 70px 80px', gap: 8, padding: '0 0 8px', borderBottom: '1px solid var(--rule)', marginBottom: 4 }}>
-            {['#', 'Zone', 'Shipments', 'Del. Rate', ''].map((h, i) => (
-              <div key={i} style={{ fontSize: 11, fontWeight: 600, color: '#808080', fontFamily: '"Noto Sans", sans-serif', textAlign: i >= 2 ? 'right' : 'left' }}>{h}</div>
+          {/* Header row */}
+          <div style={{ display: 'grid', gridTemplateColumns: '24px 1fr 80px 100px 120px', gap: 8, padding: '0 8px 8px' }}>
+            {['#', 'Zone', 'Shipments', 'Del. Rate', 'Performance'].map((h, i) => (
+              <div key={i} style={{ fontSize: 11, fontWeight: 600, color: 'var(--Text-Caption-Base, #808080)', fontFamily: '"Noto Sans", sans-serif', textAlign: i >= 2 ? 'right' : 'left' }}>{h}</div>
             ))}
           </div>
 
-          {/* Rows */}
-          {sorted.map((z, idx) => {
-            const c = zoneColor(z.rate)
-            const isHov = hovered === z.id
-            return (
-              <div key={z.id}
-                onMouseEnter={() => setHovered(z.id)}
-                onMouseLeave={() => setHovered(null)}
-                style={{ display: 'grid', gridTemplateColumns: '24px 1fr 80px 70px 80px', gap: 8, alignItems: 'center', padding: '10px 8px', borderRadius: 8, background: isHov ? '#f4f5f7' : 'transparent', transition: 'background 120ms', cursor: 'default' }}>
-                <div style={{ fontSize: 11, fontWeight: 600, color: '#b0b0b0', fontFamily: '"Noto Sans", sans-serif' }}>{idx + 1}</div>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>{z.label}</div>
-                  <div style={{ fontSize: 10, color: '#808080', fontFamily: '"Noto Sans", sans-serif', marginTop: 1 }}>{z.states}</div>
-                </div>
-                <div style={{ fontSize: 13, fontWeight: 500, color: '#454545', fontFamily: '"Noto Sans", sans-serif', textAlign: 'right' }}>{z.shipments.toLocaleString()}</div>
-                {/* Delivery rate */}
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: c.text, fontFamily: '"Noto Sans", sans-serif' }}>{z.rate}%</div>
-                </div>
-                {/* Bar */}
-                <div>
-                  <div style={{ height: 4, background: '#eff1f5', borderRadius: 999, overflow: 'hidden' }}>
-                    <div style={{ height: '100%', width: `${z.rate}%`, background: c.stroke, borderRadius: 999, transition: 'width 400ms ease' }} />
+          <Divider size="0.5" />
+
+          {/* Zone rows */}
+          <div style={{ marginTop: 4 }}>
+            {sorted.map((z, idx) => {
+              const isHov = hovered === z.id
+              return (
+                <div key={z.id}
+                  onMouseEnter={() => setHovered(z.id)}
+                  onMouseLeave={() => setHovered(null)}
+                  style={{ display: 'grid', gridTemplateColumns: '24px 1fr 80px 100px 120px', gap: 8, alignItems: 'center', padding: '10px 8px', borderRadius: 8, background: isHov ? 'var(--Surface-BG_Coal-Weakest, #f9f9fb)' : 'transparent', transition: 'background 120ms', cursor: 'default' }}>
+                  {/* Rank */}
+                  <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--Text-Caption-Disabled, #b0b0b0)', fontFamily: '"Noto Sans", sans-serif' }}>{idx + 1}</span>
+                  {/* Zone name + states */}
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--Text-Body-Primary, #2b2b2b)', fontFamily: '"Noto Sans", sans-serif' }}>{z.label}</div>
+                    <div style={{ fontSize: 10, color: 'var(--Text-Caption-Base, #808080)', fontFamily: '"Noto Sans", sans-serif', marginTop: 1 }}>{z.states}</div>
                   </div>
+                  {/* Shipments */}
+                  <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--Text-Body-Secondary, #454545)', fontFamily: '"Noto Sans", sans-serif', textAlign: 'right' }}>{z.shipments.toLocaleString()}</div>
+                  {/* Delivery rate Pill */}
+                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Pill pillVariant={pillVariantForRate(z.rate)} pillType="subtle" size="sm" text={`${z.rate}%`} />
+                  </div>
+                  {/* Progress bar */}
+                  <ProgressBar
+                    value={z.rate}
+                    type="horizontal"
+                    size="sm"
+                    variant={progressVariantForRate(z.rate)}
+                    barType="tds"
+                    style={{ margin: 0 }}
+                  />
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
+
+          <Divider size="0.5" style={{ margin: '12px 0' }} />
 
           {/* Summary footer */}
-          <div style={{ marginTop: 16, padding: '14px 16px', background: '#f9f9fb', borderRadius: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <div style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>Pan-India delivery rate</div>
-              <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.2, marginTop: 2 }}>83.1%</div>
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>Total shipments</div>
-              <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.2, marginTop: 2 }}>6,710</div>
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>Best zone</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 2 }}>
-                <div style={{ width: 8, height: 8, borderRadius: 999, background: '#1ba86e' }} />
-                <div style={{ fontSize: 13, fontWeight: 700, color: '#1ba86e', fontFamily: '"Noto Sans", sans-serif' }}>South · 91%</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+            {[
+              { label: 'Pan-India delivery rate', value: '83.1%', pill: null },
+              { label: 'Total shipments', value: '6,710', pill: null },
+              { label: 'Best zone', value: 'South', pill: 'success' },
+            ].map((item, i) => (
+              <div key={i} style={{ background: 'var(--Surface-BG_Coal-Weakest, #f9f9fb)', borderRadius: 8, padding: '12px 14px' }}>
+                <div style={{ fontSize: 11, color: 'var(--Text-Caption-Base, #808080)', fontFamily: '"Noto Sans", sans-serif', marginBottom: 6 }}>{item.label}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ fontSize: 20, fontWeight: 700, color: 'var(--Text-Body-Primary, #2b2b2b)', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1 }}>{item.value}</span>
+                  {item.pill && <Pill pillVariant={item.pill} pillType="subtle" size="sm" text="91%" />}
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
