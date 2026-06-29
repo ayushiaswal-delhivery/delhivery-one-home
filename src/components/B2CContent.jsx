@@ -471,7 +471,9 @@ function PerformanceByGeographySection() {
       {/* Column headers */}
       <div style={{ display: 'grid', gridTemplateColumns: colTemplate, padding: '0 12px 10px' }}>
         {GEO_COLS.map(col => (
-          <TableHeaderCell key={col.key} label={col.label} className={col.align === 'right' ? 'tbl-hdr-right' : ''} />
+          <div key={col.key} style={{ textAlign: col.align, fontSize: 11, fontWeight: 600, color: '#808080', fontFamily: '"Noto Sans", sans-serif', letterSpacing: '0.04em' }}>
+            {col.label}
+          </div>
         ))}
       </div>
 
