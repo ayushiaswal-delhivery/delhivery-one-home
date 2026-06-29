@@ -818,64 +818,72 @@ export default function B2CContent() {
         </div>
 
         {/* RIGHT RAIL */}
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
 
-          {/* Wallet */}
-          <Card isHoverable={false} style={{ marginBottom: 16, borderRadius: 12, border: '1px solid var(--rule)', padding: '16px 18px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-              <span style={{ color: 'var(--ink-3)' }}><IcoWallet /></span>
-              <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)' }}>Wallet</span>
+          {/* ── Wallet card ── */}
+          <Card isHoverable={false} style={{ borderRadius: 12, border: '1px solid var(--rule)', overflow: 'hidden' }}>
+            {/* Low balance banner — top of card, unmissable */}
+            <div style={{ background: '#fffbec', borderBottom: '1px solid #fcedb7', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#c28b00" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span style={{ fontSize: 12, fontWeight: 600, color: '#a07000', fontFamily: '"Noto Sans", sans-serif' }}>Low balance — recharge to avoid disruption</span>
             </div>
-            <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 4 }}>Available balance</div>
-            <div style={{ fontSize: 28, fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-disp)', letterSpacing: -1, marginBottom: 4 }}>₹12,456</div>
-            <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 12 }}>Last recharged: ₹50,000 on May 8, 2026</div>
-            <Alert
-              variant="warning"
-              alertStyle="subtle"
-              size="sm"
-              title="Low balance alert"
-              description="Recharge now to avoid service interruption"
-              style={{ marginBottom: 12 }}
-            />
-            <Button variant="black" size="sm" style={{ width: '100%', justifyContent: 'center', marginBottom: 8 }}>
-              Recharge wallet ↗
-            </Button>
-            <a style={{ fontSize: 12, fontWeight: 600, color: 'var(--blue)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3 }}>
-              View transaction history <IcoChevR />
-            </a>
-
-            {/* COD Remittance */}
-            <div style={{ borderTop: '1px solid var(--rule)', marginTop: 16, paddingTop: 16 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                <span style={{ color: 'var(--blue)' }}><IcoCod /></span>
-                <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>COD Remittance</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 12 }}>
-                <div>
-                  <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 4 }}>Remitted (L30D)</div>
-                  <div style={{ fontSize: 24, fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-disp)', letterSpacing: -0.5 }}>₹8,45,600</div>
+            <div style={{ padding: '16px 18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ color: 'var(--ink-3)' }}><IcoWallet /></span>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)', fontFamily: '"Noto Sans", sans-serif' }}>Wallet</span>
                 </div>
-                <a style={{ fontSize: 12, fontWeight: 600, color: 'var(--blue)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3 }}>View details <IcoChevR /></a>
+                <a style={{ fontSize: 11, fontWeight: 500, color: 'var(--blue)', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>History <IcoChevR /></a>
               </div>
-              <div style={{ background: 'var(--surface)', borderRadius: 8, padding: '12px 14px', marginBottom: 12 }}>
-                <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 4 }}>Next remittance</div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)' }}>May 15, 2026</div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--green)', marginTop: 2 }}>₹1,24,500</div>
-              </div>
-              <Alert
-                variant="error"
-                alertStyle="subtle"
-                size="sm"
-                title="Anomaly detected"
-                description="Finlock on your account due to pending verification. Contact support."
-                ctaActions={<Button variant="dlv_red" size="sm" buttonStyle="tertiary">Resolve now →</Button>}
-                showCtas
-              />
+              <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 2 }}>Available balance</div>
+              <div style={{ fontSize: 30, fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-disp)', letterSpacing: -1, marginBottom: 2 }}>₹12,456</div>
+              <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 14 }}>Last recharged ₹50,000 · May 8</div>
+              <Button variant="black" size="sm" style={{ width: '100%', justifyContent: 'center' }}>
+                Recharge wallet ↗
+              </Button>
             </div>
           </Card>
 
-          {/* Promo carousel — hidden */}
-          {/* Disruptions — hidden */}
+          {/* ── COD Remittance card ── */}
+          <Card isHoverable={false} style={{ borderRadius: 12, border: '1px solid var(--rule)', overflow: 'hidden' }}>
+            {/* Next payout hero */}
+            <div style={{ background: 'linear-gradient(135deg, #f0fdf8 0%, #e8f8f2 100%)', borderBottom: '1px solid #b3e2cf', padding: '16px 18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+                <span style={{ color: '#1ba86e' }}><IcoCod /></span>
+                <span style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>COD Remittance</span>
+              </div>
+              <div style={{ fontSize: 11, color: '#1ba86e', fontWeight: 500, fontFamily: '"Noto Sans", sans-serif', marginBottom: 4 }}>NEXT PAYOUT · MAY 15, 2026</div>
+              <div style={{ fontSize: 28, fontWeight: 700, color: '#1ba86e', fontFamily: 'var(--font-disp)', letterSpacing: -1, lineHeight: 1, marginBottom: 4 }}>₹1,24,500</div>
+              <div style={{ fontSize: 11, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>In 2 days · direct to your bank account</div>
+            </div>
+            {/* Supporting stats */}
+            <div style={{ padding: '14px 18px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div>
+                  <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 2 }}>Total remitted · last 30 days</div>
+                  <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-disp)', letterSpacing: -0.5 }}>₹8,45,600</div>
+                </div>
+                <a style={{ fontSize: 12, fontWeight: 600, color: 'var(--blue)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>
+                  View details <IcoChevR />
+                </a>
+              </div>
+              {/* Mini payout timeline */}
+              <div style={{ display: 'flex', gap: 6 }}>
+                {[
+                  { label: 'May 1', amt: '₹2.1L', done: true },
+                  { label: 'May 8', amt: '₹1.8L', done: true },
+                  { label: 'May 15', amt: '₹1.24L', done: false, next: true },
+                ].map((p, i) => (
+                  <div key={i} style={{ flex: 1, background: p.next ? '#f0fdf8' : p.done ? '#f4f4f6' : '#fff', border: `1px solid ${p.next ? '#b3e2cf' : '#e6e6e6'}`, borderRadius: 6, padding: '6px 8px', textAlign: 'center' }}>
+                    <div style={{ fontSize: 10, color: p.next ? '#1ba86e' : '#808080', fontWeight: p.next ? 600 : 400, fontFamily: '"Noto Sans", sans-serif', marginBottom: 2 }}>{p.label}</div>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: p.next ? '#1ba86e' : '#454545', fontFamily: '"Noto Sans", sans-serif' }}>{p.amt}</div>
+                    {p.done && <div style={{ fontSize: 9, color: '#1ba86e', fontWeight: 500, marginTop: 1 }}>✓ paid</div>}
+                    {p.next && <div style={{ fontSize: 9, color: '#1ba86e', fontWeight: 600, marginTop: 1 }}>upcoming</div>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Card>
 
         </div>
       </div>
