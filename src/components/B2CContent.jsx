@@ -620,6 +620,49 @@ export default function B2CContent() {
         </div>
       </div>
 
+      {/* ── Quick links ── */}
+      <div style={{ height: 1, background: 'var(--rule)', margin: '8px 0 20px' }} />
+      <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
+        {[
+          {
+            icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>,
+            title: 'Help Center',
+            sub: 'FAQs, guides & support',
+          },
+          {
+            icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 7H6a2 2 0 00-2 2v9a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2h-3"/><rect x="9" y="3" width="6" height="8" rx="1"/><path d="M9 12h6M9 16h4"/></svg>,
+            title: 'Rate Calculator',
+            sub: 'Estimate shipping costs',
+          },
+          {
+            icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>,
+            title: 'Book a Training Session',
+            sub: 'Learn the platform with an expert',
+          },
+        ].map((item, i) => (
+          <button key={i} style={{
+            flex: '1 1 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            gap: 12, padding: '14px 16px', background: '#fff',
+            border: '1px solid var(--rule)', borderRadius: 12, cursor: 'pointer',
+            textAlign: 'left', transition: 'box-shadow 150ms, border-color 150ms',
+          }}
+            onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor = '#ccc' }}
+            onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = 'var(--rule)' }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ width: 40, height: 40, borderRadius: 10, background: '#f4f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#454545', flexShrink: 0 }}>
+                {item.icon}
+              </div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink)', fontFamily: '"Noto Sans", sans-serif' }}>{item.title}</div>
+                <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: '"Noto Sans", sans-serif', marginTop: 2 }}>{item.sub}</div>
+              </div>
+            </div>
+            <IcoChevR />
+          </button>
+        ))}
+      </div>
+
       {/* Floating SmartAssist */}
       <button style={{ position: 'fixed', bottom: 24, right: 24, height: 44, padding: '0 18px', background: 'var(--dark)', color: '#fff', border: 'none', borderRadius: 999, fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', zIndex: 300, boxShadow: '0 4px 14px rgba(0,0,0,0.25)' }}>
         <span style={{ color: '#7C3AED' }}><IcoSpark /></span>Ask SmartAssist
