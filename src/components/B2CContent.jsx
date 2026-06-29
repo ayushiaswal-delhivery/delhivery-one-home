@@ -508,16 +508,44 @@ function ActionRow({ item, isLast }) {
   )
 }
 
+function ActionCard({ item }) {
+  const cfg = SEVERITY[item.sev]
+  return (
+    <div
+      style={{ flex: '1 1 0', minWidth: 0, border: `1px solid ${cfg.bg}`, borderTop: `3px solid ${cfg.color}`, borderRadius: 10, padding: '16px 18px', background: '#fff', cursor: 'pointer', transition: 'box-shadow 150ms', display: 'flex', flexDirection: 'column', gap: 10 }}
+      onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.08)'}
+      onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
+    >
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
+        <div style={{ width: 36, height: 36, borderRadius: 8, background: cfg.bg, color: cfg.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          {item.icon}
+        </div>
+        <span style={{ fontSize: 11, fontWeight: 700, color: cfg.color, background: cfg.bg, borderRadius: 999, padding: '2px 8px', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap', alignSelf: 'center' }}>
+          {item.count} {item.unit}
+        </span>
+      </div>
+      <div>
+        <div style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif', marginBottom: 4 }}>{item.title}</div>
+        <div style={{ fontSize: 12, color: '#808080', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.4 }}>{item.desc}</div>
+      </div>
+      <a style={{ marginTop: 'auto', fontSize: 12, fontWeight: 700, color: cfg.color, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: '"Noto Sans", sans-serif' }}>
+        {item.cta} <IcoArrow />
+      </a>
+    </div>
+  )
+}
+
 function NeedsAttentionSection() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const critical = ACTION_ITEMS.filter(i => i.sev === 'critical')
-  const rest      = ACTION_ITEMS.filter(i => i.sev !== 'critical')
+  const topUrgent = ACTION_ITEMS.filter(i => i.sev === 'urgent').slice(0, 1)
+  const preview = [...critical, ...topUrgent]
 
   return (
     <>
-      <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, marginBottom: 24, overflow: 'hidden' }}>
+      <div style={{ marginBottom: 24 }}>
         {/* ── Header ── */}
-        <div style={{ padding: '12px 20px', borderBottom: '1px solid #f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ fontSize: 14, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>Needs your attention</span>
             <span style={{ fontSize: 11, fontWeight: 600, color: '#ed1b36', background: '#fde8eb', borderRadius: 999, padding: '2px 8px', fontFamily: '"Noto Sans", sans-serif' }}>
@@ -534,10 +562,10 @@ function NeedsAttentionSection() {
           </button>
         </div>
 
-        {/* ── Critical items only ── */}
-        {critical.map((item, idx) => (
-          <ActionRow key={idx} item={item} isLast={idx === critical.length - 1} />
-        ))}
+        {/* ── 3 cards side by side ── */}
+        <div style={{ display: 'flex', gap: 14 }}>
+          {preview.map((item, idx) => <ActionCard key={idx} item={item} />)}
+        </div>
       </div>
 
       {/* ── Side drawer — all items ── */}
