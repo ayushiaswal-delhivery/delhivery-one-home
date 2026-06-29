@@ -125,9 +125,9 @@ function ClaimCard({ title, total, inputCount, inputAmt, rejectedCount, rejected
           <span style={{ fontSize: 20, fontWeight: 600, color: 'var(--Text-Coal-Primary, #343c51)', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.2 }}>{inputCount}</span>
           <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--Text-Success-Primary, #1ba86e)', fontFamily: '"Noto Sans", sans-serif' }}>{inputAmt}</span>
           {showCta && (
-            <Button variant="dlv_red" buttonStyle="tertiary" size="sm" style={{ marginTop: 8, padding: '4px 0', fontSize: 12, justifyContent: 'flex-start', color: 'var(--red)' }}>
-              Respond →
-            </Button>
+            <a style={{ marginTop: 8, fontSize: 12, fontWeight: 600, color: '#2396fb', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 3, fontFamily: '"Noto Sans", sans-serif' }}>
+              Respond <IcoArrow />
+            </a>
           )}
         </div>
         {/* Vertical divider */}
