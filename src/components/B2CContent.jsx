@@ -184,9 +184,9 @@ function PickupCol({ dayLabel, date, pickupCount, variant, cutoff, missedReason,
         )}
         <div style={{ display: 'flex', gap: 8, marginTop: 'auto' }}>
           {buttons.map((b, i) => (
-            <Button key={i} variant={b.primary ? 'black' : 'outline'} size="sm"
+            <Button key={i} variant="coal" size="sm"
               leadingIcon={b.icon}
-              style={{ flex: '1 1 0', justifyContent: 'center', background: b.primary ? undefined : '#fff', whiteSpace: 'nowrap' }}>
+              style={{ flex: '1 1 0', justifyContent: 'center', whiteSpace: 'nowrap' }}>
               {b.label}
             </Button>
           ))}
