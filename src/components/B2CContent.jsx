@@ -566,20 +566,7 @@ export default function B2CContent() {
             </div>
           </Card>
 
-          {/* SmartAssist Insights */}
-          <InsightCard
-            title="Your RTO rate jumped 4.2pp last month"
-            body="Top driver: bad addresses in Uttar Pradesh (+18 orders)"
-            cta="Fix 18 bad addresses → estimated ₹2.1L recovered"
-          />
-          <InsightCard
-            title="Your COD share is increasing with contribution from Hyderabad"
-            body="COD jumped from 42% to 58% in last 30 days"
-            cta="Try to change demand mix for better cash flow"
-          />
-          <Button variant="black" size="md" trailingIcon={<IcoArrow />} style={{ width: '100%', justifyContent: 'center', marginBottom: 20 }}>
-            View analysis
-          </Button>
+          {/* SmartAssist Insights — hidden */}
 
           {/* Performance */}
           <PerformanceSection />
