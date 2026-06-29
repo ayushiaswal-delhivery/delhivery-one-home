@@ -472,7 +472,6 @@ export default function B2CContent() {
             <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>84</div>
             <DeltaBadge delta="-2%" up={false} />
             <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
-              <Chip text="Automate NDR" chipType="coal" chipVariant="outlined" size="sm" />
               <Button size="sm" style={{ width: '100%', justifyContent: 'center', background: '#7c3aed', borderColor: '#7c3aed', color: '#fff' }}>
                 Activate SmartNDR
               </Button>
