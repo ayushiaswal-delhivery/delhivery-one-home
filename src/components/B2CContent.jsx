@@ -513,34 +513,6 @@ export default function B2CContent() {
               { label: 'Need your input', value: '5',  amount: '₹14,800', amtColor: 'var(--yellow)', bg: '#FDFAF2', cta: 'Respond' },
               { label: 'Rejected',        value: '2',  amount: '₹6,500',  amtColor: 'var(--red)',   bg: '#FDF2F3' },
             ]} />
-            {/* COD Remittance */}
-            <div style={{ padding: '16px 0' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                <span style={{ color: 'var(--blue)' }}><IcoCod /></span>
-                <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>COD Remittance</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 12 }}>
-                <div>
-                  <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 4 }}>Remitted (L30D)</div>
-                  <div style={{ fontSize: 24, fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-disp)', letterSpacing: -0.5 }}>₹8,45,600</div>
-                </div>
-                <a style={{ fontSize: 12, fontWeight: 600, color: 'var(--blue)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3 }}>View details <IcoChevR /></a>
-              </div>
-              <div style={{ background: 'var(--surface)', borderRadius: 8, padding: '12px 14px', marginBottom: 12 }}>
-                <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 4 }}>Next remittance</div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)' }}>May 15, 2026</div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--green)', marginTop: 2 }}>₹1,24,500</div>
-              </div>
-              <Alert
-                variant="error"
-                alertStyle="subtle"
-                size="sm"
-                title="Anomaly detected"
-                description="Finlock on your account due to pending verification. Contact support."
-                ctaActions={<Button variant="dlv_red" size="sm" buttonStyle="tertiary">Resolve now →</Button>}
-                showCtas
-              />
-            </div>
           </Card>
 
           {/* Upcoming Pickups */}
@@ -612,6 +584,35 @@ export default function B2CContent() {
             <a style={{ fontSize: 12, fontWeight: 600, color: 'var(--blue)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3 }}>
               View transaction history <IcoChevR />
             </a>
+
+            {/* COD Remittance */}
+            <div style={{ borderTop: '1px solid var(--rule)', marginTop: 16, paddingTop: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <span style={{ color: 'var(--blue)' }}><IcoCod /></span>
+                <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>COD Remittance</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 12 }}>
+                <div>
+                  <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 4 }}>Remitted (L30D)</div>
+                  <div style={{ fontSize: 24, fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-disp)', letterSpacing: -0.5 }}>₹8,45,600</div>
+                </div>
+                <a style={{ fontSize: 12, fontWeight: 600, color: 'var(--blue)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3 }}>View details <IcoChevR /></a>
+              </div>
+              <div style={{ background: 'var(--surface)', borderRadius: 8, padding: '12px 14px', marginBottom: 12 }}>
+                <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 4 }}>Next remittance</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)' }}>May 15, 2026</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--green)', marginTop: 2 }}>₹1,24,500</div>
+              </div>
+              <Alert
+                variant="error"
+                alertStyle="subtle"
+                size="sm"
+                title="Anomaly detected"
+                description="Finlock on your account due to pending verification. Contact support."
+                ctaActions={<Button variant="dlv_red" size="sm" buttonStyle="tertiary">Resolve now →</Button>}
+                showCtas
+              />
+            </div>
           </Card>
 
           {/* Promo carousel — hidden */}
