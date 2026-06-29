@@ -380,48 +380,38 @@ export default function B2CContent() {
         ))}
       </div>
 
-      {tab === 'analysis' && (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 320, color: 'var(--ink-4)', fontFamily: '"Noto Sans", sans-serif' }}>
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ marginBottom: 12, opacity: 0.3 }}><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-          <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--ink-3)', marginBottom: 6 }}>Analysis coming soon</div>
-          <div style={{ fontSize: 13, color: 'var(--ink-4)' }}>Deep-dive metrics and insights will appear here.</div>
-        </div>
-      )}
-
-      {tab === 'overview' && <>
-
-      {/* ── Business Overview (Revenue KPIs) ── */}
-      <div style={{
-        background: 'var(--Surface-BG_Primary-Default, #fff)',
-        border: '1px solid var(--Border-Neutral-Tertiary, #e6e6e6)',
-        borderRadius: 'var(--Radius-Large, 12px)',
-        overflow: 'hidden',
-        marginBottom: 16,
-      }}>
-        <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--Border-Neutral-Tertiary, #e6e6e6)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div>
-            <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--Text-Heading-Primary, #1a1a1a)', fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif' }}>Business Overview</div>
-            <div style={{ fontSize: 12, fontWeight: 400, color: 'var(--Text-Caption-Primary, #454545)', marginTop: 2, fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>Last 30 days performance</div>
+      {tab === 'analysis' && <>
+        {/* ── Business Overview (Revenue KPIs) ── */}
+        <div style={{ background: 'var(--Surface-BG_Primary-Default, #fff)', border: '1px solid var(--Border-Neutral-Tertiary, #e6e6e6)', borderRadius: 'var(--Radius-Large, 12px)', overflow: 'hidden', marginBottom: 16 }}>
+          <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--Border-Neutral-Tertiary, #e6e6e6)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div>
+              <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--Text-Heading-Primary, #1a1a1a)', fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif' }}>Business Overview</div>
+              <div style={{ fontSize: 12, fontWeight: 400, color: 'var(--Text-Caption-Primary, #454545)', marginTop: 2, fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>Last 30 days performance</div>
+            </div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
+            {[
+              { icon: <IcoTrendUp />, iconColor: 'var(--Text-Success-Primary, #1ba86e)', label: 'Revenue (OMS)',         value: '₹42.8L', delta: '+12% vs L30D', deltaColor: 'var(--Text-Success-Primary, #1ba86e)' },
+              { icon: <IcoBox />,     iconColor: 'var(--Text-Accent-Primary, #2396fb)',  label: 'AOV',                   value: '₹1,247', delta: '+7% vs L30D',  deltaColor: 'var(--Text-Success-Primary, #1ba86e)' },
+              { icon: <IcoBox />,     iconColor: '#7C3AED',                              label: 'Total orders',           value: '3,432',  delta: '+2% vs L30D',  deltaColor: 'var(--Text-Success-Primary, #1ba86e)' },
+              { icon: <IcoTruck />,   iconColor: 'var(--Text-Warning-Primary, #cf9f02)', label: 'Shipped with Delhivery', value: '1,544',  delta: '45% of total', deltaColor: 'var(--Text-Caption-Base, #808080)' },
+            ].map((m, i, arr) => (
+              <div key={i} style={{ padding: '16px 20px', borderRight: i < arr.length - 1 ? '1px solid var(--Border-Neutral-Tertiary, #e6e6e6)' : 'none' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+                  <span style={{ color: m.iconColor }}>{m.icon}</span>
+                  <span style={{ fontSize: 12, fontWeight: 400, color: 'var(--Text-Caption-Primary, #454545)', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>{m.label}</span>
+                </div>
+                <div style={{ fontSize: 20, fontWeight: 700, lineHeight: '26px', color: 'var(--Text-Body-Primary, #2b2b2b)', fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif', marginBottom: 6 }}>{m.value}</div>
+                <div style={{ fontSize: 10, fontWeight: 500, color: m.deltaColor, fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>{m.delta}</div>
+              </div>
+            ))}
           </div>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
-          {[
-            { icon: <IcoTrendUp />, iconColor: 'var(--Text-Success-Primary, #1ba86e)', label: 'Revenue (OMS)',         value: '₹42.8L', delta: '+12% vs L30D', deltaColor: 'var(--Text-Success-Primary, #1ba86e)' },
-            { icon: <IcoBox />,     iconColor: 'var(--Text-Accent-Primary, #2396fb)',  label: 'AOV',                   value: '₹1,247', delta: '+7% vs L30D',  deltaColor: 'var(--Text-Success-Primary, #1ba86e)' },
-            { icon: <IcoBox />,     iconColor: '#7C3AED',                              label: 'Total orders',           value: '3,432',  delta: '+2% vs L30D',  deltaColor: 'var(--Text-Success-Primary, #1ba86e)' },
-            { icon: <IcoTruck />,   iconColor: 'var(--Text-Warning-Primary, #cf9f02)', label: 'Shipped with Delhivery', value: '1,544',  delta: '45% of total', deltaColor: 'var(--Text-Caption-Base, #808080)' },
-          ].map((m, i, arr) => (
-            <div key={i} style={{ padding: '16px 20px', borderRight: i < arr.length - 1 ? '1px solid var(--Border-Neutral-Tertiary, #e6e6e6)' : 'none' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-                <span style={{ color: m.iconColor }}>{m.icon}</span>
-                <span style={{ fontSize: 12, fontWeight: 400, color: 'var(--Text-Caption-Primary, #454545)', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>{m.label}</span>
-              </div>
-              <div style={{ fontSize: 20, fontWeight: 700, lineHeight: '26px', letterSpacing: 0, color: 'var(--Text-Body-Primary, #2b2b2b)', fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif', marginBottom: 6 }}>{m.value}</div>
-              <div style={{ fontSize: 10, fontWeight: 500, lineHeight: '12px', color: m.deltaColor, fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>{m.delta}</div>
-            </div>
-          ))}
-        </div>
-      </div>
+        {/* Performance */}
+        <PerformanceSection />
+      </>}
+
+      {tab === 'overview' && <>
 
       {/* ── Orders Summary — rich tiles with CTAs ── */}
       <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, padding: 16, marginBottom: 24 }}>
@@ -594,9 +584,6 @@ export default function B2CContent() {
           </Card>
 
           {/* SmartAssist Insights — hidden */}
-
-          {/* Performance */}
-          <PerformanceSection />
         </div>
 
         {/* RIGHT RAIL */}
