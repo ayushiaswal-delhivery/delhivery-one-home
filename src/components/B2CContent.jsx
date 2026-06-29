@@ -186,6 +186,8 @@ function PickupCol({ dayLabel, date, pickupCount, variant, cutoff, missedReason,
           {buttons.map((b, i) => (
             <Button key={i} variant="coal" size="sm"
               leadingIcon={b.icon}
+              backgroundColor="var(--Surface-BG_Coal-Weaker, #eff1f5)"
+              textColor="var(--Text-Coal-Primary, #343c51)"
               style={{ flex: '1 1 0', justifyContent: 'center', whiteSpace: 'nowrap' }}>
               {b.label}
             </Button>
