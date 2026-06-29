@@ -856,32 +856,10 @@ export default function B2CContent() {
               <div style={{ fontSize: 28, fontWeight: 700, color: '#1ba86e', fontFamily: 'var(--font-disp)', letterSpacing: -1, lineHeight: 1, marginBottom: 4 }}>₹1,24,500</div>
               <div style={{ fontSize: 11, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>In 2 days · direct to your bank account</div>
             </div>
-            {/* Supporting stats */}
-            <div style={{ padding: '14px 18px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div>
-                  <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 2 }}>Total remitted · last 30 days</div>
-                  <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-disp)', letterSpacing: -0.5 }}>₹8,45,600</div>
-                </div>
-                <a style={{ fontSize: 12, fontWeight: 600, color: 'var(--blue)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>
-                  View details <IcoChevR />
-                </a>
-              </div>
-              {/* Mini payout timeline */}
-              <div style={{ display: 'flex', gap: 6 }}>
-                {[
-                  { label: 'May 1', amt: '₹2.1L', done: true },
-                  { label: 'May 8', amt: '₹1.8L', done: true },
-                  { label: 'May 15', amt: '₹1.24L', done: false, next: true },
-                ].map((p, i) => (
-                  <div key={i} style={{ flex: 1, background: p.next ? '#f0fdf8' : p.done ? '#f4f4f6' : '#fff', border: `1px solid ${p.next ? '#b3e2cf' : '#e6e6e6'}`, borderRadius: 6, padding: '6px 8px', textAlign: 'center' }}>
-                    <div style={{ fontSize: 10, color: p.next ? '#1ba86e' : '#808080', fontWeight: p.next ? 600 : 400, fontFamily: '"Noto Sans", sans-serif', marginBottom: 2 }}>{p.label}</div>
-                    <div style={{ fontSize: 12, fontWeight: 700, color: p.next ? '#1ba86e' : '#454545', fontFamily: '"Noto Sans", sans-serif' }}>{p.amt}</div>
-                    {p.done && <div style={{ fontSize: 9, color: '#1ba86e', fontWeight: 500, marginTop: 1 }}>✓ paid</div>}
-                    {p.next && <div style={{ fontSize: 9, color: '#1ba86e', fontWeight: 600, marginTop: 1 }}>upcoming</div>}
-                  </div>
-                ))}
-              </div>
+            <div style={{ padding: '12px 18px' }}>
+              <a style={{ fontSize: 12, fontWeight: 600, color: 'var(--blue)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, fontFamily: '"Noto Sans", sans-serif' }}>
+                View remittance details <IcoChevR />
+              </a>
             </div>
           </Card>
 
