@@ -613,44 +613,8 @@ export default function B2CContent() {
             </a>
           </Card>
 
-          {/* Promo carousel */}
-          <div style={{ marginBottom: 16 }}>
-            <div style={{ background: s.bg, borderRadius: 12, padding: '16px 18px', position: 'relative', overflow: 'hidden' }}>
-              <div style={{ position: 'absolute', right: -20, top: -20, width: 100, height: 100, borderRadius: 999, background: 'radial-gradient(closest-side, rgba(237,27,54,0.25), transparent)', pointerEvents: 'none' }} />
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', color: s.tagColor, fontFamily: 'var(--font-ui)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 5 }}>
-                <span style={{ color: '#7C3AED' }}><IcoSpark /></span>{s.tag}
-              </div>
-              <div style={{ fontSize: 16, fontWeight: 700, color: '#fff', lineHeight: 1.3, marginBottom: 6 }}>{s.title}</div>
-              <div style={{ fontSize: 12, color: '#B2B8CC', marginBottom: 14, lineHeight: 1.5 }}>{s.body}</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <button style={{ height: 30, padding: '0 14px', borderRadius: 999, background: s.ctaBg, color: '#fff', border: 'none', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>{s.cta}</button>
-                {s.ctaSecondary && <a style={{ fontSize: 12, color: '#B2B8CC', cursor: 'pointer' }}>{s.ctaSecondary}</a>}
-              </div>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 10, padding: '0 2px' }}>
-              <div style={{ display: 'flex', gap: 6 }}>
-                {slides.map((_, i) => (
-                  <div key={i} onClick={() => setSlide(i)} style={{ height: 6, borderRadius: 999, cursor: 'pointer', background: i === slide ? 'var(--ink-3)' : 'var(--rule)', width: i === slide ? 16 : 6, transition: 'all 150ms' }} />
-                ))}
-              </div>
-              <div style={{ display: 'flex', gap: 6 }}>
-                <Button variant="outline" size="sm" buttonType="iconButton" onClick={() => setSlide((slide - 1 + slides.length) % slides.length)}><IcoChevL /></Button>
-                <Button variant="outline" size="sm" buttonType="iconButton" onClick={() => setSlide((slide + 1) % slides.length)}><IcoChevR /></Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Disruptions */}
-          <Card isHoverable={false} style={{ borderRadius: 12, border: '1px solid var(--rule)', padding: '16px 18px 8px' }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)', marginBottom: 2 }}>Disruptions affecting your shipments</div>
-            <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 12 }}>Last synced: 11:59 AM</div>
-            <DisruptionRow icon={<IcoStop />}    title="Embargo · Madhya Pradesh"   meta="12 shipments at risk · Est. delay 2–3 days" severity="high" />
-            <DisruptionRow icon={<IcoRain />}    title="Heavy rain · Mumbai, Pune"  meta="8 shipments at risk · Est. delay 1 day"     severity="med" />
-            <DisruptionRow icon={<IcoStarOut />} title="Local festival · Rajasthan" meta="3 shipments at risk · Delivery may be delayed" severity="low" />
-            <a style={{ fontSize: 12, fontWeight: 600, color: 'var(--blue)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, padding: '10px 0 4px' }}>
-              View all disruptions <IcoChevR />
-            </a>
-          </Card>
+          {/* Promo carousel — hidden */}
+          {/* Disruptions — hidden */}
 
         </div>
       </div>
