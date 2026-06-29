@@ -351,6 +351,7 @@ function PerformanceSection() {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function B2CContent() {
+  const [tab, setTab] = useState('overview')
   const [slide, setSlide] = useState(0)
 
   const slides = [
@@ -362,6 +363,32 @@ export default function B2CContent() {
 
   return (
     <div className="content" style={{ position: 'relative' }}>
+
+      {/* ── Tabs ── */}
+      <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid var(--rule)', marginBottom: 20, marginTop: -4 }}>
+        {['overview', 'analysis'].map(t => (
+          <button key={t} onClick={() => setTab(t)} style={{
+            background: 'none', border: 'none', cursor: 'pointer',
+            padding: '10px 20px', fontSize: 14, fontWeight: tab === t ? 600 : 400,
+            color: tab === t ? 'var(--ink)' : 'var(--ink-3)',
+            borderBottom: tab === t ? '2px solid var(--red)' : '2px solid transparent',
+            marginBottom: -1, fontFamily: '"Noto Sans", sans-serif',
+            textTransform: 'capitalize', transition: 'color 120ms',
+          }}>
+            {t.charAt(0).toUpperCase() + t.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'analysis' && (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 320, color: 'var(--ink-4)', fontFamily: '"Noto Sans", sans-serif' }}>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ marginBottom: 12, opacity: 0.3 }}><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--ink-3)', marginBottom: 6 }}>Analysis coming soon</div>
+          <div style={{ fontSize: 13, color: 'var(--ink-4)' }}>Deep-dive metrics and insights will appear here.</div>
+        </div>
+      )}
+
+      {tab === 'overview' && <>
 
       {/* ── Business Overview (Revenue KPIs) ── */}
       <div style={{
@@ -610,6 +637,7 @@ export default function B2CContent() {
       <button style={{ position: 'fixed', bottom: 24, right: 24, height: 44, padding: '0 18px', background: 'var(--dark)', color: '#fff', border: 'none', borderRadius: 999, fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', zIndex: 300, boxShadow: '0 4px 14px rgba(0,0,0,0.25)' }}>
         <span style={{ color: '#7C3AED' }}><IcoSpark /></span>Ask SmartAssist
       </button>
+      </>}
     </div>
   )
 }
