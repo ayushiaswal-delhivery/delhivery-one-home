@@ -218,6 +218,137 @@ function DisruptionRow({ icon, title, meta, severity }) {
   )
 }
 
+// ── Performance section ────────────────────────────────────────────────────────
+const PERF_WEEKS = ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6']
+// [inTransit%, delivered%, returned%] — stacked, values are proportions of max
+const PERF_DATA = [
+  { inTransit: 32, delivered: 42, returned: 9 },
+  { inTransit: 62, delivered: 60, returned: 9 },
+  { inTransit: 110, delivered: 182, returned: 26 },
+  { inTransit: 10, delivered: 28, returned: 26 },
+  { inTransit: 44, delivered: 50, returned: 36 },
+  { inTransit: 56, delivered: 120, returned: 64 },
+]
+const CHART_MAX = 300
+
+function PerformanceSection() {
+  const [filter, setFilter] = useState('Last 7 days')
+  const [filterOpen, setFilterOpen] = useState(false)
+  const filterOpts = ['Last 7 days', 'Last 14 days', 'Last 30 days', 'Last 90 days']
+  const kpis = [
+    { label: 'Delivered',        value: '1,234', delta: '+50%', up: true },
+    { label: 'First attempt',    value: '1,101', delta: '+50%', up: true },
+    { label: 'Avg delivery time', value: '2.4 days', delta: '+50%', up: true },
+    { label: 'Avg pickup time',  value: '3.1 hrs', delta: '+50%', up: true },
+  ]
+  const yLabels = [300, 240, 180, 120, 60, 0]
+
+  return (
+    <Card isHoverable={false} style={{ marginBottom: 20, borderRadius: 12, border: '1px solid var(--rule)', padding: 24 }}>
+      {/* header */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20 }}>
+        <div>
+          <div style={{ fontSize: 20, fontWeight: 600, lineHeight: '26px', color: 'var(--Text-Heading-Tertiary, #2b2b2b)', fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif' }}>Performance</div>
+          <div style={{ fontSize: 12, fontWeight: 400, color: 'var(--Text-Heading-Base, #666)', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif', marginTop: 4 }}>This excludes shipments picked in last 3 days</div>
+        </div>
+        <div style={{ position: 'relative' }}>
+          <button onClick={() => setFilterOpen(o => !o)} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'var(--Surface-BG_Coal-Weaker, #eff1f5)', border: 'none', borderRadius: 4, padding: '8px 12px', fontSize: 14, fontWeight: 500, color: 'var(--Text-Coal-Primary, #343c51)', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>
+            {filter}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          {filterOpen && (
+            <div style={{ position: 'absolute', right: 0, top: '100%', marginTop: 4, background: '#fff', border: '1px solid #e6e6e6', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.1)', zIndex: 200, minWidth: 140, overflow: 'hidden' }}>
+              {filterOpts.map(o => (
+                <div key={o} onClick={() => { setFilter(o); setFilterOpen(false) }}
+                  style={{ padding: '10px 16px', fontSize: 13, color: o === filter ? '#ed1b36' : '#2b2b2b', fontWeight: o === filter ? 600 : 400, cursor: 'pointer', background: o === filter ? '#fde8eb' : 'transparent', fontFamily: '"Noto Sans", sans-serif' }}
+                  onMouseEnter={e => { if (o !== filter) e.currentTarget.style.background = '#f7f7f7' }}
+                  onMouseLeave={e => { if (o !== filter) e.currentTarget.style.background = 'transparent' }}
+                >{o}</div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* KPI cards row */}
+      <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
+        {kpis.map((k, i) => (
+          <div key={i} style={{ flex: '1 1 0', background: '#f9f9fb', borderRadius: 6, padding: 12 }}>
+            <div style={{ fontSize: 12, fontWeight: 400, color: 'var(--Text-Caption-Primary, #454545)', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif', marginBottom: 6 }}>{k.label}</div>
+            <div style={{ fontSize: 20, fontWeight: 700, lineHeight: '26px', color: 'var(--Text-Body-Primary, #2b2b2b)', fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif', marginBottom: 6 }}>{k.value}</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <span style={{ fontSize: 10, fontWeight: 500, color: k.up ? '#1ba86e' : '#ed1b36', display: 'flex', alignItems: 'center' }}>
+                {k.delta}
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ transform: k.up ? 'none' : 'rotate(90deg)' }}>
+                  <path d="M7 17L17 7M17 7H7M17 7v10"/>
+                </svg>
+              </span>
+              <span style={{ fontSize: 10, fontWeight: 500, color: '#808080', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>vs last month</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Divider */}
+      <div style={{ height: 1, background: 'var(--rule)', marginBottom: 20 }} />
+
+      {/* Stacked bar chart */}
+      <div style={{ display: 'flex', flexDirection: 'column', height: 320, padding: 8 }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+          {/* Chart + y-axis */}
+          <div style={{ flex: 1, display: 'flex', alignItems: 'stretch', minHeight: 0 }}>
+            {/* Y axis */}
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-end', paddingRight: 8, width: 36, fontFamily: 'Inter, sans-serif', fontSize: 11, color: 'rgba(0,0,0,0.55)' }}>
+              {yLabels.map(l => <span key={l}>{l}</span>)}
+            </div>
+            {/* Bars + grid */}
+            <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
+              {/* Horizontal grid lines */}
+              {yLabels.map((_, i) => (
+                <div key={i} style={{ position: 'absolute', left: 0, right: 0, top: `${(i / (yLabels.length - 1)) * 100}%`, height: 1, background: i === yLabels.length - 1 ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.07)' }} />
+              ))}
+              {/* Bar groups */}
+              <div style={{ position: 'absolute', inset: '6px 0 28px 0', display: 'flex', alignItems: 'flex-end' }}>
+                {PERF_DATA.map((d, i) => {
+                  const total = d.inTransit + d.delivered + d.returned
+                  const pct = (v) => `${(v / CHART_MAX) * 100}%`
+                  return (
+                    <div key={i} style={{ flex: 1, display: 'flex', justifyContent: 'center', height: '100%', alignItems: 'flex-end' }}>
+                      <div style={{ width: '55%', height: pct(total), display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+                        {/* returned (top, lightest) */}
+                        <div style={{ height: pct(d.returned), background: '#e0e3eb', borderRadius: '4px 4px 0 0', minHeight: d.returned > 0 ? 2 : 0 }} />
+                        {/* delivered (mid, darker) */}
+                        <div style={{ height: pct(d.delivered), background: '#5a688c', minHeight: d.delivered > 0 ? 2 : 0 }} />
+                        {/* inTransit (bottom, darkest) */}
+                        <div style={{ height: pct(d.inTransit), background: '#98a2bc', minHeight: d.inTransit > 0 ? 2 : 0 }} />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+              {/* X axis labels */}
+              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 28, display: 'flex' }}>
+                {PERF_WEEKS.map(w => (
+                  <div key={w} style={{ flex: 1, textAlign: 'center', fontSize: 11, fontFamily: 'Inter, sans-serif', color: 'rgba(0,0,0,0.55)', paddingTop: 4 }}>{w}</div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* Legend */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 16, marginTop: 8 }}>
+          {[['#e0e3eb', 'In transit'], ['#5a688c', 'Delivered'], ['#98a2bc', 'Returned']].map(([color, label]) => (
+            <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontFamily: 'Inter, sans-serif', color: 'rgba(0,0,0,0.7)' }}>
+              <div style={{ width: 8, height: 8, background: color, border: '1px solid #fff' }} />
+              {label}
+            </div>
+          ))}
+        </div>
+      </div>
+    </Card>
+  )
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function B2CContent() {
   const [slide, setSlide] = useState(0)
@@ -449,6 +580,9 @@ export default function B2CContent() {
           <Button variant="black" size="md" trailingIcon={<IcoArrow />} style={{ width: '100%', justifyContent: 'center', marginBottom: 20 }}>
             View analysis
           </Button>
+
+          {/* Performance */}
+          <PerformanceSection />
         </div>
 
         {/* RIGHT RAIL */}
