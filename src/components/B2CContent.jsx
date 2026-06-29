@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Badge, Chip, Alert, Card, Pill, ProgressBar, FilterDropdown, Divider } from '@delhivery/tarmac'
+import { Button, Badge, Chip, Alert, Card, Pill, ProgressBar, FilterDropdown, Divider, TabGroup, TabCell, TableHeaderCell, TableTextCell } from '@delhivery/tarmac'
 
 // ── Inline SVG icons (Tarmac icon set style) ──────────────────────────────────
 const IcoWarning  = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -359,168 +359,104 @@ function PerformanceSection() {
 }
 
 // ── Performance by Geography section ──────────────────────────────────────────
-const GEO_ZONES = [
-  { id: 'south',   label: 'South',      states: 'KA · TN · AP · TS · KL', rate: 91, shipments: 2100, cx: 108, cy: 168, r: 28 },
-  { id: 'west',    label: 'West',       states: 'MH · GJ · RJ',           rate: 88, shipments: 1680, cx: 62,  cy: 112, r: 24 },
-  { id: 'north',   label: 'North',      states: 'DL · UP · HR · PB · UK', rate: 84, shipments: 1420, cx: 98,  cy: 58,  r: 22 },
-  { id: 'east',    label: 'East',       states: 'WB · OR · BR · JH',      rate: 76, shipments: 890,  cx: 155, cy: 112, r: 20 },
-  { id: 'central', label: 'Central',    states: 'MP · CG',                 rate: 72, shipments: 430,  cx: 108, cy: 112, r: 16 },
-  { id: 'ne',      label: 'North East', states: 'AS · MN · NL · MZ',      rate: 68, shipments: 190,  cx: 162, cy: 62,  r: 14 },
+const GEO_DATA = {
+  zone: [
+    { name: 'Zone A',   orderMix: '38%', rto: '8.2%',  cod: '45%', ttd50: '1.8d', ttd75: '2.2d', ttd95: '3.1d', firstAttempt: '92.5%' },
+    { name: 'Zone B',   orderMix: '28%', rto: '10.5%', cod: '52%', ttd50: '2.1d', ttd75: '2.6d', ttd95: '3.8d', firstAttempt: '88.2%' },
+    { name: 'Zone C',   orderMix: '22%', rto: '14.8%', cod: '58%', ttd50: '2.4d', ttd75: '3.1d', ttd95: '4.5d', firstAttempt: '84.1%' },
+    { name: 'Zone D-F', orderMix: '12%', rto: '18.2%', cod: '65%', ttd50: '3.2d', ttd75: '4.1d', ttd95: '5.8d', firstAttempt: '79.6%' },
+  ],
+  cities: [
+    { name: 'Mumbai',    orderMix: '18%', rto: '7.1%',  cod: '38%', ttd50: '1.2d', ttd75: '1.6d', ttd95: '2.3d', firstAttempt: '94.2%' },
+    { name: 'Delhi',     orderMix: '15%', rto: '9.4%',  cod: '42%', ttd50: '1.4d', ttd75: '1.9d', ttd95: '2.8d', firstAttempt: '91.8%' },
+    { name: 'Bengaluru', orderMix: '12%', rto: '8.8%',  cod: '35%', ttd50: '1.3d', ttd75: '1.7d', ttd95: '2.5d', firstAttempt: '93.1%' },
+    { name: 'Hyderabad', orderMix: '9%',  rto: '11.2%', cod: '48%', ttd50: '1.6d', ttd75: '2.1d', ttd95: '3.0d', firstAttempt: '89.4%' },
+    { name: 'Chennai',   orderMix: '8%',  rto: '10.8%', cod: '44%', ttd50: '1.5d', ttd75: '2.0d', ttd95: '2.9d', firstAttempt: '90.6%' },
+    { name: 'Pune',      orderMix: '7%',  rto: '12.3%', cod: '51%', ttd50: '1.7d', ttd75: '2.3d', ttd95: '3.3d', firstAttempt: '87.5%' },
+    { name: 'Ahmedabad', orderMix: '6%',  rto: '13.1%', cod: '55%', ttd50: '1.9d', ttd75: '2.5d', ttd95: '3.6d', firstAttempt: '85.9%' },
+    { name: 'Kolkata',   orderMix: '5%',  rto: '15.6%', cod: '60%', ttd50: '2.2d', ttd75: '2.9d', ttd95: '4.1d', firstAttempt: '83.2%' },
+    { name: 'Jaipur',    orderMix: '4%',  rto: '16.4%', cod: '62%', ttd50: '2.5d', ttd75: '3.3d', ttd95: '4.7d', firstAttempt: '81.4%' },
+    { name: 'Surat',     orderMix: '3%',  rto: '14.2%', cod: '57%', ttd50: '2.0d', ttd75: '2.7d', ttd95: '3.9d', firstAttempt: '84.7%' },
+  ],
+  states: [
+    { name: 'Maharashtra', orderMix: '22%', rto: '8.9%',  cod: '40%', ttd50: '1.5d', ttd75: '2.0d', ttd95: '2.9d', firstAttempt: '91.3%' },
+    { name: 'Delhi',       orderMix: '15%', rto: '9.4%',  cod: '42%', ttd50: '1.4d', ttd75: '1.9d', ttd95: '2.8d', firstAttempt: '91.8%' },
+    { name: 'Karnataka',   orderMix: '11%', rto: '9.1%',  cod: '36%', ttd50: '1.4d', ttd75: '1.8d', ttd95: '2.6d', firstAttempt: '92.7%' },
+    { name: 'Telangana',   orderMix: '9%',  rto: '11.5%', cod: '49%', ttd50: '1.7d', ttd75: '2.2d', ttd95: '3.1d', firstAttempt: '88.9%' },
+    { name: 'Tamil Nadu',  orderMix: '8%',  rto: '11.0%', cod: '46%', ttd50: '1.6d', ttd75: '2.1d', ttd95: '3.0d', firstAttempt: '89.8%' },
+    { name: 'Gujarat',     orderMix: '7%',  rto: '13.4%', cod: '54%', ttd50: '2.0d', ttd75: '2.6d', ttd95: '3.7d', firstAttempt: '85.4%' },
+    { name: 'Uttar Pradesh', orderMix: '7%', rto: '17.8%', cod: '63%', ttd50: '2.8d', ttd75: '3.7d', ttd95: '5.2d', firstAttempt: '80.1%' },
+    { name: 'Rajasthan',   orderMix: '5%',  rto: '16.1%', cod: '61%', ttd50: '2.6d', ttd75: '3.4d', ttd95: '4.9d', firstAttempt: '81.7%' },
+    { name: 'West Bengal', orderMix: '5%',  rto: '15.3%', cod: '59%', ttd50: '2.3d', ttd75: '3.0d', ttd95: '4.3d', firstAttempt: '82.9%' },
+    { name: 'Madhya Pradesh', orderMix: '4%', rto: '19.1%', cod: '67%', ttd50: '3.4d', ttd75: '4.4d', ttd95: '6.1d', firstAttempt: '78.4%' },
+  ],
+}
+
+const GEO_COLS = [
+  { key: 'name',         label: 'ZONE',           align: 'left',  color: null },
+  { key: 'orderMix',     label: 'ORDER MIX',      align: 'right', color: null },
+  { key: 'rto',          label: 'RTO %',          align: 'right', color: 'red' },
+  { key: 'cod',          label: 'COD %',          align: 'right', color: null },
+  { key: 'ttd50',        label: 'TTD 50p',        align: 'right', color: null },
+  { key: 'ttd75',        label: 'TTD 75p',        align: 'right', color: null },
+  { key: 'ttd95',        label: 'TTD 95p',        align: 'right', color: null },
+  { key: 'firstAttempt', label: 'FIRST ATTEMPT %', align: 'right', color: 'green' },
 ]
-
-const GEO_FILTER_OPTS = [
-  { value: '7d',  label: 'Last 7 days' },
-  { value: '14d', label: 'Last 14 days' },
-  { value: '30d', label: 'Last 30 days' },
-  { value: '90d', label: 'Last 90 days' },
-]
-
-function pillVariantForRate(rate) {
-  if (rate >= 88) return 'success'
-  if (rate >= 80) return 'blue'
-  if (rate >= 72) return 'warning'
-  return 'error'
-}
-
-function progressVariantForRate(rate) {
-  if (rate >= 88) return 'success'
-  if (rate >= 80) return 'info'
-  if (rate >= 72) return 'warning'
-  return 'error'
-}
-
-function svgColorForRate(rate) {
-  if (rate >= 88) return { fill: '#dcf5ec', stroke: '#1ba86e', text: '#1ba86e' }
-  if (rate >= 80) return { fill: '#e6f3fe', stroke: '#2396fb', text: '#2396fb' }
-  if (rate >= 72) return { fill: '#fefaec', stroke: '#e9a900', text: '#cf9f02' }
-  return { fill: '#fdf2f4', stroke: '#ed1b36', text: '#ed1b36' }
-}
 
 function PerformanceByGeographySection() {
-  const [filterVal, setFilterVal] = useState(['7d'])
-  const [hovered, setHovered] = useState(null)
-  const sorted = [...GEO_ZONES].sort((a, b) => b.rate - a.rate)
+  const [activeTab, setActiveTab] = useState('zone')
+  const rows = GEO_DATA[activeTab]
+  const colTemplate = '1.4fr 0.9fr 0.9fr 0.9fr 0.9fr 0.9fr 0.9fr 1.1fr'
 
   return (
     <Card isHoverable={false} style={{ marginBottom: 20, borderRadius: 12, border: '1px solid var(--rule)', padding: 24 }}>
-      {/* header */}
+      {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 20 }}>
         <div>
           <div style={{ fontSize: 20, fontWeight: 600, lineHeight: '26px', color: 'var(--Text-Heading-Tertiary, #2b2b2b)', fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif' }}>Performance by Geography</div>
-          <div style={{ fontSize: 12, fontWeight: 400, color: 'var(--Text-Heading-Base, #666)', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif', marginTop: 4 }}>Delivery rates across India</div>
+          <div style={{ fontSize: 12, color: 'var(--Text-Heading-Base, #666)', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif', marginTop: 4 }}>Last 30 days</div>
         </div>
-        <FilterDropdown
-          options={GEO_FILTER_OPTS}
-          value={filterVal}
-          onChange={v => setFilterVal(v)}
-          size="sm"
-          multiple={false}
-        />
+        {/* Tab switcher */}
+        <TabGroup tabType="button" size="sm">
+          {[{ key: 'zone', label: 'Zone' }, { key: 'cities', label: 'Top 10 Cities' }, { key: 'states', label: 'Top 10 States' }].map(t => (
+            <TabCell key={t.key} tabType="button" size="sm" title={t.label} isPressed={activeTab === t.key} onClick={() => setActiveTab(t.key)} />
+          ))}
+        </TabGroup>
       </div>
 
-      {/* body: map + table */}
-      <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: 24, alignItems: 'start' }}>
+      {/* Column headers */}
+      <div style={{ display: 'grid', gridTemplateColumns: colTemplate, padding: '0 12px 10px' }}>
+        {GEO_COLS.map(col => (
+          <TableHeaderCell key={col.key} label={col.label} className={col.align === 'right' ? 'tbl-hdr-right' : ''} />
+        ))}
+      </div>
 
-        {/* India map SVG */}
-        <div>
-          <svg viewBox="0 0 210 230" style={{ width: '100%', height: 'auto', display: 'block' }}>
-            <path d="M58,14 L72,5 L107,8 L142,22 L178,40 L186,76 L178,120 L165,155 L145,185 L125,215 L110,220 L95,210 L75,186 L60,156 L45,122 L35,82 L30,56 L42,32 Z" fill="#f4f5f7" stroke="#d0d3db" strokeWidth="1.5" />
-            {GEO_ZONES.map(z => {
-              const c = svgColorForRate(z.rate)
-              const isHov = hovered === z.id
+      <Divider size="0.5" />
+
+      {/* Data rows */}
+      {rows.map((row, i) => (
+        <div key={row.name}>
+          <div style={{ display: 'grid', gridTemplateColumns: colTemplate, padding: '14px 12px', alignItems: 'center' }}>
+            {GEO_COLS.map(col => {
+              const val = row[col.key]
+              const color = col.color === 'red' ? 'var(--Text-Error-Primary, #dc143c)'
+                          : col.color === 'green' ? 'var(--Text-Success-Primary, #1ba86e)'
+                          : col.key === 'name' ? 'var(--Text-Body-Primary, #2b2b2b)'
+                          : 'var(--Text-Body-Secondary, #454545)'
               return (
-                <g key={z.id} style={{ cursor: 'pointer' }} onMouseEnter={() => setHovered(z.id)} onMouseLeave={() => setHovered(null)}>
-                  <circle cx={z.cx} cy={z.cy} r={isHov ? z.r + 3 : z.r} fill={c.fill} stroke={c.stroke} strokeWidth={isHov ? 2 : 1.5} style={{ transition: 'r 120ms' }} />
-                  <text x={z.cx} y={z.cy - 2} textAnchor="middle" fontSize={9} fontWeight="700" fill={c.text} fontFamily="Noto Sans, sans-serif">{z.rate}%</text>
-                  <text x={z.cx} y={z.cy + 8} textAnchor="middle" fontSize={7} fill={c.text} fontFamily="Noto Sans, sans-serif" opacity="0.85">{z.label}</text>
-                </g>
-              )
-            })}
-          </svg>
-
-          {/* Legend using Pill */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 12 }}>
-            {[
-              ['success', '≥88%', 'Excellent'],
-              ['blue',    '80–87%', 'Good'],
-              ['warning', '72–79%', 'Fair'],
-              ['error',   '<72%',   'Low'],
-            ].map(([variant, range, label]) => (
-              <div key={variant} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Pill pillVariant={variant} pillType="subtle" size="sm" text={range} />
-                <span style={{ fontSize: 11, color: 'var(--Text-Caption-Base, #808080)', fontFamily: '"Noto Sans", sans-serif' }}>{label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Zone ranked table */}
-        <div>
-          {/* Header row */}
-          <div style={{ display: 'grid', gridTemplateColumns: '24px 1fr 80px 100px 120px', gap: 8, padding: '0 8px 8px' }}>
-            {['#', 'Zone', 'Shipments', 'Del. Rate', 'Performance'].map((h, i) => (
-              <div key={i} style={{ fontSize: 11, fontWeight: 600, color: 'var(--Text-Caption-Base, #808080)', fontFamily: '"Noto Sans", sans-serif', textAlign: i >= 2 ? 'right' : 'left' }}>{h}</div>
-            ))}
-          </div>
-
-          <Divider size="0.5" />
-
-          {/* Zone rows */}
-          <div style={{ marginTop: 4 }}>
-            {sorted.map((z, idx) => {
-              const isHov = hovered === z.id
-              return (
-                <div key={z.id}
-                  onMouseEnter={() => setHovered(z.id)}
-                  onMouseLeave={() => setHovered(null)}
-                  style={{ display: 'grid', gridTemplateColumns: '24px 1fr 80px 100px 120px', gap: 8, alignItems: 'center', padding: '10px 8px', borderRadius: 8, background: isHov ? 'var(--Surface-BG_Coal-Weakest, #f9f9fb)' : 'transparent', transition: 'background 120ms', cursor: 'default' }}>
-                  {/* Rank */}
-                  <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--Text-Caption-Disabled, #b0b0b0)', fontFamily: '"Noto Sans", sans-serif' }}>{idx + 1}</span>
-                  {/* Zone name + states */}
-                  <div>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--Text-Body-Primary, #2b2b2b)', fontFamily: '"Noto Sans", sans-serif' }}>{z.label}</div>
-                    <div style={{ fontSize: 10, color: 'var(--Text-Caption-Base, #808080)', fontFamily: '"Noto Sans", sans-serif', marginTop: 1 }}>{z.states}</div>
-                  </div>
-                  {/* Shipments */}
-                  <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--Text-Body-Secondary, #454545)', fontFamily: '"Noto Sans", sans-serif', textAlign: 'right' }}>{z.shipments.toLocaleString()}</div>
-                  {/* Delivery rate Pill */}
-                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Pill pillVariant={pillVariantForRate(z.rate)} pillType="subtle" size="sm" text={`${z.rate}%`} />
-                  </div>
-                  {/* Progress bar */}
-                  <ProgressBar
-                    value={z.rate}
-                    type="horizontal"
-                    size="sm"
-                    variant={progressVariantForRate(z.rate)}
-                    barType="tds"
-                    style={{ margin: 0 }}
-                  />
+                <div key={col.key} style={{ textAlign: col.align, fontSize: 14, fontWeight: col.key === 'name' ? 600 : (col.color ? 600 : 400), color, fontFamily: '"Noto Sans", sans-serif' }}>
+                  {val}
                 </div>
               )
             })}
           </div>
-
-          <Divider size="0.5" style={{ margin: '12px 0' }} />
-
-          {/* Summary footer */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-            {[
-              { label: 'Pan-India delivery rate', value: '83.1%', pill: null },
-              { label: 'Total shipments', value: '6,710', pill: null },
-              { label: 'Best zone', value: 'South', pill: 'success' },
-            ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--Surface-BG_Coal-Weakest, #f9f9fb)', borderRadius: 8, padding: '12px 14px' }}>
-                <div style={{ fontSize: 11, color: 'var(--Text-Caption-Base, #808080)', fontFamily: '"Noto Sans", sans-serif', marginBottom: 6 }}>{item.label}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ fontSize: 20, fontWeight: 700, color: 'var(--Text-Body-Primary, #2b2b2b)', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1 }}>{item.value}</span>
-                  {item.pill && <Pill pillVariant={item.pill} pillType="subtle" size="sm" text="91%" />}
-                </div>
-              </div>
-            ))}
-          </div>
+          {i < rows.length - 1 && <Divider size="0.5" />}
         </div>
-      </div>
+      ))}
+
+      <style>{`
+        .tbl-hdr-right > * { text-align: right; justify-content: flex-end; }
+      `}</style>
     </Card>
   )
 }
