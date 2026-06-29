@@ -365,19 +365,22 @@ export default function B2CContent() {
     <div className="content" style={{ position: 'relative' }}>
 
       {/* ── Tabs ── */}
-      <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid var(--rule)', marginBottom: 20, marginTop: -4 }}>
-        {['overview', 'analysis'].map(t => (
-          <button key={t} onClick={() => setTab(t)} style={{
-            background: 'none', border: 'none', cursor: 'pointer',
-            padding: '10px 20px', fontSize: 14, fontWeight: tab === t ? 600 : 400,
-            color: tab === t ? 'var(--ink)' : 'var(--ink-3)',
-            borderBottom: tab === t ? '2px solid var(--red)' : '2px solid transparent',
-            marginBottom: -1, fontFamily: '"Noto Sans", sans-serif',
-            textTransform: 'capitalize', transition: 'color 120ms',
-          }}>
-            {t.charAt(0).toUpperCase() + t.slice(1)}
-          </button>
-        ))}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--rule)', marginBottom: 20, marginTop: -4 }}>
+        <div style={{ display: 'flex' }}>
+          {['overview', 'analysis'].map(t => (
+            <button key={t} onClick={() => setTab(t)} style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              padding: '10px 20px', fontSize: 14, fontWeight: tab === t ? 600 : 400,
+              color: tab === t ? 'var(--ink)' : 'var(--ink-3)',
+              borderBottom: tab === t ? '2px solid var(--red)' : '2px solid transparent',
+              marginBottom: -1, fontFamily: '"Noto Sans", sans-serif',
+              textTransform: 'capitalize', transition: 'color 120ms',
+            }}>
+              {t.charAt(0).toUpperCase() + t.slice(1)}
+            </button>
+          ))}
+        </div>
+        <DateFilter />
       </div>
 
       {tab === 'analysis' && <>
@@ -415,9 +418,8 @@ export default function B2CContent() {
 
       {/* ── Orders Summary — rich tiles with CTAs ── */}
       <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, padding: 16, marginBottom: 24 }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+        <div style={{ marginBottom: 14 }}>
           <span style={{ fontSize: 20, fontWeight: 600, lineHeight: '26px', color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>Orders Summary</span>
-          <DateFilter />
         </div>
         <div style={{ display: 'flex', flexDirection: 'row', gap: 12, alignItems: 'stretch' }}>
 
