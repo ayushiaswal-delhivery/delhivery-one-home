@@ -144,52 +144,50 @@ function ClaimCard({ title, total, inputCount, inputAmt, rejectedCount, rejected
   )
 }
 
-// ── Pickup column card (new Figma design) ─────────────────────────────────────
-function PickupCol({ dayLabel, dayName, date, pickupId, statusLabel, statusVariant, accentColor, buttons }) {
-  const pillBg   = statusVariant === 'error'   ? 'var(--Surface-BG_Error-Weakest, #fdf2f4)'
-                 : statusVariant === 'warning' ? 'var(--Surface-BG_Warning-Weakest, #fefaec)'
-                 :                               'var(--Surface-BG_Blue-Weakest, #f0f8ff)'
-  const pillText = statusVariant === 'error'   ? 'var(--Text-Error-Tertiary, #930d28)'
-                 : statusVariant === 'warning' ? 'var(--Text-Warning-Primary, #7b6414)'
-                 :                               'var(--Text-Info_Blue-Tertiary, #1764a7)'
+// ── Pickup day row (matches screenshot layout) ────────────────────────────────
+function PickupCol({ dayLabel, date, pickupCount, variant, cutoff, missedReason, buttons }) {
+  // variant: 'error' | 'info' | 'default'
+  const badge = variant === 'error'
+    ? { bg: '#fde8eb', color: '#ed1b36', icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> }
+    : variant === 'info'
+    ? { bg: '#e6f3fe', color: '#2396fb', icon: <IcoClock /> }
+    : { bg: '#f4f4f6', color: '#454545', icon: <IcoCalendar /> }
+
   return (
-    <div style={{ flex: '1 1 0', minWidth: 0, border: '1px solid var(--Border-Neutral-Primary, #e6e6e6)', borderRadius: 12, paddingBottom: 12, overflow: 'hidden' }}>
-      {/* header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 12px 6px', background: '#fff' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--Text-Caption-Base, #808080)', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>{dayLabel}, </span>
-          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--Text-Caption-Primary, #454545)', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>{dayName}</span>
+    <div style={{ padding: '18px 0' }}>
+      {/* Day header row */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontSize: 15, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>{dayLabel}</span>
+          {cutoff && (
+            <span style={{ fontSize: 11, fontWeight: 600, color: '#ed1b36', background: '#fde8eb', borderRadius: 6, padding: '3px 8px', fontFamily: '"Noto Sans", sans-serif' }}>
+              Cut-off in {cutoff}
+            </span>
+          )}
+          <span style={{ fontSize: 12, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>{date}</span>
         </div>
-        <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--Text-Caption-Base, #808080)', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>{date}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5, background: badge.bg, borderRadius: 20, padding: '4px 10px 4px 8px' }}>
+          <span style={{ color: badge.color, display: 'flex', alignItems: 'center' }}>{badge.icon}</span>
+          <span style={{ fontSize: 12, fontWeight: 600, color: badge.color, fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>{pickupCount} {pickupCount === 1 ? 'pickup' : 'pickups'}</span>
+        </div>
       </div>
-      <div style={{ height: 1, background: 'var(--Border-Neutral-Primary, #e6e6e6)', margin: '0 12px' }} />
-      {/* content */}
-      <div style={{ margin: '12px 12px 0', background: 'var(--Surface-BG_Coal-Weakest, #f9f9fb)', borderRadius: 12, padding: '8px 8px 8px 12px', display: 'flex', gap: 8, alignItems: 'center' }}>
-        {/* left accent bar */}
-        <div style={{ width: 2, height: 72, borderRadius: 999, background: accentColor, flexShrink: 0 }} />
-        {/* info */}
-        <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-            <div>
-              <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--Text-Info_Blue-Primary, #2396fb)', fontFamily: 'var(--Font_Family-body, "Noto Sans"), sans-serif', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{pickupId}</div>
-              <div style={{ fontSize: 10, fontWeight: 500, color: 'var(--Text-Caption-Base, #808080)', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif', marginTop: 1 }}>PICKUP ID</div>
-            </div>
-            {/* status pill */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 2, background: pillBg, borderRadius: 999, padding: '4px 8px', flexShrink: 0 }}>
-              <span style={{ fontSize: 10, fontWeight: 500, color: pillText, fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif', whiteSpace: 'nowrap' }}>{statusLabel}</span>
-            </div>
-          </div>
-          {/* action buttons */}
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            {buttons.map((b, i) => (
-              <Button key={i} variant={b.primary ? 'black' : 'outline'} size="sm"
-                leadingIcon={b.icon}
-                style={{ background: b.primary ? undefined : '#fff', whiteSpace: 'nowrap', padding: '6px' }}>
-                {b.label}
-              </Button>
-            ))}
-          </div>
+
+      {/* Missed reason banner */}
+      {missedReason && (
+        <div style={{ background: '#fdf2f4', border: '1px solid #f5c6ce', borderRadius: 6, padding: '8px 12px', marginBottom: 10, fontSize: 13, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>
+          <span style={{ fontWeight: 600, color: '#ed1b36' }}>Reason: </span>{missedReason}
         </div>
+      )}
+
+      {/* Action buttons */}
+      <div style={{ display: 'flex', gap: 10 }}>
+        {buttons.map((b, i) => (
+          <Button key={i} variant={b.primary ? 'black' : 'outline'} size="sm"
+            leadingIcon={b.icon}
+            style={{ flex: b.full ? '1 1 0' : undefined, justifyContent: 'center', background: b.primary ? undefined : '#fff', whiteSpace: 'nowrap' }}>
+            {b.label}
+          </Button>
+        ))}
       </div>
     </div>
   )
@@ -785,43 +783,32 @@ export default function B2CContent() {
           </div>
 
           {/* Upcoming Pickups */}
-          <Card isHoverable={false} style={{ marginBottom: 20, borderRadius: 12, border: '1px solid var(--rule)', padding: 24 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-              <span style={{ fontSize: 20, fontWeight: 600, lineHeight: '26px', color: 'var(--Text-Body-Primary, #2b2b2b)', fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif' }}>Upcoming Pickups</span>
-              <a style={{ fontSize: 12, fontWeight: 500, color: 'var(--Text-Info_Blue-Primary, #2396fb)', cursor: 'pointer', fontFamily: 'var(--Font_Family-caption, "Noto Sans"), sans-serif' }}>View all</a>
+          <Card isHoverable={false} style={{ marginBottom: 20, borderRadius: 12, border: '1px solid var(--rule)', padding: '0 24px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 0 0' }}>
+              <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--Text-Body-Primary, #2b2b2b)', fontFamily: '"Noto Sans", sans-serif' }}>Upcoming Pickups</span>
+              <a style={{ fontSize: 12, fontWeight: 500, color: 'var(--Text-Info_Blue-Primary, #2396fb)', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>View all</a>
             </div>
-            <div style={{ display: 'flex', gap: 20 }}>
-              <PickupCol
-                dayLabel="YESTERDAY" dayName="SUN" date="24 May"
-                pickupId="896232"
-                statusLabel="Not Picked" statusVariant="error"
-                accentColor="var(--delhivery-red, #ed1b36)"
-                buttons={[
-                  { label: 'Reschedule', primary: false },
-                  { icon: <IcoHeadset />, label: undefined, primary: false },
-                ]}
-              />
-              <PickupCol
-                dayLabel="TODAY" dayName="MON" date="25 May"
-                pickupId="896233"
-                statusLabel="Out for Pickup" statusVariant="info"
-                accentColor="var(--delhivery-blue, #2396fb)"
-                buttons={[
-                  { label: 'Print  Labels', primary: false },
-                  { label: 'Call Executive', primary: false },
-                ]}
-              />
-              <PickupCol
-                dayLabel="TOMORROW" dayName="TUE" date="26 May"
-                pickupId="896222"
-                statusLabel="Scheduled" statusVariant="warning"
-                accentColor="var(--warning, #e9a900)"
-                buttons={[
-                  { label: 'Print  Labels', primary: false },
-                  { icon: <IcoHeadset />, label: undefined, primary: false },
-                ]}
-              />
-            </div>
+            <PickupCol
+              dayLabel="Yesterday" date="May 12, 2026"
+              pickupCount={1} variant="error"
+              missedReason="Shipment not ready"
+              buttons={[{ label: 'Reschedule', primary: true, full: true }]}
+            />
+            <div style={{ height: 1, background: 'var(--rule)' }} />
+            <PickupCol
+              dayLabel="Today" date="May 13, 2026"
+              pickupCount={9} variant="info" cutoff="2h 14m"
+              buttons={[
+                { icon: <IcoPhone />, label: 'Call FE', primary: false, full: true },
+                { icon: <IcoPrint />, label: 'Print labels', primary: false, full: true },
+              ]}
+            />
+            <div style={{ height: 1, background: 'var(--rule)' }} />
+            <PickupCol
+              dayLabel="Tomorrow" date="May 14, 2026"
+              pickupCount={3} variant="default"
+              buttons={[{ icon: <IcoPrint />, label: 'Print labels', primary: false, full: true }]}
+            />
           </Card>
 
           {/* SmartAssist Insights — hidden */}
