@@ -107,27 +107,36 @@ function StatRow({ label, value, link }) {
   )
 }
 
-// ── Finance claim sub-section ─────────────────────────────────────────────────
-function ClaimSection({ title, icon, rows }) {
+// ── Finance claim card (Figma-spec compact layout) ───────────────────────────
+function ClaimCard({ title, total, inputCount, inputAmt, rejectedCount, rejectedAmt }) {
   return (
-    <div style={{ borderBottom: '1px solid var(--rule)', padding: '16px 0' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-        <span style={{ color: 'var(--red)' }}>{icon}</span>
-        <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>{title}</span>
+    <div style={{ flex: '1 1 0', minWidth: 0, display: 'flex', flexDirection: 'column', position: 'relative' }}>
+      {/* Header chip — sits above the card, overlapping */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--Surface-BG_Coal-Weak, #eff1f5)', borderRadius: '8px 8px 0 0', padding: '8px 14px 20px', zIndex: 1, position: 'relative' }}>
+        <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--Text-Heading-Primary, #121212)', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>{title}</span>
+        <Badge text={`Total ${total}`} variant="error" badgeType="subtle" size="sm" />
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
-        {rows.map((r, i) => (
-          <div key={i} style={{ background: r.bg, borderRadius: 8, padding: '14px 16px' }}>
-            <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 6 }}>{r.label}</div>
-            <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-disp)', lineHeight: 1 }}>{r.value}</div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: r.amtColor || 'var(--ink-3)', marginTop: 4 }}>{r.amount}</div>
-            {r.cta && (
-              <a style={{ fontSize: 12, fontWeight: 600, color: 'var(--blue)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 3, marginTop: 6 }}>
-                {r.cta} <IcoArrow />
-              </a>
-            )}
-          </div>
-        ))}
+      {/* Body card — overlaps header bottom */}
+      <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 0 2px rgba(0,0,0,0.1)', padding: '20px 20px 16px', marginTop: -12, display: 'flex', gap: 0, flex: 1 }}>
+        {/* INPUT NEEDED col */}
+        <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 4, paddingRight: 16 }}>
+          <div style={{ height: 3, background: 'var(--Surface-BG_Warning-Weak, #fcedb7)', borderRadius: 999, marginBottom: 12 }} />
+          <span style={{ fontSize: 10, fontWeight: 500, color: 'var(--Text-Caption-Primary, #454545)', fontFamily: '"Noto Sans", sans-serif', letterSpacing: 0.4 }}>INPUT NEEDED</span>
+          <span style={{ fontSize: 20, fontWeight: 600, color: 'var(--Text-Coal-Primary, #343c51)', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.2 }}>{inputCount}</span>
+          <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--Text-Success-Primary, #1ba86e)', fontFamily: '"Noto Sans", sans-serif' }}>{inputAmt}</span>
+          <Button variant="dlv_red" buttonStyle="tertiary" size="sm" style={{ marginTop: 8, padding: '4px 0', fontSize: 12, justifyContent: 'flex-start', color: 'var(--red)' }}>
+            Respond →
+          </Button>
+        </div>
+        {/* Vertical divider */}
+        <Divider orientation="vertical" size="0.5" style={{ alignSelf: 'stretch', height: 'auto' }} />
+        {/* REJECTED col */}
+        <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 4, paddingLeft: 16 }}>
+          <div style={{ height: 3, background: 'var(--Surface-BG_DLV_Red-Weak, #fbd1d7)', borderRadius: 999, marginBottom: 12 }} />
+          <span style={{ fontSize: 10, fontWeight: 500, color: 'var(--Text-Caption-Primary, #454545)', fontFamily: '"Noto Sans", sans-serif', letterSpacing: 0.4 }}>REJECTED</span>
+          <span style={{ fontSize: 20, fontWeight: 600, color: 'var(--Text-Coal-Primary, #343c51)', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.2 }}>{rejectedCount}</span>
+          <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--Text-Success-Primary, #1ba86e)', fontFamily: '"Noto Sans", sans-serif' }}>{rejectedAmt}</span>
+        </div>
       </div>
     </div>
   )
@@ -671,19 +680,15 @@ export default function B2CContent() {
         <div>
 
           {/* Finance */}
-          <Card isHoverable={false} style={{ marginBottom: 20, borderRadius: 12, border: '1px solid var(--rule)', padding: '0 18px' }}>
-            <div style={{ padding: '16px 0 0', borderBottom: '1px solid var(--rule)' }}>
-              <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)' }}>Finance</span>
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+              <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)', fontFamily: '"Noto Sans", sans-serif' }}>Finance</span>
             </div>
-            <ClaimSection title="Loss & Damage Claims" icon={<IcoShield />} rows={[
-              { label: 'Need your input', value: '7',  amount: '₹18,200', amtColor: 'var(--yellow)', bg: '#FDFAF2', cta: 'Respond' },
-              { label: 'Rejected',        value: '3',  amount: '₹9,400',  amtColor: 'var(--red)',   bg: '#FDF2F3' },
-            ]} />
-            <ClaimSection title="Weight Disputes" icon={<IcoScale />} rows={[
-              { label: 'Need your input', value: '5',  amount: '₹14,800', amtColor: 'var(--yellow)', bg: '#FDFAF2', cta: 'Respond' },
-              { label: 'Rejected',        value: '2',  amount: '₹6,500',  amtColor: 'var(--red)',   bg: '#FDF2F3' },
-            ]} />
-          </Card>
+            <div style={{ display: 'flex', gap: 16 }}>
+              <ClaimCard title="Loss & Damage Claims" total={10} inputCount={7}  inputAmt="₹18,200" rejectedCount={3} rejectedAmt="₹9,400" />
+              <ClaimCard title="Weight Disputes"       total={7}  inputCount={5}  inputAmt="₹14,800" rejectedCount={2} rejectedAmt="₹6,500" />
+            </div>
+          </div>
 
           {/* Upcoming Pickups */}
           <Card isHoverable={false} style={{ marginBottom: 20, borderRadius: 12, border: '1px solid var(--rule)', padding: 24 }}>
