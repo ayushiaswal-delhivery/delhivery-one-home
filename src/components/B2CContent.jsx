@@ -659,6 +659,173 @@ function NeedsAttentionSection({ isSupport = false }) {
   )
 }
 
+// ── Shared pipeline data ──────────────────────────────────────────────────────
+const PIPELINE_BUCKETS = [
+  {
+    id: 'pre',
+    label: 'Pre-Shipping',
+    color: '#2396fb',
+    bg: '#e6f3fe',
+    icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="2" width="18" height="20" rx="2"/><path d="M9 12h6M9 16h4M9 8h6"/></svg>,
+    cards: [
+      { label: 'Pending manifest', count: 312, delta: '+8%', up: true,  accent: '#e07230', accentBg: '#fff3ec', sub: [{ label: 'Bad address', value: '47', link: 'Fix now', linkColor: '#ed1b36' }, { label: 'High risk', value: '23', link: 'Review' }] },
+      { label: 'To be shipped',    count: 156, delta: '+3%', up: true,  accent: '#2396fb', accentBg: '#e6f3fe', sub: [{ label: 'High risk AWBs', value: '12', link: 'Review' }] },
+      { label: 'Awaiting pickup',  count: 9,   delta: '+1',  up: true,  accent: '#1ba86e', accentBg: '#ecf8f3', sub: [] },
+    ],
+  },
+  {
+    id: 'transit',
+    label: 'In Transit',
+    color: '#7c3aed',
+    bg: '#f3f0ff',
+    icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 7h11v10H3z"/><path d="M14 10h5l2 3v4h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>,
+    cards: [
+      { label: 'Out for delivery', count: 142, delta: '+5%', up: true,  accent: '#7c3aed', accentBg: '#f3f0ff', sub: [{ label: 'Delayed by traffic', value: '18' }, { label: 'Scheduled evening', value: '34' }] },
+      { label: 'NDR',              count: 84,  delta: '-2%', up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ label: 'Customer unreachable', value: '61' }, { label: '2nd attempt pending', value: '23', link: 'Resolve', linkColor: '#ed1b36' }] },
+      { label: 'PDD breached',     count: 12,  delta: '+4',  up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ label: 'Past promise date', value: '12', link: 'View', linkColor: '#ed1b36' }, { label: 'Avg delay', value: '1.4 days' }] },
+    ],
+  },
+  {
+    id: 'delivered',
+    label: 'Delivered',
+    color: '#1ba86e',
+    bg: '#ecf8f3',
+    icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>,
+    cards: [
+      { label: 'Delivered',       count: 1234, delta: '+11%', up: true,  accent: '#1ba86e', accentBg: '#ecf8f3', sub: [{ label: 'First attempt', value: '1,101' }, { label: 'Success rate', value: '89.3%' }] },
+      { label: 'RTO initiated',   count: 87,   delta: '+3%',  up: false, accent: '#e07230', accentBg: '#fff3ec', sub: [{ label: 'In return transit', value: '54' }, { label: 'Returned to origin', value: '33' }] },
+    ],
+  },
+]
+
+function PipelineCard({ card }) {
+  return (
+    <div style={{ background: '#fff', border: '1px solid #e8e8e8', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: card.accent, flexShrink: 0 }} />
+          <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>{card.label}</span>
+        </div>
+        <span style={{ fontSize: 10, fontWeight: 600, color: card.up ? '#1ba86e' : '#ed1b36', fontFamily: '"Noto Sans", sans-serif' }}>
+          {card.delta} {card.up ? '↑' : '↓'}
+        </span>
+      </div>
+      <div style={{ fontSize: 24, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1 }}>{card.count.toLocaleString()}</div>
+      {card.sub.length > 0 && (
+        <div style={{ borderTop: '1px solid #f0f0f0', paddingTop: 8, display: 'flex', flexDirection: 'column', gap: 4 }}>
+          {card.sub.map((s, i) => (
+            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11 }}>
+              <span style={{ color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>{s.label} <strong style={{ color: '#2b2b2b' }}>{s.value}</strong></span>
+              {s.link && <a style={{ fontWeight: 600, color: s.linkColor || '#2396fb', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap', marginLeft: 4 }}>{s.link} →</a>}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Order Summary V2 — horizontal pipeline ────────────────────────────────────
+function OrdersSummaryV2() {
+  const IcoArrowR = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c8c8c8" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+
+  return (
+    <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, padding: 20, marginBottom: 24 }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 18 }}>
+        <span style={{ fontSize: 16, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>Orders Summary</span>
+        <span style={{ fontSize: 12, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>v2 — pipeline view</span>
+      </div>
+
+      {/* 3 buckets + arrows */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr auto 1fr', gap: 0, alignItems: 'start' }}>
+        {PIPELINE_BUCKETS.map((bucket, bi) => (
+          <>
+            {/* Bucket column */}
+            <div key={bucket.id}>
+              {/* Bucket header */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, padding: '8px 12px', background: bucket.bg, borderRadius: 8 }}>
+                <span style={{ color: bucket.color }}>{bucket.icon}</span>
+                <span style={{ fontSize: 13, fontWeight: 700, color: bucket.color, fontFamily: '"Noto Sans", sans-serif' }}>{bucket.label}</span>
+                <span style={{ marginLeft: 'auto', fontSize: 11, fontWeight: 600, color: bucket.color, background: '#fff', borderRadius: 999, padding: '1px 8px', fontFamily: '"Noto Sans", sans-serif' }}>
+                  {bucket.cards.length} types
+                </span>
+              </div>
+              {/* Cards stacked */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {bucket.cards.map((card, ci) => <PipelineCard key={ci} card={card} />)}
+              </div>
+            </div>
+            {/* Arrow between buckets */}
+            {bi < PIPELINE_BUCKETS.length - 1 && (
+              <div key={`arrow-${bi}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 12px', paddingTop: 18 }}>
+                <IcoArrowR />
+              </div>
+            )}
+          </>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── Order Summary V3 — vertical pipeline ─────────────────────────────────────
+function OrdersSummaryV3() {
+  const IcoArrowD = () => (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '6px 0' }}>
+      <div style={{ width: 1, height: 16, background: '#ddd' }} />
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8c8c8" strokeWidth="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </div>
+  )
+
+  return (
+    <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, padding: 20, marginBottom: 24 }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 18 }}>
+        <span style={{ fontSize: 16, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>Orders Summary</span>
+        <span style={{ fontSize: 12, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>v3 — vertical pipeline</span>
+      </div>
+
+      {/* Buckets stacked vertically */}
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {PIPELINE_BUCKETS.map((bucket, bi) => (
+          <div key={bucket.id}>
+            {/* Bucket row */}
+            <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', gap: 16, alignItems: 'start' }}>
+              {/* Stage label — left */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, paddingTop: 4 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: bucket.bg, borderRadius: 8, padding: '8px 14px', width: '100%' }}>
+                  <span style={{ color: bucket.color }}>{bucket.icon}</span>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: bucket.color, fontFamily: '"Noto Sans", sans-serif' }}>{bucket.label}</span>
+                </div>
+              </div>
+
+              {/* Cards in a row — right */}
+              <div style={{ display: 'flex', gap: 10 }}>
+                {bucket.cards.map((card, ci) => (
+                  <div key={ci} style={{ flex: '1 1 0', minWidth: 0 }}>
+                    <PipelineCard card={card} />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Arrow between buckets */}
+            {bi < PIPELINE_BUCKETS.length - 1 && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16, margin: '4px 0' }}>
+                <div style={{ width: 160, display: 'flex', justifyContent: 'center' }}>
+                  <IcoArrowD />
+                </div>
+                <div style={{ flex: 1, height: 1, background: '#f0f0f0' }} />
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ── Support Tasks section ────────────────────────────────────────────────────
 function SupportTasksSection() {
   const tasks = [
@@ -1083,6 +1250,11 @@ export default function B2CContent({ role = 'owner' }) {
         </div>
       </div>{/* end Orders Summary card */}
 
+      {/* ── Orders Summary V2 — horizontal pipeline ── */}
+      <OrdersSummaryV2 />
+
+      {/* ── Orders Summary V3 — vertical pipeline ── */}
+      <OrdersSummaryV3 />
 
       {/* ── Lower 2-col grid ── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 20, alignItems: 'start' }}>
