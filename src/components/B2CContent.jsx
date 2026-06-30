@@ -931,22 +931,71 @@ export default function B2CContent({ role = 'owner' }) {
 
       {tab === 'overview' && <>
 
-      {/* ── Account finlock strip — owner only ── */}
-      {!isSupport && (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff3f4', border: '1px solid #f5c0c8', borderRadius: 8, padding: '9px 16px', marginBottom: 12, gap: 12 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ed1b36" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            <span style={{ fontSize: 13, fontWeight: 600, color: '#c0001a', fontFamily: '"Noto Sans", sans-serif' }}>Account finlock</span>
-            <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>Pending KYC verification — new shipments may be held until resolved.</span>
-          </div>
-          <a style={{ fontSize: 12, fontWeight: 700, color: '#ed1b36', cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 3 }}>
-            Resolve now <IcoChevR />
-          </a>
-        </div>
-      )}
+      {/* ── Top 2-col: [finlock + action center] + [wallet/COD] ── */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 20, alignItems: 'start', marginBottom: 24 }}>
 
-      {/* ── Action Center ── */}
-      {isSupport ? <SupportTasksSection /> : <NeedsAttentionSection />}
+        {/* LEFT: finlock strip + action center */}
+        <div>
+          {!isSupport && (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff3f4', border: '1px solid #f5c0c8', borderRadius: 8, padding: '9px 16px', marginBottom: 12, gap: 12 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ed1b36" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span style={{ fontSize: 13, fontWeight: 600, color: '#c0001a', fontFamily: '"Noto Sans", sans-serif' }}>Account finlock</span>
+                <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>Pending KYC verification — new shipments may be held until resolved.</span>
+              </div>
+              <a style={{ fontSize: 12, fontWeight: 700, color: '#ed1b36', cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 3 }}>
+                Resolve now <IcoChevR />
+              </a>
+            </div>
+          )}
+          {isSupport ? <SupportTasksSection /> : <NeedsAttentionSection />}
+        </div>
+
+        {/* RIGHT: Wallet + COD — owner only */}
+        {!isSupport && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <Card isHoverable={false} style={{ borderRadius: 12, border: '1px solid var(--rule)', overflow: 'hidden' }}>
+              <div style={{ background: '#fffbec', borderBottom: '1px solid #fcedb7', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#c28b00" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                <span style={{ fontSize: 12, fontWeight: 600, color: '#a07000', fontFamily: '"Noto Sans", sans-serif' }}>Low balance — recharge to avoid disruption</span>
+              </div>
+              <div style={{ padding: '16px 18px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{ color: 'var(--ink-3)' }}><IcoWallet /></span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)', fontFamily: '"Noto Sans", sans-serif' }}>Wallet</span>
+                  </div>
+                  <a style={{ fontSize: 11, fontWeight: 500, color: 'var(--blue)', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>History <IcoChevR /></a>
+                </div>
+                <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 2 }}>Available balance</div>
+                <div style={{ fontSize: 30, fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-disp)', letterSpacing: -1, marginBottom: 2 }}>₹12,456</div>
+                <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 14 }}>Last recharged ₹50,000 · May 8</div>
+                <Button variant="black" size="sm" style={{ width: '100%', justifyContent: 'center' }}>Recharge wallet ↗</Button>
+              </div>
+            </Card>
+
+            <Card isHoverable={false} style={{ borderRadius: 12, border: '1px solid var(--rule)', overflow: 'hidden' }}>
+              <div style={{ background: 'linear-gradient(135deg, #f0fdf8 0%, #e8f8f2 100%)', borderBottom: '1px solid #b3e2cf', padding: '16px 18px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+                  <span style={{ color: '#1ba86e' }}><IcoCod /></span>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>COD Remittance</span>
+                </div>
+                <div style={{ fontSize: 11, color: '#1ba86e', fontWeight: 500, fontFamily: '"Noto Sans", sans-serif', marginBottom: 4 }}>NEXT PAYOUT · MAY 15, 2026</div>
+                <div style={{ fontSize: 28, fontWeight: 700, color: '#1ba86e', fontFamily: 'var(--font-disp)', letterSpacing: -1, lineHeight: 1, marginBottom: 4 }}>₹1,24,500</div>
+                <div style={{ fontSize: 11, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>In 2 days · direct to your bank account</div>
+              </div>
+              <div style={{ padding: '12px 18px' }}>
+                <a style={{ fontSize: 12, fontWeight: 600, color: 'var(--blue)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, fontFamily: '"Noto Sans", sans-serif' }}>
+                  View remittance details <IcoChevR />
+                </a>
+              </div>
+            </Card>
+          </div>
+        )}
+
+        {/* Support right rail */}
+        {isSupport && <div />}
+      </div>
 
       {/* ── Orders Summary — rich tiles with CTAs ── */}
       <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, padding: 16, marginBottom: 24 }}>
@@ -1035,7 +1084,7 @@ export default function B2CContent({ role = 'owner' }) {
       </div>{/* end Orders Summary card */}
 
 
-      {/* ── Main 2-col grid ── */}
+      {/* ── Lower 2-col grid ── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 20, alignItems: 'start' }}>
 
         {/* LEFT */}
@@ -1088,79 +1137,8 @@ export default function B2CContent({ role = 'owner' }) {
           {/* SmartAssist Insights — hidden */}
         </div>
 
-        {/* RIGHT RAIL */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-
-          {/* ── Wallet card — owner only ── */}
-          {!isSupport && <Card isHoverable={false} style={{ borderRadius: 12, border: '1px solid var(--rule)', overflow: 'hidden' }}>
-            {/* Low balance banner — top of card, unmissable */}
-            <div style={{ background: '#fffbec', borderBottom: '1px solid #fcedb7', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#c28b00" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-              <span style={{ fontSize: 12, fontWeight: 600, color: '#a07000', fontFamily: '"Noto Sans", sans-serif' }}>Low balance — recharge to avoid disruption</span>
-            </div>
-            <div style={{ padding: '16px 18px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ color: 'var(--ink-3)' }}><IcoWallet /></span>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)', fontFamily: '"Noto Sans", sans-serif' }}>Wallet</span>
-                </div>
-                <a style={{ fontSize: 11, fontWeight: 500, color: 'var(--blue)', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>History <IcoChevR /></a>
-              </div>
-              <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 2 }}>Available balance</div>
-              <div style={{ fontSize: 30, fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-disp)', letterSpacing: -1, marginBottom: 2 }}>₹12,456</div>
-              <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 14 }}>Last recharged ₹50,000 · May 8</div>
-              <Button variant="black" size="sm" style={{ width: '100%', justifyContent: 'center' }}>
-                Recharge wallet ↗
-              </Button>
-            </div>
-          </Card>}
-
-          {/* ── COD Remittance card — owner only ── */}
-          {!isSupport && <Card isHoverable={false} style={{ borderRadius: 12, border: '1px solid var(--rule)', overflow: 'hidden' }}>
-            {/* Next payout hero */}
-            <div style={{ background: 'linear-gradient(135deg, #f0fdf8 0%, #e8f8f2 100%)', borderBottom: '1px solid #b3e2cf', padding: '16px 18px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-                <span style={{ color: '#1ba86e' }}><IcoCod /></span>
-                <span style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>COD Remittance</span>
-              </div>
-              <div style={{ fontSize: 11, color: '#1ba86e', fontWeight: 500, fontFamily: '"Noto Sans", sans-serif', marginBottom: 4 }}>NEXT PAYOUT · MAY 15, 2026</div>
-              <div style={{ fontSize: 28, fontWeight: 700, color: '#1ba86e', fontFamily: 'var(--font-disp)', letterSpacing: -1, lineHeight: 1, marginBottom: 4 }}>₹1,24,500</div>
-              <div style={{ fontSize: 11, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>In 2 days · direct to your bank account</div>
-            </div>
-            <div style={{ padding: '12px 18px' }}>
-              <a style={{ fontSize: 12, fontWeight: 600, color: 'var(--blue)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, fontFamily: '"Noto Sans", sans-serif' }}>
-                View remittance details <IcoChevR />
-              </a>
-            </div>
-          </Card>}
-
-          {/* ── Support quick-ref card — support only ── */}
-          {isSupport && (
-            <Card isHoverable={false} style={{ borderRadius: 12, border: '1px solid #c5dcf9', overflow: 'hidden' }}>
-              <div style={{ background: '#f0f6ff', borderBottom: '1px solid #c5dcf9', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2396fb" strokeWidth="2"><circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 116 0c0 2-3 3-3 3"/><circle cx="12" cy="17" r=".5" fill="#2396fb"/></svg>
-                <span style={{ fontSize: 13, fontWeight: 700, color: '#1a6abf', fontFamily: '"Noto Sans", sans-serif' }}>Support quick-ref</span>
-              </div>
-              <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {[
-                  { label: 'NDR pending', value: '84', note: 'Awaiting re-attempt instruction', color: '#ed1b36' },
-                  { label: 'Tickets needing reply', value: '11', note: 'SLA risk on 1 ticket', color: '#e07230' },
-                  { label: 'Bad addresses', value: '47', note: 'Call customer to fix', color: '#a07000' },
-                  { label: 'Support tickets open', value: '18', note: '32 resolved this month', color: '#2396fb' },
-                ].map((r, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: i < 3 ? 10 : 0, borderBottom: i < 3 ? '1px solid #eef3fb' : 'none' }}>
-                    <div>
-                      <div style={{ fontSize: 12, fontWeight: 600, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>{r.label}</div>
-                      <div style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif', marginTop: 1 }}>{r.note}</div>
-                    </div>
-                    <span style={{ fontSize: 18, fontWeight: 700, color: r.color, fontFamily: '"Noto Sans", sans-serif' }}>{r.value}</span>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          )}
-
-        </div>
+        {/* RIGHT RAIL — empty, wallet/COD moved to top grid */}
+        <div />
       </div>
 
       {/* ── Quick links ── */}
