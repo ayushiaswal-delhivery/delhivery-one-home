@@ -1090,21 +1090,6 @@ export default function B2CContent({ role = 'owner' }) {
         {/* LEFT */}
         <div>
 
-          {/* Finance — owner only */}
-          {!isSupport && <div style={{ marginBottom: 20 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
-                <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)', fontFamily: '"Noto Sans", sans-serif' }}>Finance</span>
-                <span style={{ fontSize: 12, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>Total at risk:</span>
-                <span style={{ fontSize: 15, fontWeight: 700, color: '#ed1b36', fontFamily: '"Noto Sans", sans-serif' }}>₹48,900</span>
-              </div>
-            </div>
-            <div style={{ display: 'flex', gap: 16 }}>
-              <ClaimCard title="Loss & Damage Claims" total={10} inputCount={7}  inputAmt="₹18,200" rejectedCount={3} rejectedAmt="₹9,400" />
-              <ClaimCard title="Weight Disputes"       total={7}  inputCount={5}  inputAmt="₹14,800" rejectedCount={2} rejectedAmt="₹6,500" />
-            </div>
-          </div>}
-
           {/* Upcoming Pickups */}
           <Card isHoverable={false} style={{ marginBottom: 20, borderRadius: 12, border: '1px solid var(--rule)', padding: 20 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
@@ -1134,7 +1119,21 @@ export default function B2CContent({ role = 'owner' }) {
             </div>
           </Card>
 
-          {/* SmartAssist Insights — hidden */}
+          {/* Finance — owner only */}
+          {!isSupport && <div style={{ marginBottom: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
+                <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)', fontFamily: '"Noto Sans", sans-serif' }}>Finance</span>
+                <span style={{ fontSize: 12, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>Total at risk:</span>
+                <span style={{ fontSize: 15, fontWeight: 700, color: '#ed1b36', fontFamily: '"Noto Sans", sans-serif' }}>₹48,900</span>
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: 16 }}>
+              <ClaimCard title="Loss & Damage Claims" total={10} inputCount={7}  inputAmt="₹18,200" rejectedCount={3} rejectedAmt="₹9,400" />
+              <ClaimCard title="Weight Disputes"       total={7}  inputCount={5}  inputAmt="₹14,800" rejectedCount={2} rejectedAmt="₹6,500" />
+            </div>
+          </div>}
+
         </div>
 
         {/* RIGHT RAIL — empty, wallet/COD moved to top grid */}
