@@ -872,6 +872,62 @@ function SupportTasksSection() {
   )
 }
 
+// ── Orders Summary V1 (inline component for reuse) ───────────────────────────
+function OrdersSummaryInline({ setTab }) {
+  return (
+    <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, padding: 16, marginBottom: 24 }}>
+      <div style={{ marginBottom: 14 }}>
+        <span style={{ fontSize: 20, fontWeight: 600, lineHeight: '26px', color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>Orders Summary</span>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'row', gap: 12, alignItems: 'stretch' }}>
+        <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}><div style={{ width: 24, height: 24, borderRadius: 4, background: '#fde8eb', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ed1b36', flexShrink: 0 }}><IcoWarning /></div><span style={{ fontSize: 12, color: '#454545' }}>Pending manifest</span></div>
+          <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>312</div>
+          <DeltaBadge delta="+8%" up />
+          <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
+            <SubRow label="Bad address" value="47" link="Fix now" linkColor="#ed1b36" />
+            <SubRow label="High risk orders" value="23" link="Review" />
+          </div>
+        </div>
+        <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}><div style={{ width: 24, height: 24, borderRadius: 4, background: '#fff3ec', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#e77337', flexShrink: 0 }}><IcoBox /></div><span style={{ fontSize: 12, color: '#454545' }}>To be shipped</span></div>
+          <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>156</div>
+          <DeltaBadge delta="+3%" up />
+          <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, flex: 1 }}><SubRow label="High risk AWBs" value="12" link="Review" /></div>
+        </div>
+        <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}><div style={{ width: 24, height: 24, borderRadius: 4, background: '#e6f3fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2396fb', flexShrink: 0 }}><IcoClock /></div><span style={{ fontSize: 12, color: '#454545' }}>Awaiting pickup</span></div>
+          <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>9</div>
+          <DeltaBadge delta="+1" up />
+          <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, flex: 1 }}><Button variant="black" size="sm" style={{ width: '100%', justifyContent: 'center' }}>Schedule now</Button></div>
+        </div>
+        <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}><div style={{ width: 24, height: 24, borderRadius: 4, background: '#f3f0ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed', flexShrink: 0 }}><IcoChat /></div><span style={{ fontSize: 12, color: '#454545' }}>NDR</span></div>
+          <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>84</div>
+          <DeltaBadge delta="-2%" up={false} />
+          <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, flex: 1 }}>
+            <button onClick={() => setTab('analysis')} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, fontSize: 12, fontWeight: 600, color: '#2396fb', fontFamily: '"Noto Sans", sans-serif' }}>See trend <IcoChevR /></button>
+          </div>
+        </div>
+        <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}><div style={{ width: 24, height: 24, borderRadius: 4, background: '#ecf8f3', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1ba86e', flexShrink: 0 }}><IcoHeadset /></div><span style={{ fontSize: 12, color: '#454545' }}>Support tickets</span></div>
+          <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>18</div>
+          <DeltaBadge delta="-3" up={false} />
+          <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
+            <SubRow label="Recently resolved" value="32" link="See resolution" />
+            <SubRow label="Need your input" value="11" link="Respond" linkColor="#ed1b36" />
+          </div>
+        </div>
+      </div>
+      <div style={{ borderTop: '1px solid #f0f0f0', marginTop: 12, paddingTop: 10, display: 'flex', justifyContent: 'flex-end' }}>
+        <button onClick={() => setTab('analysis')} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, color: '#2396fb', fontFamily: '"Noto Sans", sans-serif', padding: 0 }}>
+          See delivery trends in Analysis <IcoChevR />
+        </button>
+      </div>
+    </div>
+  )
+}
+
 // ── Orders Summary 2 ─────────────────────────────────────────────────────────
 function OrdersSummary2() {
   const IcoFire = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M12 2c0 0-5 4-5 9a5 5 0 0010 0c0-5-5-9-5-9z"/><path d="M12 12c0 0-2 1.5-2 3a2 2 0 004 0c0-1.5-2-3-2-3z"/></svg>
@@ -1116,6 +1172,11 @@ export default function B2CContent({ role = 'owner' }) {
             </div>
           )}
           {isSupport ? <SupportTasksSection /> : <NeedsAttentionSection />}
+
+          {/* ── Orders Summary V1/V2/V3 ── */}
+          <OrdersSummaryInline setTab={setTab} />
+          <OrdersSummaryV2 />
+          <OrdersSummaryV3 />
         </div>
 
         {/* RIGHT: Wallet + COD — owner only */}
@@ -1163,98 +1224,6 @@ export default function B2CContent({ role = 'owner' }) {
         {/* Support right rail */}
         {isSupport && <div />}
       </div>
-
-      {/* ── Orders Summary — rich tiles with CTAs ── */}
-      <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, padding: 16, marginBottom: 24 }}>
-        <div style={{ marginBottom: 14 }}>
-          <span style={{ fontSize: 20, fontWeight: 600, lineHeight: '26px', color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>Orders Summary</span>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'row', gap: 12, alignItems: 'stretch' }}>
-
-          {/* Pending manifest */}
-          <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-              <div style={{ width: 24, height: 24, borderRadius: 4, background: '#fde8eb', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ed1b36', flexShrink: 0 }}><IcoWarning /></div>
-              <span style={{ fontSize: 12, color: '#454545' }}>Pending manifest</span>
-            </div>
-            <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>312</div>
-            <DeltaBadge delta="+8%" up />
-            <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
-              <SubRow label="Bad address" value="47" link="Fix now" linkColor="#ed1b36" />
-              <SubRow label="High risk orders" value="23" link="Review" />
-            </div>
-          </div>
-
-          {/* To be shipped */}
-          <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-              <div style={{ width: 24, height: 24, borderRadius: 4, background: '#fff3ec', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#e77337', flexShrink: 0 }}><IcoBox /></div>
-              <span style={{ fontSize: 12, color: '#454545' }}>To be shipped</span>
-            </div>
-            <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>156</div>
-            <DeltaBadge delta="+3%" up />
-            <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, flex: 1 }}>
-              <SubRow label="High risk AWBs" value="12" link="Review" />
-            </div>
-          </div>
-
-          {/* Awaiting pickup */}
-          <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-              <div style={{ width: 24, height: 24, borderRadius: 4, background: '#e6f3fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2396fb', flexShrink: 0 }}><IcoClock /></div>
-              <span style={{ fontSize: 12, color: '#454545' }}>Awaiting pickup</span>
-            </div>
-            <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>9</div>
-            <DeltaBadge delta="+1" up />
-            <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, flex: 1 }}>
-              <Button variant="black" size="sm" style={{ width: '100%', justifyContent: 'center' }}>Schedule now</Button>
-            </div>
-          </div>
-
-          {/* NDR */}
-          <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-              <div style={{ width: 24, height: 24, borderRadius: 4, background: '#f3f0ff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7c3aed', flexShrink: 0 }}><IcoChat /></div>
-              <span style={{ fontSize: 12, color: '#454545' }}>NDR</span>
-            </div>
-            <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>84</div>
-            <DeltaBadge delta="-2%" up={false} />
-            <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
-              <button onClick={() => setTab('analysis')} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, fontSize: 12, fontWeight: 600, color: '#2396fb', fontFamily: '"Noto Sans", sans-serif' }}>
-                See trend <IcoChevR />
-              </button>
-            </div>
-          </div>
-
-          {/* Support tickets */}
-          <div style={{ flex: '1 1 0', minWidth: 0, background: '#f9f9fb', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-              <div style={{ width: 24, height: 24, borderRadius: 4, background: '#ecf8f3', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1ba86e', flexShrink: 0 }}><IcoHeadset /></div>
-              <span style={{ fontSize: 12, color: '#454545' }}>Support tickets</span>
-            </div>
-            <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>18</div>
-            <DeltaBadge delta="-3" up={false} />
-            <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
-              <SubRow label="Recently resolved" value="32" link="See resolution" />
-              <SubRow label="Need your input" value="11" link="Respond" linkColor="#ed1b36" />
-            </div>
-          </div>
-
-        </div>{/* end tiles row */}
-
-        {/* Footer link to Analysis */}
-        <div style={{ borderTop: '1px solid #f0f0f0', marginTop: 12, paddingTop: 10, display: 'flex', justifyContent: 'flex-end' }}>
-          <button onClick={() => setTab('analysis')} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, color: '#2396fb', fontFamily: '"Noto Sans", sans-serif', padding: 0 }}>
-            See delivery trends in Analysis <IcoChevR />
-          </button>
-        </div>
-      </div>{/* end Orders Summary card */}
-
-      {/* ── Orders Summary V2 — horizontal pipeline ── */}
-      <OrdersSummaryV2 />
-
-      {/* ── Orders Summary V3 — vertical pipeline ── */}
-      <OrdersSummaryV3 />
 
       {/* ── Lower 2-col grid ── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 20, alignItems: 'start' }}>
