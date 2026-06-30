@@ -579,11 +579,13 @@ function ActionCard({ item }) {
   )
 }
 
-function NeedsAttentionSection() {
+function NeedsAttentionSection({ isSupport = false }) {
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const critical = ACTION_ITEMS.filter(i => i.sev === 'critical')
-  const topUrgent = ACTION_ITEMS.filter(i => i.sev === 'urgent').slice(0, 1)
-  const preview = [...critical, ...topUrgent]
+  // Support view hides finlock — it's a financial/account health item
+  const visibleItems = isSupport ? ACTION_ITEMS.filter(i => i.title !== 'Account finlock') : ACTION_ITEMS
+  const critical = visibleItems.filter(i => i.sev === 'critical')
+  const topUrgent = visibleItems.filter(i => i.sev === 'urgent').slice(0, 1)
+  const preview = [...critical, ...topUrgent].slice(0, 3)
 
   return (
     <>
@@ -602,7 +604,7 @@ function NeedsAttentionSection() {
             onMouseEnter={e => e.currentTarget.style.borderColor = '#aaa'}
             onMouseLeave={e => e.currentTarget.style.borderColor = '#e6e6e6'}
           >
-            View all {ACTION_ITEMS.length} <IcoChevR />
+            View all {visibleItems.length} <IcoChevR />
           </button>
         </div>
 
@@ -624,7 +626,7 @@ function NeedsAttentionSection() {
             <div style={{ padding: '18px 20px', borderBottom: '1px solid #f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
               <div>
                 <div style={{ fontSize: 15, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>All actions</div>
-                <div style={{ fontSize: 12, color: '#808080', marginTop: 2, fontFamily: '"Noto Sans", sans-serif' }}>{ACTION_ITEMS.length} items need your attention</div>
+                <div style={{ fontSize: 12, color: '#808080', marginTop: 2, fontFamily: '"Noto Sans", sans-serif' }}>{visibleItems.length} items need your attention</div>
               </div>
               <button onClick={() => setDrawerOpen(false)} style={{ width: 30, height: 30, borderRadius: 6, background: '#f4f4f6', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#454545' }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -635,7 +637,7 @@ function NeedsAttentionSection() {
             <div style={{ flex: 1, overflowY: 'auto' }}>
               {['critical', 'urgent', 'normal'].map(sev => {
                 const cfg   = SEVERITY[sev]
-                const items = ACTION_ITEMS.filter(i => i.sev === sev)
+                const items = visibleItems.filter(i => i.sev === sev)
                 return (
                   <div key={sev}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 20px', background: cfg.lightBg, borderTop: '1px solid #f0f0f0', borderBottom: '1px solid #f0f0f0', borderLeft: `3px solid ${cfg.color}` }}>
@@ -801,7 +803,8 @@ function OrdersSummary2() {
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
-export default function B2CContent() {
+export default function B2CContent({ role = 'owner' }) {
+  const isSupport = role === 'support'
   const [tab, setTab] = useState('overview')
   const [slide, setSlide] = useState(0)
 
@@ -814,6 +817,16 @@ export default function B2CContent() {
 
   return (
     <div className="content" style={{ position: 'relative' }}>
+
+      {/* ── Support role banner ── */}
+      {isSupport && (
+        <div style={{ background: '#f0f6ff', border: '1px solid #c5dcf9', borderRadius: 8, padding: '10px 16px', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2396fb" strokeWidth="2"><circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 116 0c0 2-3 3-3 3"/><circle cx="12" cy="17" r=".5" fill="#2396fb"/></svg>
+          <span style={{ fontSize: 12, fontWeight: 500, color: '#1a6abf', fontFamily: '"Noto Sans", sans-serif' }}>
+            <strong>Support view</strong> — financial data and business intelligence are hidden. Switch to Owner view to see full details.
+          </span>
+        </div>
+      )}
 
       {/* ── Tabs ── */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--rule)', marginBottom: 20, marginTop: -4 }}>
@@ -838,8 +851,8 @@ export default function B2CContent() {
       </div>
 
       {tab === 'analysis' && <>
-        {/* ── Business Overview (Revenue KPIs) ── */}
-        <div style={{ background: 'var(--Surface-BG_Primary-Default, #fff)', border: '1px solid var(--Border-Neutral-Tertiary, #e6e6e6)', borderRadius: 'var(--Radius-Large, 12px)', overflow: 'hidden', marginBottom: 16 }}>
+        {/* ── Business Overview (Revenue KPIs) — owner only ── */}
+        {!isSupport && <div style={{ background: 'var(--Surface-BG_Primary-Default, #fff)', border: '1px solid var(--Border-Neutral-Tertiary, #e6e6e6)', borderRadius: 'var(--Radius-Large, 12px)', overflow: 'hidden', marginBottom: 16 }}>
           <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--Border-Neutral-Tertiary, #e6e6e6)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
               <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--Text-Heading-Primary, #1a1a1a)', fontFamily: 'var(--Font_Family-heading, "Noto Sans"), sans-serif' }}>Business Overview</div>
@@ -863,7 +876,7 @@ export default function B2CContent() {
               </div>
             ))}
           </div>
-        </div>
+        </div>}
         {/* Performance */}
         <PerformanceSection />
         {/* Performance by Geography */}
@@ -873,7 +886,7 @@ export default function B2CContent() {
       {tab === 'overview' && <>
 
       {/* ── Action Center ── */}
-      <NeedsAttentionSection />
+      <NeedsAttentionSection isSupport={isSupport} />
 
       {/* ── Orders Summary — rich tiles with CTAs ── */}
       <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, padding: 16, marginBottom: 24 }}>
@@ -961,8 +974,8 @@ export default function B2CContent() {
         </div>
       </div>{/* end Orders Summary card */}
 
-      {/* ── Orders Summary 2 ── */}
-      <OrdersSummary2 />
+      {/* ── Orders Summary 2 — owner only ── */}
+      {!isSupport && <OrdersSummary2 />}
 
       {/* ── Main 2-col grid ── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 20, alignItems: 'start' }}>
@@ -970,8 +983,8 @@ export default function B2CContent() {
         {/* LEFT */}
         <div>
 
-          {/* Finance */}
-          <div style={{ marginBottom: 20 }}>
+          {/* Finance — owner only */}
+          {!isSupport && <div style={{ marginBottom: 20 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
                 <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)', fontFamily: '"Noto Sans", sans-serif' }}>Finance</span>
@@ -983,7 +996,7 @@ export default function B2CContent() {
               <ClaimCard title="Loss & Damage Claims" total={10} inputCount={7}  inputAmt="₹18,200" rejectedCount={3} rejectedAmt="₹9,400" />
               <ClaimCard title="Weight Disputes"       total={7}  inputCount={5}  inputAmt="₹14,800" rejectedCount={2} rejectedAmt="₹6,500" />
             </div>
-          </div>
+          </div>}
 
           {/* Upcoming Pickups */}
           <Card isHoverable={false} style={{ marginBottom: 20, borderRadius: 12, border: '1px solid var(--rule)', padding: 20 }}>
@@ -1020,8 +1033,8 @@ export default function B2CContent() {
         {/* RIGHT RAIL */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
 
-          {/* ── Wallet card ── */}
-          <Card isHoverable={false} style={{ borderRadius: 12, border: '1px solid var(--rule)', overflow: 'hidden' }}>
+          {/* ── Wallet card — owner only ── */}
+          {!isSupport && <Card isHoverable={false} style={{ borderRadius: 12, border: '1px solid var(--rule)', overflow: 'hidden' }}>
             {/* Low balance banner — top of card, unmissable */}
             <div style={{ background: '#fffbec', borderBottom: '1px solid #fcedb7', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#c28b00" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -1042,10 +1055,10 @@ export default function B2CContent() {
                 Recharge wallet ↗
               </Button>
             </div>
-          </Card>
+          </Card>}
 
-          {/* ── COD Remittance card ── */}
-          <Card isHoverable={false} style={{ borderRadius: 12, border: '1px solid var(--rule)', overflow: 'hidden' }}>
+          {/* ── COD Remittance card — owner only ── */}
+          {!isSupport && <Card isHoverable={false} style={{ borderRadius: 12, border: '1px solid var(--rule)', overflow: 'hidden' }}>
             {/* Next payout hero */}
             <div style={{ background: 'linear-gradient(135deg, #f0fdf8 0%, #e8f8f2 100%)', borderBottom: '1px solid #b3e2cf', padding: '16px 18px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
@@ -1061,7 +1074,33 @@ export default function B2CContent() {
                 View remittance details <IcoChevR />
               </a>
             </div>
-          </Card>
+          </Card>}
+
+          {/* ── Support quick-ref card — support only ── */}
+          {isSupport && (
+            <Card isHoverable={false} style={{ borderRadius: 12, border: '1px solid #c5dcf9', overflow: 'hidden' }}>
+              <div style={{ background: '#f0f6ff', borderBottom: '1px solid #c5dcf9', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2396fb" strokeWidth="2"><circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 116 0c0 2-3 3-3 3"/><circle cx="12" cy="17" r=".5" fill="#2396fb"/></svg>
+                <span style={{ fontSize: 13, fontWeight: 700, color: '#1a6abf', fontFamily: '"Noto Sans", sans-serif' }}>Support quick-ref</span>
+              </div>
+              <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {[
+                  { label: 'NDR pending', value: '84', note: 'Awaiting re-attempt instruction', color: '#ed1b36' },
+                  { label: 'Tickets needing reply', value: '11', note: 'SLA risk on 1 ticket', color: '#e07230' },
+                  { label: 'Bad addresses', value: '47', note: 'Call customer to fix', color: '#a07000' },
+                  { label: 'Support tickets open', value: '18', note: '32 resolved this month', color: '#2396fb' },
+                ].map((r, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: i < 3 ? 10 : 0, borderBottom: i < 3 ? '1px solid #eef3fb' : 'none' }}>
+                    <div>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>{r.label}</div>
+                      <div style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif', marginTop: 1 }}>{r.note}</div>
+                    </div>
+                    <span style={{ fontSize: 18, fontWeight: 700, color: r.color, fontFamily: '"Noto Sans", sans-serif' }}>{r.value}</span>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
 
         </div>
       </div>
