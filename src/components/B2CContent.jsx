@@ -659,6 +659,52 @@ function NeedsAttentionSection({ isSupport = false }) {
   )
 }
 
+// ── Support Tasks section ────────────────────────────────────────────────────
+function SupportTasksSection() {
+  const tasks = [
+    { count: 7,  countColor: '#ed1b36', title: 'Tickets need your input',    sub: '3 customer-facing · oldest 18h' },
+    { count: 4,  countColor: '#e07230', title: 'Open claims awaiting docs',   sub: '₹38,420 · 1 expires today' },
+    { count: 86, countColor: '#1a1a1a', title: 'NDR — call customer',         sub: 'Resolve before 6pm cut-off' },
+    { count: 42, countColor: '#1a1a1a', title: 'Bad addresses to fix',        sub: 'Auto-suggest available · 38' },
+  ]
+
+  return (
+    <div style={{ background: '#fff', border: '1px solid #e8e8e8', borderRadius: 12, padding: '18px 20px', marginBottom: 24 }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16 }}>
+        <div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif', marginBottom: 3 }}>
+            Tasks for you · <span style={{ fontWeight: 700 }}>11 to action</span>
+          </div>
+          <div style={{ fontSize: 12, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>
+            Customer issues, stuck shipments and tickets needing your input. Sorted by SLA breach risk.
+          </div>
+        </div>
+        <div style={{ background: '#fde8eb', border: '1px solid #f5c0c8', borderRadius: 999, padding: '4px 12px', whiteSpace: 'nowrap', flexShrink: 0, marginLeft: 16 }}>
+          <span style={{ fontSize: 12, fontWeight: 600, color: '#ed1b36', fontFamily: '"Noto Sans", sans-serif' }}>3 breaching SLA in &lt; 2h</span>
+        </div>
+      </div>
+
+      {/* Task cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+        {tasks.map((t, i) => (
+          <div key={i} style={{
+            background: '#f7f7f9', borderRadius: 8, padding: '16px 18px',
+            cursor: 'pointer', transition: 'box-shadow 150ms',
+          }}
+            onMouseEnter={e => e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)'}
+            onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
+          >
+            <div style={{ fontSize: 32, fontWeight: 700, color: t.countColor, fontFamily: '"Noto Sans", sans-serif', lineHeight: 1, marginBottom: 8 }}>{t.count}</div>
+            <div style={{ fontSize: 13, fontWeight: 600, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif', marginBottom: 4 }}>{t.title}</div>
+            <div style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>{t.sub}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ── Orders Summary 2 ─────────────────────────────────────────────────────────
 function OrdersSummary2() {
   const IcoFire = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M12 2c0 0-5 4-5 9a5 5 0 0010 0c0-5-5-9-5-9z"/><path d="M12 12c0 0-2 1.5-2 3a2 2 0 004 0c0-1.5-2-3-2-3z"/></svg>
@@ -886,7 +932,7 @@ export default function B2CContent({ role = 'owner' }) {
       {tab === 'overview' && <>
 
       {/* ── Action Center ── */}
-      <NeedsAttentionSection isSupport={isSupport} />
+      {isSupport ? <SupportTasksSection /> : <NeedsAttentionSection />}
 
       {/* ── Orders Summary — rich tiles with CTAs ── */}
       <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, padding: 16, marginBottom: 24 }}>
