@@ -931,6 +931,20 @@ export default function B2CContent({ role = 'owner' }) {
 
       {tab === 'overview' && <>
 
+      {/* ── Account finlock strip — owner only ── */}
+      {!isSupport && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff3f4', border: '1px solid #f5c0c8', borderRadius: 8, padding: '9px 16px', marginBottom: 12, gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ed1b36" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span style={{ fontSize: 13, fontWeight: 600, color: '#c0001a', fontFamily: '"Noto Sans", sans-serif' }}>Account finlock</span>
+            <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>Pending KYC verification — new shipments may be held until resolved.</span>
+          </div>
+          <a style={{ fontSize: 12, fontWeight: 700, color: '#ed1b36', cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 3 }}>
+            Resolve now <IcoChevR />
+          </a>
+        </div>
+      )}
+
       {/* ── Action Center ── */}
       {isSupport ? <SupportTasksSection /> : <NeedsAttentionSection />}
 
