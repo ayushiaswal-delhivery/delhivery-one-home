@@ -1020,8 +1020,6 @@ export default function B2CContent({ role = 'owner' }) {
         </div>
       </div>{/* end Orders Summary card */}
 
-      {/* ── Orders Summary 2 — owner only ── */}
-      {!isSupport && <OrdersSummary2 />}
 
       {/* ── Main 2-col grid ── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 20, alignItems: 'start' }}>
