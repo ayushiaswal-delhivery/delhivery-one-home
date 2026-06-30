@@ -670,7 +670,7 @@ const PIPELINE_BUCKETS = [
     cards: [
       { label: 'Pending manifest', count: 312, delta: '+8%', up: true,  accent: '#e07230', accentBg: '#fff3ec', sub: [{ label: 'Bad address', value: '47', link: 'Fix now', linkColor: '#ed1b36' }, { label: 'High risk', value: '23', link: 'Review' }] },
       { label: 'To be shipped',    count: 156, delta: '+3%', up: true,  accent: '#2396fb', accentBg: '#e6f3fe', sub: [{ label: 'High risk AWBs', value: '12', link: 'Review' }] },
-      { label: 'Awaiting pickup',  count: 9,   delta: '+1',  up: true,  accent: '#1ba86e', accentBg: '#ecf8f3', sub: [] },
+      { label: 'Awaiting pickup',  count: 9,   delta: '+1',  up: true,  accent: '#1ba86e', accentBg: '#ecf8f3', sub: [{ link: 'Schedule Now', linkColor: '#2396fb' }] },
     ],
   },
   {
@@ -714,9 +714,9 @@ function PipelineCard({ card }) {
       {card.sub.length > 0 && (
         <div style={{ borderTop: '1px solid #f0f0f0', paddingTop: 8, display: 'flex', flexDirection: 'column', gap: 4 }}>
           {card.sub.map((s, i) => (
-            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11 }}>
-              <span style={{ color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>{s.label} <strong style={{ color: '#2b2b2b' }}>{s.value}</strong></span>
-              {s.link && <a style={{ fontWeight: 600, color: s.linkColor || '#2396fb', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap', marginLeft: 4 }}>{s.link} →</a>}
+            <div key={i} style={{ display: 'flex', justifyContent: s.label ? 'space-between' : 'flex-start', alignItems: 'center', fontSize: 11 }}>
+              {s.label && <span style={{ color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>{s.label} <strong style={{ color: '#2b2b2b' }}>{s.value}</strong></span>}
+              {s.link && <a style={{ fontWeight: 600, color: s.linkColor || '#2396fb', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>{s.link} →</a>}
             </div>
           ))}
         </div>
