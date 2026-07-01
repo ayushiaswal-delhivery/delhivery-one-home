@@ -692,7 +692,7 @@ const PIPELINE_BUCKETS = [
     bg: '#ecf8f3',
     icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>,
     cards: [
-      { label: 'Delivered',       count: 1234, delta: '+11%', up: true,  accent: '#1ba86e', accentBg: '#ecf8f3', sub: [{ label: 'First attempt', value: '1,101' }, { label: 'Success rate', value: '89.3%' }, { link: 'View now', linkColor: '#2396fb' }] },
+      { label: 'Delivered',       count: 1234, delta: '+11%', up: true,  accent: '#1ba86e', accentBg: '#ecf8f3', sub: [{ link: 'View now', linkColor: '#2396fb' }] },
       { label: 'RTO initiated',   count: 87,   delta: '+3%',  up: false, accent: '#e07230', accentBg: '#fff3ec', sub: [{ link: 'View orders', linkColor: '#2396fb' }] },
     ],
   },
