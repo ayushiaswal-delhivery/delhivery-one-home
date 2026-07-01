@@ -680,9 +680,9 @@ const PIPELINE_BUCKETS = [
     bg: '#f3f0ff',
     icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 7h11v10H3z"/><path d="M14 10h5l2 3v4h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>,
     cards: [
-      { label: 'Out for delivery', count: 142, delta: '+5%', up: true,  accent: '#7c3aed', accentBg: '#f3f0ff', sub: [{ label: 'Delayed by traffic', value: '18' }, { label: 'Scheduled evening', value: '34' }] },
-      { label: 'NDR',              count: 84,  delta: '-2%', up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ label: 'Customer unreachable', value: '61' }, { label: '2nd attempt pending', value: '23', link: 'Resolve', linkColor: '#ed1b36' }, { label: 'Support tickets', value: '7', link: 'Raise ticket', linkColor: '#2396fb' }] },
-      { label: 'PDD breached',     count: 12,  delta: '+4',  up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ label: 'Past promise date', value: '12', link: 'View', linkColor: '#ed1b36' }, { label: 'Avg delay', value: '1.4 days' }, { label: 'Support tickets', value: '3', link: 'Raise ticket', linkColor: '#2396fb' }] },
+      { label: 'Out for delivery', count: 142, delta: '+5%', up: true,  accent: '#7c3aed', accentBg: '#f3f0ff', sub: [{ link: 'View now', linkColor: '#2396fb' }] },
+      { label: 'NDR',              count: 84,  delta: '-2%', up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ label: '2nd attempt pending', value: '23', link: 'Resolve', linkColor: '#ed1b36' }] },
+      { label: 'PDD breached',     count: 12,  delta: '+4',  up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ link: 'View shipments', linkColor: '#2396fb' }] },
     ],
   },
   {
@@ -692,8 +692,8 @@ const PIPELINE_BUCKETS = [
     bg: '#ecf8f3',
     icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>,
     cards: [
-      { label: 'Delivered',       count: 1234, delta: '+11%', up: true,  accent: '#1ba86e', accentBg: '#ecf8f3', sub: [{ label: 'First attempt', value: '1,101' }, { label: 'Success rate', value: '89.3%' }] },
-      { label: 'RTO initiated',   count: 87,   delta: '+3%',  up: false, accent: '#e07230', accentBg: '#fff3ec', sub: [{ label: 'In return transit', value: '54' }, { label: 'Returned to origin', value: '33' }, { label: 'Support tickets', value: '5', link: 'Raise ticket', linkColor: '#2396fb' }] },
+      { label: 'Delivered',       count: 1234, delta: '+11%', up: true,  accent: '#1ba86e', accentBg: '#ecf8f3', sub: [{ label: 'First attempt', value: '1,101' }, { label: 'Success rate', value: '89.3%' }, { link: 'View now', linkColor: '#2396fb' }] },
+      { label: 'RTO initiated',   count: 87,   delta: '+3%',  up: false, accent: '#e07230', accentBg: '#fff3ec', sub: [{ link: 'View orders', linkColor: '#2396fb' }] },
     ],
   },
 ]
@@ -703,7 +703,6 @@ function PipelineCard({ card }) {
     <div style={{ background: '#fff', border: '1px solid #e8e8e8', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column', gap: 6 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <div style={{ width: 8, height: 8, borderRadius: '50%', background: card.accent, flexShrink: 0 }} />
           <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>{card.label}</span>
         </div>
         <span style={{ fontSize: 10, fontWeight: 600, color: card.up ? '#1ba86e' : '#ed1b36', fontFamily: '"Noto Sans", sans-serif' }}>
