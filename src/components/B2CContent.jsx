@@ -729,7 +729,7 @@ function OrdersSummaryV2() {
   const IcoArrowR = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c8c8c8" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
 
   return (
-    <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, padding: 20, marginBottom: 24 }}>
+    <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, padding: 20, marginBottom: 16 }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 18 }}>
         <span style={{ fontSize: 16, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>Orders Summary</span>
@@ -1153,7 +1153,7 @@ export default function B2CContent({ role = 'owner' }) {
       {tab === 'overview' && <>
 
       {/* ── Top 2-col: [finlock + action center] + [wallet/COD] ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 20, alignItems: 'start', marginBottom: 24 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 20, alignItems: 'start', marginBottom: 0 }}>
 
         {/* LEFT: finlock strip + action center */}
         <div>
