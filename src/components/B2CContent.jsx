@@ -1183,12 +1183,10 @@ export default function B2CContent({ role = 'owner' }) {
               </div>
             </div>
           )}
-          {isSupport ? <SupportTasksSection /> : <NeedsAttentionSection />}
+          {isSupport ? <SupportTasksSection /> : null}
 
-          {/* ── Orders Summary V1/V2/V3 ── */}
-          <OrdersSummaryInline setTab={setTab} />
+          {/* ── Orders Summary V2/V3 ── */}
           <OrdersSummaryV2 />
-          <OrdersSummaryV3 />
         </div>
 
         {/* RIGHT: Wallet + COD — owner only */}
