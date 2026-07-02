@@ -913,7 +913,6 @@ function OrdersSummaryInline({ setTab }) {
           <div style={{ fontSize: 22, fontWeight: 700, color: '#2b2b2b', lineHeight: 1, marginBottom: 4 }}>18</div>
           <DeltaBadge delta="-3" up={false} />
           <div style={{ borderTop: '1px solid #e6e6e6', marginTop: 10, paddingTop: 10, display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
-            <SubRow label="Recently resolved" value="32" link="See resolution" />
             <SubRow label="Need your input" value="11" link="Respond" linkColor="#ed1b36" />
           </div>
         </div>
