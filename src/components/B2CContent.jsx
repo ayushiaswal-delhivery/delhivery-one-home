@@ -1217,6 +1217,50 @@ export default function B2CContent({ role = 'owner' }) {
                 </a>
               </div>
             </Card>
+
+            {/* What's New */}
+            <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, overflow: 'hidden' }}>
+              {/* Header */}
+              <div style={{ padding: '14px 16px', borderBottom: '1px solid #f0f0f0', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ width: 32, height: 32, borderRadius: 8, background: '#f5f5f7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <span style={{ fontSize: 15, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>What's New</span>
+              </div>
+
+              {/* Items */}
+              {[
+                { emoji: '🛵', title: 'Direct Intracity Shipping', sub: 'Hire bikes or trucks to deliver goods', isNew: false },
+                { emoji: '🛡️', title: 'Secure with Delhivery Protect', sub: 'Get cover up to ₹30,000 per shipment in case of loss or damage', isNew: true },
+                { emoji: '📦', title: 'Save More with RTO Prediction', sub: 'Reduce returns using Artificial Intelligence', isNew: false },
+                { emoji: '🛒', title: 'Connect WooCommerce in One Click!', sub: 'Get orders auto-fetched by Delhivery', isNew: false },
+                { emoji: '📦', title: 'Connect Amazon in One Click!', sub: 'Get orders auto-fetched by Delhivery', isNew: false },
+                { emoji: '👛', title: 'Auto-topup using Remittances', sub: 'Topup your wallet automatically', isNew: false },
+              ].map((item, i, arr) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderBottom: i < arr.length - 1 ? '1px solid #f5f5f5' : 'none', cursor: 'pointer' }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#fafafa'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                >
+                  {/* Icon */}
+                  <div style={{ position: 'relative', flexShrink: 0 }}>
+                    <div style={{ width: 40, height: 40, borderRadius: 10, background: '#f5f5f7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>
+                      {item.emoji}
+                    </div>
+                    {item.isNew && (
+                      <div style={{ position: 'absolute', bottom: -4, left: '50%', transform: 'translateX(-50%)', background: '#ed1b36', color: '#fff', fontSize: 9, fontWeight: 700, borderRadius: 999, padding: '1px 5px', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>New</div>
+                    )}
+                  </div>
+                  {/* Text */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif', marginBottom: 2 }}>{item.title}</div>
+                    <div style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.4 }}>{item.sub}</div>
+                  </div>
+                  {/* Chevron */}
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8c8c8" strokeWidth="2.5" style={{ flexShrink: 0 }}><path d="M9 18l6-6-6-6"/></svg>
+                </div>
+              ))}
+            </div>
+
           </div>
         )}
 
