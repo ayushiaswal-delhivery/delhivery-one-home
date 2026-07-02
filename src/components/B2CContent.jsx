@@ -1187,6 +1187,34 @@ export default function B2CContent({ role = 'owner' }) {
 
           {/* ── Orders Summary V2/V3 ── */}
           <OrdersSummaryV2 />
+
+          {/* Upcoming Pickups */}
+          <Card isHoverable={false} style={{ marginBottom: 20, borderRadius: 12, border: '1px solid var(--rule)', padding: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+              <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--Text-Body-Primary, #2b2b2b)', fontFamily: '"Noto Sans", sans-serif' }}>Upcoming Pickups</span>
+              <a style={{ fontSize: 12, fontWeight: 500, color: 'var(--Text-Info_Blue-Primary, #2396fb)', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>View all</a>
+            </div>
+            <div style={{ display: 'flex', gap: 14 }}>
+              <PickupCol dayLabel="Yesterday" date="May 12, 2026" pickupCount={1} variant="error" missedReason="Shipment not ready" buttons={[{ label: 'Reschedule', primary: true }]} />
+              <PickupCol dayLabel="Today" date="May 13, 2026" pickupCount={9} variant="info" cutoff="2h 14m" buttons={[{ icon: <IcoPhone />, label: 'Call FE', primary: false }, { icon: <IcoPrint />, label: 'Print labels', primary: false }]} />
+              <PickupCol dayLabel="Tomorrow" date="May 14, 2026" pickupCount={3} variant="default" buttons={[{ icon: <IcoPrint />, label: 'Print labels', primary: false }]} />
+            </div>
+          </Card>
+
+          {/* Finance — owner only */}
+          {!isSupport && <div style={{ marginBottom: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
+                <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)', fontFamily: '"Noto Sans", sans-serif' }}>Finance</span>
+                <span style={{ fontSize: 12, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>Total at risk:</span>
+                <span style={{ fontSize: 15, fontWeight: 700, color: '#ed1b36', fontFamily: '"Noto Sans", sans-serif' }}>₹48,900</span>
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: 16 }}>
+              <ClaimCard title="Loss & Damage Claims" total={10} inputCount={7} inputAmt="₹18,200" rejectedCount={3} rejectedAmt="₹9,400" />
+              <ClaimCard title="Weight Disputes" total={7} inputCount={5} inputAmt="₹14,800" rejectedCount={2} rejectedAmt="₹6,500" />
+            </div>
+          </div>}
         </div>
 
         {/* RIGHT: Wallet + COD — owner only */}
@@ -1307,61 +1335,6 @@ export default function B2CContent({ role = 'owner' }) {
         {isSupport && <div />}
       </div>
 
-      {/* ── Lower 2-col grid ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 20, alignItems: 'start' }}>
-
-        {/* LEFT */}
-        <div>
-
-          {/* Upcoming Pickups */}
-          <Card isHoverable={false} style={{ marginBottom: 20, borderRadius: 12, border: '1px solid var(--rule)', padding: 20 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-              <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--Text-Body-Primary, #2b2b2b)', fontFamily: '"Noto Sans", sans-serif' }}>Upcoming Pickups</span>
-              <a style={{ fontSize: 12, fontWeight: 500, color: 'var(--Text-Info_Blue-Primary, #2396fb)', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>View all</a>
-            </div>
-            <div style={{ display: 'flex', gap: 14 }}>
-              <PickupCol
-                dayLabel="Yesterday" date="May 12, 2026"
-                pickupCount={1} variant="error"
-                missedReason="Shipment not ready"
-                buttons={[{ label: 'Reschedule', primary: true }]}
-              />
-              <PickupCol
-                dayLabel="Today" date="May 13, 2026"
-                pickupCount={9} variant="info" cutoff="2h 14m"
-                buttons={[
-                  { icon: <IcoPhone />, label: 'Call FE', primary: false },
-                  { icon: <IcoPrint />, label: 'Print labels', primary: false },
-                ]}
-              />
-              <PickupCol
-                dayLabel="Tomorrow" date="May 14, 2026"
-                pickupCount={3} variant="default"
-                buttons={[{ icon: <IcoPrint />, label: 'Print labels', primary: false }]}
-              />
-            </div>
-          </Card>
-
-          {/* Finance — owner only */}
-          {!isSupport && <div style={{ marginBottom: 20 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
-                <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)', fontFamily: '"Noto Sans", sans-serif' }}>Finance</span>
-                <span style={{ fontSize: 12, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>Total at risk:</span>
-                <span style={{ fontSize: 15, fontWeight: 700, color: '#ed1b36', fontFamily: '"Noto Sans", sans-serif' }}>₹48,900</span>
-              </div>
-            </div>
-            <div style={{ display: 'flex', gap: 16 }}>
-              <ClaimCard title="Loss & Damage Claims" total={10} inputCount={7}  inputAmt="₹18,200" rejectedCount={3} rejectedAmt="₹9,400" />
-              <ClaimCard title="Weight Disputes"       total={7}  inputCount={5}  inputAmt="₹14,800" rejectedCount={2} rejectedAmt="₹6,500" />
-            </div>
-          </div>}
-
-        </div>
-
-        {/* RIGHT RAIL — empty, wallet/COD moved to top grid */}
-        <div />
-      </div>
 
       {/* ── Quick links ── */}
       <div style={{ height: 1, background: 'var(--rule)', margin: '8px 0 20px' }} />
