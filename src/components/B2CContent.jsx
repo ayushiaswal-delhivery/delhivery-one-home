@@ -1158,15 +1158,29 @@ export default function B2CContent({ role = 'owner' }) {
         {/* LEFT: finlock strip + action center */}
         <div>
           {!isSupport && (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff3f4', border: '1px solid #f5c0c8', borderRadius: 8, padding: '9px 16px', marginBottom: 12, gap: 12 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ed1b36" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                <span style={{ fontSize: 13, fontWeight: 600, color: '#c0001a', fontFamily: '"Noto Sans", sans-serif' }}>Account finlock</span>
-                <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>Pending KYC verification — new shipments may be held until resolved.</span>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
+              {/* Finlock strip */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff3f4', border: '1px solid #f5c0c8', borderRadius: 8, padding: '9px 16px', gap: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ed1b36" strokeWidth="2.5" style={{ flexShrink: 0 }}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: '#c0001a', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>Account finlock</span>
+                  <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>Pending KYC — shipments may be held.</span>
+                </div>
+                <a style={{ fontSize: 12, fontWeight: 700, color: '#ed1b36', cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0 }}>
+                  Resolve now <IcoChevR />
+                </a>
               </div>
-              <a style={{ fontSize: 12, fontWeight: 700, color: '#ed1b36', cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 3 }}>
-                Resolve now <IcoChevR />
-              </a>
+              {/* Support tickets strip */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f3f0ff', border: '1px solid #d4c8f8', borderRadius: 8, padding: '9px 16px', gap: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+                  <IcoHeadset />
+                  <span style={{ fontSize: 13, fontWeight: 600, color: '#5b21b6', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>Support tickets</span>
+                  <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>11 need your input · 1 nearing SLA.</span>
+                </div>
+                <a style={{ fontSize: 12, fontWeight: 700, color: '#7c3aed', cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0 }}>
+                  Respond <IcoChevR />
+                </a>
+              </div>
             </div>
           )}
           {isSupport ? <SupportTasksSection /> : <NeedsAttentionSection />}
