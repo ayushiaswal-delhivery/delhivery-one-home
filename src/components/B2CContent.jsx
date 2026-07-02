@@ -1221,82 +1221,69 @@ export default function B2CContent({ role = 'owner' }) {
         {!isSupport && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
 
-            <Card isHoverable={false} style={{ borderRadius: 12, border: '1px solid var(--rule)', overflow: 'hidden' }}>
-              <div style={{ background: '#fffbec', borderBottom: '1px solid #fcedb7', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#c28b00" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                <span style={{ fontSize: 12, fontWeight: 600, color: '#a07000', fontFamily: '"Noto Sans", sans-serif' }}>Low balance — recharge to avoid disruption</span>
-              </div>
-              <div style={{ padding: '16px 18px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <span style={{ color: 'var(--ink-3)' }}><IcoWallet /></span>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)', fontFamily: '"Noto Sans", sans-serif' }}>Wallet</span>
-                  </div>
-                  <a style={{ fontSize: 11, fontWeight: 500, color: 'var(--blue)', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>History <IcoChevR /></a>
+            {/* Wallet */}
+            <div style={{ background: '#fff', border: '1px solid #e8e8e8', borderRadius: 12, padding: '16px 18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ width: 28, height: 28, borderRadius: 6, background: '#f5f5f7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#454545' }}><IcoWallet /></div>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>Wallet</span>
                 </div>
-                <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 2 }}>Available balance</div>
-                <div style={{ fontSize: 30, fontWeight: 700, color: 'var(--ink)', fontFamily: 'var(--font-disp)', letterSpacing: -1, marginBottom: 2 }}>₹12,456</div>
-                <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: 'var(--font-ui)', marginBottom: 14 }}>Last recharged ₹50,000 · May 8</div>
-                <Button variant="black" size="sm" style={{ width: '100%', justifyContent: 'center' }}>Recharge wallet ↗</Button>
+                <a style={{ fontSize: 11, color: '#2396fb', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 2 }}>History <IcoChevR /></a>
               </div>
-            </Card>
+              <div style={{ fontSize: 11, color: '#98a2bc', fontFamily: '"Noto Sans", sans-serif', marginBottom: 2 }}>Available balance</div>
+              <div style={{ fontSize: 28, fontWeight: 700, color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif', letterSpacing: -1, lineHeight: 1, marginBottom: 4 }}>₹12,456</div>
+              <div style={{ fontSize: 11, color: '#98a2bc', fontFamily: '"Noto Sans", sans-serif', marginBottom: 14 }}>Last recharged ₹50,000 · May 8</div>
+              {/* Low balance notice */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#fef9ec', borderRadius: 6, padding: '6px 10px', marginBottom: 12 }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#c28b00" strokeWidth="2.5" style={{ flexShrink: 0 }}><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                <span style={{ fontSize: 11, color: '#a07000', fontFamily: '"Noto Sans", sans-serif' }}>Low balance — recharge to avoid disruption</span>
+              </div>
+              <button style={{ width: '100%', background: '#2b2b2b', color: '#fff', border: 'none', borderRadius: 6, padding: '8px 0', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>Recharge wallet ↗</button>
+            </div>
 
-            <Card isHoverable={false} style={{ borderRadius: 12, border: '1px solid var(--rule)', overflow: 'hidden' }}>
-              <div style={{ background: 'linear-gradient(135deg, #f0fdf8 0%, #e8f8f2 100%)', borderBottom: '1px solid #b3e2cf', padding: '16px 18px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-                  <span style={{ color: '#1ba86e' }}><IcoCod /></span>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>COD Remittance</span>
+            {/* COD Remittance */}
+            <div style={{ background: '#fff', border: '1px solid #e8e8e8', borderRadius: 12, padding: '16px 18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ width: 28, height: 28, borderRadius: 6, background: '#f5f5f7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#454545' }}><IcoCod /></div>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>COD Remittance</span>
                 </div>
-                <div style={{ fontSize: 11, color: '#1ba86e', fontWeight: 500, fontFamily: '"Noto Sans", sans-serif', marginBottom: 4 }}>NEXT PAYOUT · MAY 15, 2026</div>
-                <div style={{ fontSize: 28, fontWeight: 700, color: '#1ba86e', fontFamily: 'var(--font-disp)', letterSpacing: -1, lineHeight: 1, marginBottom: 4 }}>₹1,24,500</div>
-                <div style={{ fontSize: 11, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>In 2 days · direct to your bank account</div>
+                <a style={{ fontSize: 11, color: '#2396fb', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 2 }}>Details <IcoChevR /></a>
               </div>
-              <div style={{ padding: '12px 18px' }}>
-                <a style={{ fontSize: 12, fontWeight: 600, color: 'var(--blue)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, fontFamily: '"Noto Sans", sans-serif' }}>
-                  View remittance details <IcoChevR />
-                </a>
-              </div>
-            </Card>
+              <div style={{ fontSize: 11, color: '#98a2bc', fontFamily: '"Noto Sans", sans-serif', marginBottom: 2 }}>Next payout · May 15, 2026</div>
+              <div style={{ fontSize: 28, fontWeight: 700, color: '#1ba86e', fontFamily: '"Noto Sans", sans-serif', letterSpacing: -1, lineHeight: 1, marginBottom: 4 }}>₹1,24,500</div>
+              <div style={{ fontSize: 11, color: '#98a2bc', fontFamily: '"Noto Sans", sans-serif' }}>In 2 days · direct to your bank account</div>
+            </div>
 
             {/* What's New */}
-            <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, overflow: 'hidden' }}>
-              {/* Header */}
+            <div style={{ background: '#fff', border: '1px solid #e8e8e8', borderRadius: 12, overflow: 'hidden' }}>
               <div style={{ padding: '14px 16px', borderBottom: '1px solid #f0f0f0', display: 'flex', alignItems: 'center', gap: 8 }}>
-                <div style={{ width: 32, height: 32, borderRadius: 8, background: '#f5f5f7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <div style={{ width: 28, height: 28, borderRadius: 6, background: '#f5f5f7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#454545" strokeWidth="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                 </div>
-                <span style={{ fontSize: 15, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>What's New</span>
+                <span style={{ fontSize: 13, fontWeight: 600, color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>What's New</span>
               </div>
-
-              {/* Items */}
               {[
                 { emoji: '🛵', title: 'Direct Intracity Shipping', sub: 'Hire bikes or trucks to deliver goods', isNew: false },
-                { emoji: '🛡️', title: 'Secure with Delhivery Protect', sub: 'Get cover up to ₹30,000 per shipment in case of loss or damage', isNew: true },
-                { emoji: '📦', title: 'Save More with RTO Prediction', sub: 'Reduce returns using Artificial Intelligence', isNew: false },
+                { emoji: '🛡️', title: 'Secure with Delhivery Protect', sub: 'Get cover up to ₹30,000 per shipment', isNew: true },
+                { emoji: '📦', title: 'Save More with RTO Prediction', sub: 'Reduce returns using AI', isNew: false },
                 { emoji: '🛒', title: 'Connect WooCommerce in One Click!', sub: 'Get orders auto-fetched by Delhivery', isNew: false },
-                { emoji: '📦', title: 'Connect Amazon in One Click!', sub: 'Get orders auto-fetched by Delhivery', isNew: false },
+                { emoji: '🛍️', title: 'Connect Amazon in One Click!', sub: 'Get orders auto-fetched by Delhivery', isNew: false },
                 { emoji: '👛', title: 'Auto-topup using Remittances', sub: 'Topup your wallet automatically', isNew: false },
               ].map((item, i, arr) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderBottom: i < arr.length - 1 ? '1px solid #f5f5f5' : 'none', cursor: 'pointer' }}
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 16px', borderBottom: i < arr.length - 1 ? '1px solid #f5f5f5' : 'none', cursor: 'pointer' }}
                   onMouseEnter={e => e.currentTarget.style.background = '#fafafa'}
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 >
-                  {/* Icon */}
                   <div style={{ position: 'relative', flexShrink: 0 }}>
-                    <div style={{ width: 40, height: 40, borderRadius: 10, background: '#f5f5f7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>
-                      {item.emoji}
-                    </div>
-                    {item.isNew && (
-                      <div style={{ position: 'absolute', bottom: -4, left: '50%', transform: 'translateX(-50%)', background: '#ed1b36', color: '#fff', fontSize: 9, fontWeight: 700, borderRadius: 999, padding: '1px 5px', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>New</div>
-                    )}
+                    <div style={{ width: 36, height: 36, borderRadius: 8, background: '#f5f5f7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>{item.emoji}</div>
+                    {item.isNew && <div style={{ position: 'absolute', bottom: -4, left: '50%', transform: 'translateX(-50%)', background: '#ed1b36', color: '#fff', fontSize: 8, fontWeight: 700, borderRadius: 999, padding: '1px 4px', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>New</div>}
                   </div>
-                  {/* Text */}
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif', marginBottom: 2 }}>{item.title}</div>
-                    <div style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.4 }}>{item.sub}</div>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif', marginBottom: 1 }}>{item.title}</div>
+                    <div style={{ fontSize: 11, color: '#98a2bc', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.4 }}>{item.sub}</div>
                   </div>
-                  {/* Chevron */}
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8c8c8" strokeWidth="2.5" style={{ flexShrink: 0 }}><path d="M9 18l6-6-6-6"/></svg>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#c8c8c8" strokeWidth="2.5" style={{ flexShrink: 0 }}><path d="M9 18l6-6-6-6"/></svg>
                 </div>
               ))}
             </div>
