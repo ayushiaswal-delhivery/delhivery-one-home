@@ -1221,33 +1221,6 @@ export default function B2CContent({ role = 'owner' }) {
         {!isSupport && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
 
-            {/* Wallet V2 — Figma variation */}
-            <div style={{ borderRadius: 12, overflow: 'hidden', boxShadow: '0px 2px 4px rgba(0,0,0,0.10)', position: 'relative' }}>
-              {/* Top bar */}
-              <div style={{ background: '#f0f4fe', padding: '10px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 15, fontWeight: 600, color: '#343c51', fontFamily: '"Noto Sans", sans-serif' }}>Your wallet balance</span>
-                <button style={{ background: '#fff', border: 'none', borderRadius: 4, padding: '5px 12px', fontSize: 12, fontWeight: 500, color: '#2b2b2b', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 3, fontFamily: '"Noto Sans", sans-serif' }}>
-                  Add money <IcoChevR />
-                </button>
-              </div>
-              {/* Balance area — gradient card */}
-              <div style={{ background: 'linear-gradient(135deg, #f5f0ff 0%, #fde8eb 50%, #f0f4fe 100%)', padding: '28px 14px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, position: 'relative', border: '1px dashed #d8cff0', margin: '0 8px 0 8px', borderRadius: 8 }}>
-                {/* decorative blobs */}
-                <div style={{ position: 'absolute', width: 120, height: 120, borderRadius: '50%', background: 'rgba(180,160,240,0.18)', top: -30, right: -20, pointerEvents: 'none' }} />
-                <div style={{ position: 'absolute', width: 100, height: 100, borderRadius: '50%', background: 'rgba(237,180,190,0.18)', bottom: -20, left: -20, pointerEvents: 'none' }} />
-                <span style={{ fontSize: 48, fontWeight: 700, color: '#1c202b', fontFamily: '"Noto Sans", sans-serif', letterSpacing: -1, lineHeight: 1, opacity: 0.9, position: 'relative' }}>₹12,456</span>
-                <span style={{ fontSize: 11, color: '#666', fontFamily: '"Noto Sans", sans-serif', letterSpacing: 0.5, position: 'relative' }}>CURRENT BALANCE</span>
-                <a style={{ fontSize: 12, fontWeight: 500, color: '#2396fb', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 3, marginTop: 2, position: 'relative' }}>
-                  View History <IcoChevR />
-                </a>
-              </div>
-              {/* Low balance strip */}
-              <div style={{ background: '#fcefe8', border: '1px solid #fae3d7', borderTop: 'none', padding: '7px 12px', display: 'flex', alignItems: 'center', gap: 4 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e77337" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                <span style={{ fontSize: 10, fontWeight: 600, color: '#e77337', fontFamily: '"Noto Sans", sans-serif' }}>Low balance</span>
-                <span style={{ fontSize: 10, color: '#e77337', fontFamily: '"Noto Sans", sans-serif' }}>: Recharge now to avoid service interruption</span>
-              </div>
-            </div>
             <Card isHoverable={false} style={{ borderRadius: 12, border: '1px solid var(--rule)', overflow: 'hidden' }}>
               <div style={{ background: '#fffbec', borderBottom: '1px solid #fcedb7', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#c28b00" strokeWidth="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
