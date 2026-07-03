@@ -1251,7 +1251,6 @@ export default function B2CContent({ role = 'owner' }) {
               </div>
               <div style={{ fontSize: 11, color: '#98a2bc', fontFamily: '"Noto Sans", sans-serif', marginBottom: 2 }}>Next payout · May 15, 2026</div>
               <div style={{ fontSize: 28, fontWeight: 700, color: '#1ba86e', fontFamily: '"Noto Sans", sans-serif', letterSpacing: -1, lineHeight: 1, marginBottom: 4 }}>₹1,24,500</div>
-              <div style={{ fontSize: 11, color: '#98a2bc', fontFamily: '"Noto Sans", sans-serif' }}>In 2 days · direct to your bank account</div>
             </div>
 
             {/* What's New */}
