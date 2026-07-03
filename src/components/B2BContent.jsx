@@ -23,7 +23,7 @@ const B2B_PIPELINE = [
     cards: [
       { label: 'LRs manifested · PUR not created', count: 45,  unit: 'LRs', delta: '+6',  up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ label: 'Pending > 24h', value: '12', link: 'Create PUR', linkColor: '#ed1b36' }] },
       { label: 'Awaiting pickup',                   count: 28,  unit: 'LRs', delta: '+3',  up: true,  accent: '#2396fb', accentBg: '#e6f3fe', sub: [{ link: 'Schedule Now', linkColor: '#2396fb' }] },
-      { label: 'E-waybill needed',                  count: 12,  unit: 'LRs', delta: '+2',  up: false, accent: '#e07230', accentBg: '#fff3ec', sub: [{ label: 'Expiring today', value: '4', link: 'Upload now', linkColor: '#ed1b36' }] },
+      { label: 'Documents needed',                  count: 20,  unit: 'LRs', delta: '+3',  up: false, accent: '#e07230', accentBg: '#fff3ec', pills: ['E-waybill'], sub: [{ label: 'Expiring today', value: '4', link: 'Upload now', linkColor: '#ed1b36' }] },
     ],
   },
   {
@@ -45,9 +45,9 @@ const B2B_PIPELINE = [
     bg: '#ecf8f3',
     icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>,
     cards: [
-      { label: 'Delivered',         count: 145, unit: 'LRs', delta: '+9%', up: true,  accent: '#1ba86e', accentBg: '#ecf8f3', sub: [{ link: 'View now', linkColor: '#2396fb' }] },
-      { label: 'POD pending',       count: 12,  unit: 'LRs', delta: '+2',  up: false, accent: '#e07230', accentBg: '#fff3ec', sub: [{ label: 'Overdue > 48h', value: '5', link: 'Follow up', linkColor: '#ed1b36' }] },
-      { label: 'Documents needed',  count: 8,   unit: 'LRs', delta: '+1',  up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ link: 'Upload docs', linkColor: '#ed1b36' }] },
+      { label: 'Delivered',   count: 145, unit: 'LRs', delta: '+9%', up: true,  accent: '#1ba86e', accentBg: '#ecf8f3', sub: [{ link: 'View now', linkColor: '#2396fb' }] },
+      { label: 'POD pending', count: 12,  unit: 'LRs', delta: '+2',  up: false, accent: '#e07230', accentBg: '#fff3ec', sub: [{ label: 'Overdue > 48h', value: '5', link: 'Follow up', linkColor: '#ed1b36' }] },
+      { label: 'RTO',         count: 9,   unit: 'LRs', delta: '+2',  up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ label: 'In transit back', value: '6', link: 'View orders', linkColor: '#2396fb' }] },
     ],
   },
 ]
@@ -65,6 +65,13 @@ function B2BPipelineCard({ card }) {
         <span style={{ fontSize: 24, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1 }}>{card.count}</span>
         <span style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>{card.unit}</span>
       </div>
+      {card.pills && card.pills.length > 0 && (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+          {card.pills.map((p, i) => (
+            <span key={i} style={{ fontSize: 10, fontWeight: 600, color: '#e07230', background: '#fff3ec', border: '1px solid #f5c89a', borderRadius: 999, padding: '2px 8px', fontFamily: '"Noto Sans", sans-serif' }}>{p}</span>
+          ))}
+        </div>
+      )}
       {card.sub.length > 0 && (
         <div style={{ borderTop: '1px solid #f0f0f0', paddingTop: 8, display: 'flex', flexDirection: 'column', gap: 4 }}>
           {card.sub.map((s, i) => (
