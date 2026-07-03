@@ -150,7 +150,7 @@ function PickupCol({ dayLabel, date, pickupCount, variant, cutoff, missedReason,
     ? { accent: '#ed1b36', badgeBg: '#fde8eb', badgeColor: '#ed1b36', headerBg: '#fff8f8', icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> }
     : variant === 'info'
     ? { accent: '#2396fb', badgeBg: '#e6f3fe', badgeColor: '#2396fb', headerBg: '#f5f9ff', icon: <IcoClock /> }
-    : { accent: '#e0e0e0', badgeBg: '#f4f4f6', badgeColor: '#666',    headerBg: '#fafafa',  icon: <IcoCalendar /> }
+    : { accent: '#1ba86e', badgeBg: '#eff1f5', badgeColor: '#454545', headerBg: '#eff1f5',  icon: <IcoCalendar /> }
 
   return (
     <div style={{ flex: '1 1 0', minWidth: 0, border: '1px solid #e6e6e6', borderRadius: 12, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
@@ -743,10 +743,10 @@ function OrdersSummaryV2() {
             {/* Bucket column */}
             <div key={bucket.id}>
               {/* Bucket header */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, padding: '8px 12px', background: bucket.bg, borderRadius: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, padding: '8px 12px', background: '#eff1f5', borderRadius: 8 }}>
                 <span style={{ color: bucket.color }}>{bucket.icon}</span>
-                <span style={{ fontSize: 13, fontWeight: 700, color: bucket.color, fontFamily: '"Noto Sans", sans-serif' }}>{bucket.label}</span>
-                <span style={{ marginLeft: 'auto', fontSize: 11, fontWeight: 600, color: bucket.color, background: '#fff', borderRadius: 999, padding: '1px 8px', fontFamily: '"Noto Sans", sans-serif' }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>{bucket.label}</span>
+                <span style={{ marginLeft: 'auto', fontSize: 11, fontWeight: 600, color: '#454545', background: '#fff', borderRadius: 999, padding: '1px 8px', fontFamily: '"Noto Sans", sans-serif' }}>
                   {bucket.cards.length} types
                 </span>
               </div>
@@ -1164,7 +1164,7 @@ export default function B2CContent({ role = 'owner' }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ed1b36" strokeWidth="2.5" style={{ flexShrink: 0 }}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                   <span style={{ fontSize: 13, fontWeight: 600, color: '#c0001a', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>Account finlock</span>
-                  <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>Pending KYC — shipments may be held.</span>
+                  <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>Pending KYC · shipments may be held.</span>
                 </div>
                 <a style={{ fontSize: 12, fontWeight: 700, color: '#ed1b36', cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0 }}>
                   Resolve now <IcoChevR />
@@ -1296,7 +1296,7 @@ export default function B2CContent({ role = 'owner' }) {
                 <a style={{ fontSize: 11, color: '#2396fb', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 2 }}>Details <IcoChevR /></a>
               </div>
               <div style={{ fontSize: 11, color: '#98a2bc', fontFamily: '"Noto Sans", sans-serif', marginBottom: 2 }}>Next payout · May 15, 2026</div>
-              <div style={{ fontSize: 28, fontWeight: 700, color: '#1ba86e', fontFamily: '"Noto Sans", sans-serif', letterSpacing: -1, lineHeight: 1, marginBottom: 4 }}>₹1,24,500</div>
+              <div style={{ fontSize: 28, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif', letterSpacing: -1, lineHeight: 1, marginBottom: 4 }}>₹1,24,500</div>
             </div>
 
             {/* What's New */}
