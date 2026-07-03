@@ -1265,8 +1265,7 @@ export default function B2CContent({ role = 'owner' }) {
                 { emoji: '🛵', title: 'Direct Intracity Shipping', sub: 'Hire bikes or trucks to deliver goods', isNew: false },
                 { emoji: '🛡️', title: 'Secure with Delhivery Protect', sub: 'Get cover up to ₹30,000 per shipment', isNew: true },
                 { emoji: '📦', title: 'Save More with RTO Prediction', sub: 'Reduce returns using AI', isNew: false },
-                { emoji: '🛒', title: 'Connect WooCommerce in One Click!', sub: 'Get orders auto-fetched by Delhivery', isNew: false },
-                { emoji: '🛍️', title: 'Connect Amazon in One Click!', sub: 'Get orders auto-fetched by Delhivery', isNew: false },
+                { emoji: null, title: 'Connect Amazon & WooCommerce', sub: 'Get orders auto-fetched in one click', isNew: false, logos: true },
                 { emoji: '👛', title: 'Auto-topup using Remittances', sub: 'Topup your wallet automatically', isNew: false },
               ].map((item, i, arr) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 16px', borderBottom: i < arr.length - 1 ? '1px solid #f5f5f5' : 'none', cursor: 'pointer' }}
@@ -1274,7 +1273,16 @@ export default function B2CContent({ role = 'owner' }) {
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 >
                   <div style={{ position: 'relative', flexShrink: 0 }}>
-                    <div style={{ width: 36, height: 36, borderRadius: 8, background: '#f5f5f7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>{item.emoji}</div>
+                    {item.logos ? (
+                      <div style={{ width: 36, height: 36, borderRadius: 8, background: '#f5f5f7', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3 }}>
+                        {/* Amazon */}
+                        <svg width="15" height="15" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#FF9900"/><text x="50" y="72" textAnchor="middle" fontSize="60" fontFamily="Arial Black,sans-serif" fontWeight="900" fill="#fff">a</text></svg>
+                        {/* WooCommerce */}
+                        <svg width="15" height="15" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="8" fill="#7F54B3"/><text x="50" y="72" textAnchor="middle" fontSize="52" fontFamily="Arial,sans-serif" fontWeight="700" fill="#fff">W</text></svg>
+                      </div>
+                    ) : (
+                      <div style={{ width: 36, height: 36, borderRadius: 8, background: '#f5f5f7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>{item.emoji}</div>
+                    )}
                     {item.isNew && <div style={{ position: 'absolute', bottom: -4, left: '50%', transform: 'translateX(-50%)', background: '#ed1b36', color: '#fff', fontSize: 8, fontWeight: 700, borderRadius: 999, padding: '1px 4px', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>New</div>}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
