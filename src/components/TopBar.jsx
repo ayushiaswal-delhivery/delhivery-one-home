@@ -6,14 +6,11 @@ const SERVICES = [
   { id: 'intl', label: 'International Shipping', icon: '✈️', desc: 'Cross-border logistics' },
 ]
 
-export default function TopBar() {
-  const [open, setOpen]       = useState(false)
-  const [active, setActive]   = useState('b2c')
-  const [drawer, setDrawer]   = useState(false)
-  const [drawerSvc, setDrawerSvc] = useState(null)
+export default function TopBar({ activeService = 'b2c', onServiceChange }) {
+  const [open, setOpen] = useState(false)
   const ref = useRef(null)
 
-  const current = SERVICES.find(s => s.id === active)
+  const current = SERVICES.find(s => s.id === activeService)
 
   useEffect(() => {
     const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
@@ -22,10 +19,8 @@ export default function TopBar() {
   }, [])
 
   function handleSelect(svc) {
-    setActive(svc.id)
+    onServiceChange?.(svc.id)
     setOpen(false)
-    setDrawerSvc(svc)
-    setDrawer(true)
   }
 
   return (
@@ -75,19 +70,19 @@ export default function TopBar() {
                     style={{
                       display: 'flex', alignItems: 'center', gap: 10,
                       padding: '10px 14px', cursor: 'pointer',
-                      background: active === svc.id ? '#f0f8ff' : 'transparent',
-                      borderLeft: active === svc.id ? '3px solid #2396fb' : '3px solid transparent',
+                      background: activeService === svc.id ? '#f0f8ff' : 'transparent',
+                      borderLeft: activeService === svc.id ? '3px solid #2396fb' : '3px solid transparent',
                       transition: 'background 100ms',
                     }}
                     onMouseEnter={e => { if (active !== svc.id) e.currentTarget.style.background = '#f7f7f7' }}
-                    onMouseLeave={e => { if (active !== svc.id) e.currentTarget.style.background = 'transparent' }}
+                    onMouseLeave={e => { if (activeService !== svc.id) e.currentTarget.style.background = 'transparent' }}
                   >
                     <span style={{ fontSize: 18, lineHeight: 1 }}>{svc.icon}</span>
                     <div>
-                      <div style={{ fontSize: 13, fontWeight: active === svc.id ? 600 : 500, color: active === svc.id ? '#2396fb' : '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>{svc.label}</div>
+                      <div style={{ fontSize: 13, fontWeight: activeService === svc.id ? 600 : 500, color: activeService === svc.id ? '#2396fb' : '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>{svc.label}</div>
                       <div style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif', marginTop: 1 }}>{svc.desc}</div>
                     </div>
-                    {active === svc.id && (
+                    {activeService === svc.id && (
                       <svg style={{ marginLeft: 'auto', flexShrink: 0 }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2396fb" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                     )}
                   </div>
@@ -104,60 +99,6 @@ export default function TopBar() {
         </div>
       </header>
 
-      {/* Dark side drawer */}
-      {drawer && (
-        <>
-          <div onClick={() => setDrawer(false)} style={{
-            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 800,
-            animation: 'fadeIn 150ms ease',
-          }} />
-          <div style={{
-            position: 'fixed', top: 0, right: 0, bottom: 0, width: 340,
-            background: '#0d0d0d', zIndex: 900, display: 'flex', flexDirection: 'column',
-            animation: 'slideInRight 200ms ease',
-            boxShadow: '-8px 0 32px rgba(0,0,0,0.4)',
-          }}>
-            {/* Drawer header */}
-            <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <span style={{ fontSize: 22 }}>{drawerSvc?.icon}</span>
-                <div>
-                  <div style={{ fontSize: 15, fontWeight: 600, color: '#fff', fontFamily: '"Noto Sans", sans-serif' }}>{drawerSvc?.label}</div>
-                  <div style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif', marginTop: 2 }}>Edenivy Lifestyle</div>
-                </div>
-              </div>
-              <button onClick={() => setDrawer(false)} style={{ background: 'rgba(255,255,255,0.08)', border: 'none', borderRadius: 6, width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              </button>
-            </div>
-
-            {/* Drawer body */}
-            <div style={{ flex: 1, padding: '24px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <div style={{ fontSize: 11, fontWeight: 600, color: '#555', letterSpacing: 0.8, textTransform: 'uppercase', fontFamily: '"Noto Sans", sans-serif', marginBottom: 4 }}>Quick actions</div>
-              {['View Orders', 'Create Shipment', 'Schedule Pickup', 'View Reports', 'Rate Calculator'].map(action => (
-                <button key={action} style={{
-                  background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)',
-                  borderRadius: 8, padding: '12px 16px', textAlign: 'left',
-                  color: '#e0e0e0', fontSize: 13, fontWeight: 500, cursor: 'pointer',
-                  fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  transition: 'background 100ms',
-                }}
-                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
-                >
-                  {action}
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
-                </button>
-              ))}
-
-              <div style={{ marginTop: 16, padding: '16px', background: 'rgba(35,150,251,0.08)', border: '1px solid rgba(35,150,251,0.2)', borderRadius: 10 }}>
-                <div style={{ fontSize: 12, color: '#2396fb', fontWeight: 600, fontFamily: '"Noto Sans", sans-serif', marginBottom: 4 }}>Dashboard coming soon</div>
-                <div style={{ fontSize: 11, color: '#666', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.5 }}>A dedicated dashboard for {drawerSvc?.label} is being built. Check back soon.</div>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
 
       <style>{`
         @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
