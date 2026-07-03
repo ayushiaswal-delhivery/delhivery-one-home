@@ -45,9 +45,8 @@ const B2B_PIPELINE = [
     bg: '#ecf8f3',
     icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>,
     cards: [
-      { label: 'Delivered',   count: 145, unit: 'LRs', delta: '+9%', up: true,  accent: '#1ba86e', accentBg: '#ecf8f3', sub: [{ link: 'View now', linkColor: '#2396fb' }] },
-      { label: 'POD pending', count: 12,  unit: 'LRs', delta: '+2',  up: false, accent: '#e07230', accentBg: '#fff3ec', sub: [{ label: 'Overdue > 48h', value: '5', link: 'Follow up', linkColor: '#ed1b36' }] },
-      { label: 'RTO',         count: 9,   unit: 'LRs', delta: '+2',  up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ label: 'In transit back', value: '6', link: 'View orders', linkColor: '#2396fb' }] },
+      { label: 'Delivered', count: 145, unit: 'LRs', delta: '+9%', up: true,  accent: '#1ba86e', accentBg: '#ecf8f3', sub: [{ link: 'View now', linkColor: '#2396fb' }] },
+      { label: 'RTO',       count: 9,   unit: 'LRs', delta: '+2',  up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ label: 'In transit back', value: '6', link: 'View orders', linkColor: '#2396fb' }] },
     ],
   },
 ]
