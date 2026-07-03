@@ -147,9 +147,9 @@ function ClaimCard({ title, total, inputCount, inputAmt, rejectedCount, rejected
 // ── Pickup card ───────────────────────────────────────────────────────────────
 function PickupCol({ dayLabel, date, pickupCount, variant, cutoff, missedReason, buttons }) {
   const theme = variant === 'error'
-    ? { accent: '#ed1b36', badgeBg: '#fde8eb', badgeColor: '#ed1b36', headerBg: '#fff8f8', icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> }
+    ? { accent: '#ed1b36', badgeBg: '#fde8eb', badgeColor: '#ed1b36', headerBg: '#eff1f5', icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> }
     : variant === 'info'
-    ? { accent: '#2396fb', badgeBg: '#e6f3fe', badgeColor: '#2396fb', headerBg: '#f5f9ff', icon: <IcoClock /> }
+    ? { accent: '#2396fb', badgeBg: '#e6f3fe', badgeColor: '#2396fb', headerBg: '#eff1f5', icon: <IcoClock /> }
     : { accent: '#1ba86e', badgeBg: '#eff1f5', badgeColor: '#454545', headerBg: '#eff1f5',  icon: <IcoCalendar /> }
 
   return (
