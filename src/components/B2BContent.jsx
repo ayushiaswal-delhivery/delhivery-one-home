@@ -201,6 +201,52 @@ export default function B2BContent() {
               </div>
             </Card>
 
+            {/* Appointment Management */}
+            <div style={{ background: '#fff', border: '1px solid #e8e8e8', borderRadius: 12, marginBottom: 20, overflow: 'hidden' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '16px 20px 14px', borderBottom: '1px solid #f0f0f0' }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#454545" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                <span style={{ fontSize: 15, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>Appointment Management</span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1px 1fr 1px 1fr' }}>
+                {[
+                  { count: 10, label: 'Appointments Needed', cta: 'Book Now', ctaColor: '#ed1b36', details: [
+                    { icon: 'shield', color: '#1ba86e', text: '+80 appointments auto-added from consignee' },
+                    { icon: 'doc', color: '#e07230', text: '5 PO details needed' },
+                  ]},
+                  { count: 30, label: 'Appointments Booked', cta: 'View', ctaColor: '#ed1b36', details: [
+                    { icon: 'calendar', color: '#2396fb', text: '9 appointments scheduled for tomorrow' },
+                    { icon: 'warning', color: '#cf9f02', text: '3 appointments are at risk' },
+                  ]},
+                  { count: 15, label: 'Appointments Expired', cta: 'Review', ctaColor: '#ed1b36', details: [
+                    { icon: 'doc', color: '#ed1b36', text: '3 missed due to Invalid / Expired PO' },
+                    { icon: 'doc', color: '#ed1b36', text: '10 missed due to ASN missing' },
+                  ]},
+                ].map((col, i) => (
+                  <>
+                    {i > 0 && <div key={`div-${i}`} style={{ background: '#e8e8e8', margin: '20px 0' }} />}
+                    <div key={i} style={{ padding: '20px 24px 24px' }}>
+                      <div style={{ fontSize: 40, fontWeight: 800, color: '#1a1a2e', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1, marginBottom: 4 }}>{col.count}</div>
+                      <div style={{ fontSize: 13, color: '#454545', fontFamily: '"Noto Sans", sans-serif', marginBottom: 10 }}>{col.label}</div>
+                      <a style={{ fontSize: 13, fontWeight: 700, color: col.ctaColor, cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', display: 'block', marginBottom: 14 }}>{col.cta}</a>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                        {col.details.map((d, j) => (
+                          <div key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                            <div style={{ width: 28, height: 28, borderRadius: 6, background: d.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                              {d.icon === 'shield' && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={d.color} strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>}
+                              {d.icon === 'doc' && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={d.color} strokeWidth="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>}
+                              {d.icon === 'calendar' && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={d.color} strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>}
+                              {d.icon === 'warning' && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={d.color} strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="10" x2="12" y2="14"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>}
+                            </div>
+                            <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.5, paddingTop: 4 }}>{d.text}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                ))}
+              </div>
+            </div>
+
             {/* Finance */}
             <div style={{ marginBottom: 20 }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 14 }}>
