@@ -11,6 +11,107 @@ const IcoPhone   = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="n
 const IcoPrint   = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
 const IcoArrow   = () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
 const IcoSpark   = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+const IcoArrowR  = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c8c8c8" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+
+const B2B_PIPELINE = [
+  {
+    id: 'pre-dispatch',
+    label: 'Pre-Dispatch',
+    color: '#2396fb',
+    bg: '#e6f3fe',
+    icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 13h6M9 17h4"/></svg>,
+    cards: [
+      { label: 'LRs manifested · PUR not created', count: 45,  unit: 'LRs', delta: '+6',  up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ label: 'Pending > 24h', value: '12', link: 'Create PUR', linkColor: '#ed1b36' }] },
+      { label: 'Awaiting pickup',                   count: 28,  unit: 'LRs', delta: '+3',  up: true,  accent: '#2396fb', accentBg: '#e6f3fe', sub: [{ link: 'Schedule Now', linkColor: '#2396fb' }] },
+      { label: 'E-waybill needed',                  count: 12,  unit: 'LRs', delta: '+2',  up: false, accent: '#e07230', accentBg: '#fff3ec', sub: [{ label: 'Expiring today', value: '4', link: 'Upload now', linkColor: '#ed1b36' }] },
+    ],
+  },
+  {
+    id: 'in-transit',
+    label: 'In Transit',
+    color: '#7c3aed',
+    bg: '#f3f0ff',
+    icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 7h11v10H3z"/><path d="M14 10h5l2 3v4h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>,
+    cards: [
+      { label: 'In transit',       count: 328, unit: 'LRs', delta: '+15%', up: true,  accent: '#7c3aed', accentBg: '#f3f0ff', sub: [{ link: 'Track all', linkColor: '#2396fb' }] },
+      { label: 'Delayed',          count: 18,  unit: 'LRs', delta: '+4',   up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ label: 'Critical delay', value: '6', link: 'View details', linkColor: '#ed1b36' }] },
+      { label: 'NDR',              count: 24,  unit: 'LRs', delta: '+3',   up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ label: 'Consignee unreachable', value: '9', link: 'Resolve NDR', linkColor: '#ed1b36' }] },
+    ],
+  },
+  {
+    id: 'delivered',
+    label: 'Delivered',
+    color: '#1ba86e',
+    bg: '#ecf8f3',
+    icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>,
+    cards: [
+      { label: 'Delivered',         count: 145, unit: 'LRs', delta: '+9%', up: true,  accent: '#1ba86e', accentBg: '#ecf8f3', sub: [{ link: 'View now', linkColor: '#2396fb' }] },
+      { label: 'POD pending',       count: 12,  unit: 'LRs', delta: '+2',  up: false, accent: '#e07230', accentBg: '#fff3ec', sub: [{ label: 'Overdue > 48h', value: '5', link: 'Follow up', linkColor: '#ed1b36' }] },
+      { label: 'Documents needed',  count: 8,   unit: 'LRs', delta: '+1',  up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ link: 'Upload docs', linkColor: '#ed1b36' }] },
+    ],
+  },
+]
+
+function B2BPipelineCard({ card }) {
+  return (
+    <div style={{ background: '#fff', border: '1px solid #e8e8e8', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
+        <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.4 }}>{card.label}</span>
+        <span style={{ fontSize: 10, fontWeight: 600, color: card.up ? '#1ba86e' : '#ed1b36', fontFamily: '"Noto Sans", sans-serif', flexShrink: 0 }}>
+          {card.delta} {card.up ? '↑' : '↓'}
+        </span>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+        <span style={{ fontSize: 24, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1 }}>{card.count}</span>
+        <span style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>{card.unit}</span>
+      </div>
+      {card.sub.length > 0 && (
+        <div style={{ borderTop: '1px solid #f0f0f0', paddingTop: 8, display: 'flex', flexDirection: 'column', gap: 4 }}>
+          {card.sub.map((s, i) => (
+            <div key={i} style={{ display: 'flex', justifyContent: s.label ? 'space-between' : 'flex-start', alignItems: 'center', fontSize: 11 }}>
+              {s.label && <span style={{ color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>{s.label} <strong style={{ color: '#2b2b2b' }}>{s.value}</strong></span>}
+              {s.link && <a style={{ fontWeight: 600, color: s.linkColor || '#2396fb', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>{s.link} →</a>}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function B2BOrderSummary() {
+  return (
+    <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, padding: 20, marginBottom: 20 }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 18 }}>
+        <span style={{ fontSize: 16, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>LR Summary</span>
+        <span style={{ fontSize: 12, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>pipeline view</span>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr auto 1fr', gap: 0, alignItems: 'start' }}>
+        {B2B_PIPELINE.map((bucket, bi) => (
+          <>
+            <div key={bucket.id}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, padding: '8px 12px', background: bucket.bg, borderRadius: 8 }}>
+                <span style={{ color: bucket.color }}>{bucket.icon}</span>
+                <span style={{ fontSize: 13, fontWeight: 700, color: bucket.color, fontFamily: '"Noto Sans", sans-serif' }}>{bucket.label}</span>
+                <span style={{ marginLeft: 'auto', fontSize: 11, fontWeight: 600, color: bucket.color, background: '#fff', borderRadius: 999, padding: '1px 8px', fontFamily: '"Noto Sans", sans-serif' }}>
+                  {bucket.cards.reduce((s, c) => s + c.count, 0)} LRs
+                </span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {bucket.cards.map((card, ci) => <B2BPipelineCard key={ci} card={card} />)}
+              </div>
+            </div>
+            {bi < B2B_PIPELINE.length - 1 && (
+              <div key={`arrow-${bi}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 12px', paddingTop: 18 }}>
+                <IcoArrowR />
+              </div>
+            )}
+          </>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 function DateFilter() {
   const [open, setOpen] = useState(false)
@@ -106,13 +207,6 @@ function PickupCol({ dayLabel, date, pickupCount, variant, cutoff, missedReason,
   )
 }
 
-const ORDER_SUMMARY = [
-  { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>, iconBg: '#f3f0ff', label: 'LRs manifested but PUR not created', count: '45 LRs', cta: 'Create PUR' },
-  { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2"><path d="M3 7h11v10H3z"/><path d="M14 10h5l2 3v4h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>, iconBg: '#f3f0ff', label: 'In transit', count: '328 LRs', cta: 'Track all' },
-  { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e07230" strokeWidth="2"><path d="M9 7H6a2 2 0 00-2 2v9a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2h-3"/><rect x="9" y="3" width="6" height="8" rx="1"/><path d="M9 12h6M9 16h4"/></svg>, iconBg: '#fff3ec', label: 'E-waybill needed', count: '12 LRs', cta: 'Upload now' },
-  { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e07230" strokeWidth="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>, iconBg: '#fff3ec', label: 'Documents needed', count: '8 LRs', cta: 'Upload documents' },
-  { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ed1b36" strokeWidth="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>, iconBg: '#fde8eb', label: 'NDR', count: '24 LRs', cta: 'Resolve NDR' },
-]
 
 export default function B2BContent() {
   const [tab, setTab] = useState('overview')
@@ -169,24 +263,8 @@ export default function B2BContent() {
               </div>
             </div>
 
-            {/* Order Summary */}
-            <div style={{ background: '#fff', border: '1px solid #e8e8e8', borderRadius: 12, padding: 20, marginBottom: 20 }}>
-              <div style={{ fontSize: 15, fontWeight: 600, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif', marginBottom: 16 }}>Order Summary</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
-                {ORDER_SUMMARY.map((item, i) => (
-                  <div key={i} style={{ background: '#f9f9fb', border: '1px solid #efefef', borderRadius: 10, padding: '16px 16px 14px', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    <div style={{ width: 32, height: 32, borderRadius: 8, background: item.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
-                      {item.icon}
-                    </div>
-                    <div style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.4 }}>{item.label}</div>
-                    <div style={{ fontSize: 22, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1 }}>{item.count}</div>
-                    <button style={{ marginTop: 6, width: '100%', background: '#1a1a1a', color: '#fff', border: 'none', borderRadius: 6, padding: '8px 0', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>
-                      {item.cta}
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
+            {/* LR Summary — pipeline view */}
+            <B2BOrderSummary />
 
             {/* Upcoming Pickups */}
             <Card isHoverable={false} style={{ marginBottom: 20, borderRadius: 12, border: '1px solid var(--rule)', padding: 20 }}>
