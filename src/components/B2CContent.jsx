@@ -25,6 +25,23 @@ const IcoRain     = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="
 const IcoStarOut  = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
 const IcoInfo     = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
 
+function InfoTooltip({ text }) {
+  const [show, setShow] = useState(false)
+  return (
+    <span style={{ position: 'relative', display: 'inline-flex', verticalAlign: 'middle', marginLeft: 4, cursor: 'default' }}
+      onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a0a8bc" strokeWidth="2">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      {show && (
+        <div style={{ position: 'absolute', bottom: 'calc(100% + 4px)', left: '50%', transform: 'translateX(-50%)', background: '#1a1a1a', color: '#fff', fontSize: 11, fontFamily: '"Noto Sans", sans-serif', padding: '4px 8px', borderRadius: 4, whiteSpace: 'nowrap', zIndex: 9999, pointerEvents: 'none', boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
+          {text}
+        </div>
+      )}
+    </span>
+  )
+}
+
 // ── Shared tile helpers ───────────────────────────────────────────────────────
 function DeltaBadge({ delta, up }) {
   return (
@@ -107,37 +124,42 @@ function StatRow({ label, value, link }) {
   )
 }
 
-// ── Finance claim card (Figma-spec compact layout) ───────────────────────────
-function ClaimCard({ title, total, inputCount, inputAmt, rejectedCount, rejectedAmt, showCta = true }) {
+// ── Finance claim card (Open / Closed layout) ─────────────────────────────────
+function ClaimCard({ title, total, openData, closedData }) {
   return (
-    <div style={{ flex: '1 1 0', minWidth: 0, display: 'flex', flexDirection: 'column', position: 'relative' }}>
-      {/* Header chip — sits above the card, overlapping */}
+    <div style={{ flex: '1 1 0', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--Surface-BG_Coal-Weak, #eff1f5)', borderRadius: '8px 8px 0 0', padding: '8px 14px 20px', zIndex: 1, position: 'relative' }}>
-        <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--Text-Heading-Primary, #121212)', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>{title}</span>
+        <span style={{ fontSize: 13, fontWeight: 600, color: '#121212', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>{title}</span>
         <Badge text={`Total ${total}`} variant="error" badgeType="subtle" size="sm" />
+        <a style={{ marginLeft: 'auto', fontSize: 12, fontWeight: 600, color: '#2396fb', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>View all</a>
       </div>
-      {/* Body card — overlaps header bottom */}
-      <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 0 2px rgba(0,0,0,0.1)', padding: '20px 20px 16px', marginTop: -12, display: 'flex', gap: 0, flex: 1 }}>
-        {/* INPUT NEEDED col */}
-        <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 4, paddingRight: 16 }}>
-          <div style={{ height: 3, background: 'var(--Surface-BG_Warning-Weak, #fcedb7)', borderRadius: 999, marginBottom: 12 }} />
-          <span style={{ fontSize: 10, fontWeight: 500, color: 'var(--Text-Caption-Primary, #454545)', fontFamily: '"Noto Sans", sans-serif', letterSpacing: 0.4 }}>INPUT NEEDED</span>
-          <span style={{ fontSize: 20, fontWeight: 600, color: 'var(--Text-Coal-Primary, #343c51)', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.2 }}>{inputCount}</span>
-          <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--Text-Success-Primary, #1ba86e)', fontFamily: '"Noto Sans", sans-serif' }}>{inputAmt}</span>
-          {showCta && (
-            <a style={{ marginTop: 8, fontSize: 12, fontWeight: 600, color: '#2396fb', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 3, fontFamily: '"Noto Sans", sans-serif' }}>
-              Respond <IcoArrow />
-            </a>
-          )}
+      <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 0 2px rgba(0,0,0,0.1)', padding: '16px 20px', marginTop: -12, display: 'flex', gap: 0, flex: 1 }}>
+        <div style={{ flex: 1, minWidth: 0, paddingRight: 16 }}>
+          <div style={{ height: 3, background: '#fcedb7', borderRadius: 999, marginBottom: 10 }} />
+          <span style={{ fontSize: 10, fontWeight: 600, color: '#454545', fontFamily: '"Noto Sans", sans-serif', letterSpacing: 0.4 }}>OPEN</span>
+          {openData.map((item, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginTop: 10, gap: 6 }}>
+              <div>
+                <div style={{ fontSize: 20, fontWeight: 600, color: '#343c51', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.1 }}>{item.count}</div>
+                <div style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif', marginTop: 2 }}>{item.label}</div>
+              </div>
+              <a style={{ fontSize: 12, fontWeight: 600, color: item.ctaColor || '#2396fb', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap', marginTop: 2 }}>{item.cta}</a>
+            </div>
+          ))}
         </div>
-        {/* Vertical divider */}
         <Divider orientation="vertical" size="0.5" style={{ alignSelf: 'stretch', height: 'auto' }} />
-        {/* REJECTED col */}
-        <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 4, paddingLeft: 16 }}>
-          <div style={{ height: 3, background: 'var(--Surface-BG_DLV_Red-Weak, #fbd1d7)', borderRadius: 999, marginBottom: 12 }} />
-          <span style={{ fontSize: 10, fontWeight: 500, color: 'var(--Text-Caption-Primary, #454545)', fontFamily: '"Noto Sans", sans-serif', letterSpacing: 0.4 }}>REJECTED</span>
-          <span style={{ fontSize: 20, fontWeight: 600, color: 'var(--Text-Coal-Primary, #343c51)', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.2 }}>{rejectedCount}</span>
-          <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--Text-Success-Primary, #1ba86e)', fontFamily: '"Noto Sans", sans-serif' }}>{rejectedAmt}</span>
+        <div style={{ flex: 1, minWidth: 0, paddingLeft: 16 }}>
+          <div style={{ height: 3, background: '#fbd1d7', borderRadius: 999, marginBottom: 10 }} />
+          <span style={{ fontSize: 10, fontWeight: 600, color: '#454545', fontFamily: '"Noto Sans", sans-serif', letterSpacing: 0.4 }}>CLOSED</span>
+          {closedData.map((item, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginTop: 10, gap: 6 }}>
+              <div>
+                <div style={{ fontSize: 20, fontWeight: 600, color: '#343c51', fontFamily: '"Noto Sans", sans-serif', lineHeight: 1.1 }}>{item.count}</div>
+                <div style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif', marginTop: 2 }}>{item.label}</div>
+              </div>
+              <a style={{ fontSize: 12, fontWeight: 600, color: '#2396fb', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap', marginTop: 2 }}>View</a>
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -145,7 +167,7 @@ function ClaimCard({ title, total, inputCount, inputAmt, rejectedCount, rejected
 }
 
 // ── Pickup card ───────────────────────────────────────────────────────────────
-function PickupCol({ dayLabel, date, pickupCount, variant, cutoff, missedReason, buttons }) {
+function PickupCol({ dayLabel, date, slot, pickupCount, variant, cutoff, missedReason, buttons }) {
   const theme = variant === 'error'
     ? { accent: '#ed1b36', badgeBg: '#fde8eb', badgeColor: '#ed1b36', headerBg: '#eff1f5', icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> }
     : variant === 'info'
@@ -162,6 +184,12 @@ function PickupCol({ dayLabel, date, pickupCount, variant, cutoff, missedReason,
         <div>
           <div style={{ fontSize: 14, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif', marginBottom: 2 }}>{dayLabel}</div>
           <div style={{ fontSize: 11, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>{date}</div>
+          {slot && (
+            <div style={{ fontSize: 11, color: '#454545', fontFamily: '"Noto Sans", sans-serif', marginTop: 4 }}>
+              <span style={{ fontWeight: 600, color: '#6b7490' }}>Slots</span>&nbsp;
+              {slot.time} <span style={{ color: '#c8c8c8', margin: '0 3px' }}>|</span> {slot.label}
+            </div>
+          )}
           {cutoff && (
             <div style={{ marginTop: 6, display: 'inline-flex', alignItems: 'center', gap: 4, background: '#fde8eb', borderRadius: 6, padding: '3px 8px' }}>
               <IcoClock />
@@ -681,13 +709,12 @@ const PIPELINE_BUCKETS = [
     icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 7h11v10H3z"/><path d="M14 10h5l2 3v4h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>,
     cards: [
       { label: 'Out for delivery', count: 142, delta: '+5%', up: true,  accent: '#7c3aed', accentBg: '#f3f0ff', sub: [{ link: 'View now', linkColor: '#2396fb' }] },
-      { label: 'NDR',              count: 84,  delta: '-2%', up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ label: '2nd attempt pending', value: '23', link: 'Resolve', linkColor: '#ed1b36' }] },
-      { label: 'PDD breached',     count: 12,  delta: '+4',  up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ link: 'View shipments', linkColor: '#2396fb' }] },
+      { label: 'NDR & other exceptions', labelTooltip: 'Non-Delivery Report', count: 84,  delta: '-2%', up: false, accent: '#ed1b36', accentBg: '#fde8eb', sub: [{ label: '2nd attempt pending', value: '23', link: 'Resolve', linkColor: '#ed1b36' }] },
     ],
   },
   {
     id: 'delivered',
-    label: 'Delivered',
+    label: 'Delivered / Returned',
     color: '#1ba86e',
     bg: '#ecf8f3',
     icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>,
@@ -702,8 +729,9 @@ function PipelineCard({ card }) {
   return (
     <div style={{ background: '#fff', border: '1px solid #e8e8e8', borderRadius: 8, padding: 14, display: 'flex', flexDirection: 'column', gap: 6 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
           <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>{card.label}</span>
+          {card.labelTooltip && <InfoTooltip text={card.labelTooltip} />}
         </div>
         <span style={{ fontSize: 10, fontWeight: 600, color: card.up ? '#1ba86e' : '#ed1b36', fontFamily: '"Noto Sans", sans-serif' }}>
           {card.delta} {card.up ? '↑' : '↓'}
@@ -731,9 +759,12 @@ function OrdersSummaryV2() {
   return (
     <div style={{ background: '#fff', border: '1px solid #e6e6e6', borderRadius: 12, padding: 20, marginBottom: 16 }}>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 18 }}>
-        <span style={{ fontSize: 16, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>Orders Summary</span>
-        <span style={{ fontSize: 12, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>v2 — pipeline view</span>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+          <span style={{ fontSize: 16, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif' }}>Orders Summary</span>
+          <span style={{ fontSize: 12, color: '#808080', fontFamily: '"Noto Sans", sans-serif' }}>pipeline view</span>
+        </div>
+        <DateFilter />
       </div>
 
       {/* 3 buckets + arrows */}
@@ -1069,6 +1100,35 @@ function OrdersSummary2() {
   )
 }
 
+// ── Alert carousel (finlock + support tickets) ────────────────────────────────
+function AlertCarousel() {
+  const [idx, setIdx] = useState(0)
+  const alerts = [
+    { bg: '#fff3f4', border: '#f5c0c8', iconColor: '#ed1b36', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ed1b36" strokeWidth="2.5" style={{ flexShrink: 0 }}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>, title: 'Account finlock', titleColor: '#c0001a', desc: 'Pending KYC · shipments may be held.', cta: 'Resolve now', ctaColor: '#ed1b36' },
+    { bg: '#f3f0ff', border: '#d4c8f8', iconColor: '#5b21b6', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5b21b6" strokeWidth="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3z"/><path d="M3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg>, title: 'Support tickets', titleColor: '#5b21b6', desc: '11 need your input · 1 nearing SLA.', cta: 'Respond', ctaColor: '#7c3aed' },
+  ]
+  const a = alerts[idx]
+  return (
+    <div style={{ marginBottom: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: a.bg, border: `1px solid ${a.border}`, borderRadius: 8, padding: '9px 16px', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+          {a.icon}
+          <span style={{ fontSize: 13, fontWeight: 600, color: a.titleColor, fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>{a.title}</span>
+          <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>{a.desc}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+          <a style={{ fontSize: 12, fontWeight: 700, color: a.ctaColor, cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 3 }}>{a.cta} <IcoChevR /></a>
+          <div style={{ display: 'flex', gap: 5, marginLeft: 4 }}>
+            {alerts.map((_, i) => (
+              <div key={i} onClick={() => setIdx(i)} style={{ width: 6, height: 6, borderRadius: '50%', background: i === idx ? '#454545' : '#d0d5e0', cursor: 'pointer', transition: 'background 150ms' }} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function B2CContent({ role = 'owner' }) {
   const isSupport = role === 'support'
@@ -1114,7 +1174,6 @@ export default function B2CContent({ role = 'owner' }) {
             </button>
           ))}
         </div>
-        <DateFilter />
       </div>
 
       {tab === 'analysis' && <>
@@ -1157,32 +1216,7 @@ export default function B2CContent({ role = 'owner' }) {
 
         {/* LEFT: finlock strip + action center */}
         <div>
-          {!isSupport && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 12 }}>
-              {/* Finlock strip */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#fff3f4', border: '1px solid #f5c0c8', borderRadius: 8, padding: '9px 16px', gap: 12 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ed1b36" strokeWidth="2.5" style={{ flexShrink: 0 }}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                  <span style={{ fontSize: 13, fontWeight: 600, color: '#c0001a', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>Account finlock</span>
-                  <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>Pending KYC · shipments may be held.</span>
-                </div>
-                <a style={{ fontSize: 12, fontWeight: 700, color: '#ed1b36', cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0 }}>
-                  Resolve now <IcoChevR />
-                </a>
-              </div>
-              {/* Support tickets strip */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f3f0ff', border: '1px solid #d4c8f8', borderRadius: 8, padding: '9px 16px', gap: 12 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
-                  <IcoHeadset />
-                  <span style={{ fontSize: 13, fontWeight: 600, color: '#5b21b6', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>Support tickets</span>
-                  <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>11 need your input · 1 nearing SLA.</span>
-                </div>
-                <a style={{ fontSize: 12, fontWeight: 700, color: '#7c3aed', cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0 }}>
-                  Respond <IcoChevR />
-                </a>
-              </div>
-            </div>
-          )}
+          {!isSupport && <AlertCarousel />}
           {isSupport ? <SupportTasksSection /> : null}
 
           {/* ── Orders Summary V2/V3 ── */}
@@ -1191,13 +1225,16 @@ export default function B2CContent({ role = 'owner' }) {
           {/* Upcoming Pickups */}
           <Card isHoverable={false} style={{ marginBottom: 20, borderRadius: 12, border: '1px solid var(--rule)', padding: 20 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-              <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--Text-Body-Primary, #2b2b2b)', fontFamily: '"Noto Sans", sans-serif' }}>Upcoming Pickups</span>
-              <a style={{ fontSize: 12, fontWeight: 500, color: 'var(--Text-Info_Blue-Primary, #2396fb)', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>View all</a>
+              <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--Text-Body-Primary, #2b2b2b)', fontFamily: '"Noto Sans", sans-serif' }}>Pickups</span>
+              <div style={{ display: 'flex', gap: 12 }}>
+                <a style={{ fontSize: 12, fontWeight: 500, color: '#2396fb', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>View guidelines</a>
+                <a style={{ fontSize: 12, fontWeight: 500, color: '#2396fb', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>View all</a>
+              </div>
             </div>
             <div style={{ display: 'flex', gap: 14 }}>
-              <PickupCol dayLabel="Yesterday" date="May 12, 2026" pickupCount={1} variant="error" missedReason="Shipment not ready" buttons={[{ label: 'Reschedule', primary: true }]} />
-              <PickupCol dayLabel="Today" date="May 13, 2026" pickupCount={9} variant="info" cutoff="2h 14m" buttons={[{ icon: <IcoPhone />, label: 'Call FE', primary: false }, { icon: <IcoPrint />, label: 'Print labels', primary: false }]} />
-              <PickupCol dayLabel="Tomorrow" date="May 14, 2026" pickupCount={3} variant="default" buttons={[{ icon: <IcoPrint />, label: 'Print labels', primary: false }]} />
+              <PickupCol dayLabel="Yesterday" date="May 12, 2026" slot={{ time: '06:00am - 12:00pm', label: 'Early Morning - Noon' }} pickupCount={1} variant="error" missedReason="Shipment not ready" buttons={[{ label: 'Reschedule', primary: true }]} />
+              <PickupCol dayLabel="Today" date="May 13, 2026" slot={{ time: '09:00am - 01:00pm', label: 'Morning - Noon' }} pickupCount={9} variant="info" cutoff="2h 14m" buttons={[{ icon: <IcoPhone />, label: 'Call FE', primary: false }, { icon: <IcoPrint />, label: 'Print labels', primary: false }]} />
+              <PickupCol dayLabel="Tomorrow" date="May 14, 2026" slot={{ time: '12:00pm - 06:00pm', label: 'Noon - Evening' }} pickupCount={3} variant="default" buttons={[{ icon: <IcoPrint />, label: 'Print labels', primary: false }]} />
             </div>
           </Card>
 
@@ -1211,8 +1248,14 @@ export default function B2CContent({ role = 'owner' }) {
               </div>
             </div>
             <div style={{ display: 'flex', gap: 16 }}>
-              <ClaimCard title="Loss & Damage Claims" total={10} inputCount={7} inputAmt="₹18,200" rejectedCount={3} rejectedAmt="₹9,400" />
-              <ClaimCard title="Weight Disputes" total={7} inputCount={5} inputAmt="₹14,800" rejectedCount={2} rejectedAmt="₹6,500" />
+              <ClaimCard title="Loss & Damage Claims" total={10}
+                openData={[{ label: 'In process', count: 4, cta: 'View', ctaColor: '#2396fb' }, { label: 'Need your input', count: 3, cta: 'Respond', ctaColor: '#ed1b36' }]}
+                closedData={[{ label: 'Rejected', count: 2 }, { label: 'Accepted', count: 1 }]}
+              />
+              <ClaimCard title="Weight Disputes" total={7}
+                openData={[{ label: 'In process', count: 3, cta: 'View', ctaColor: '#2396fb' }, { label: 'Need your input', count: 2, cta: 'Respond', ctaColor: '#ed1b36' }]}
+                closedData={[{ label: 'Rejected', count: 1 }, { label: 'Processed', count: 1 }]}
+              />
             </div>
           </div>}
         </div>
@@ -1292,6 +1335,55 @@ export default function B2CContent({ role = 'owner' }) {
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#c8c8c8" strokeWidth="2.5" style={{ flexShrink: 0 }}><path d="M9 18l6-6-6-6"/></svg>
                 </div>
               ))}
+              {/* Resources section inside What's New */}
+              <div style={{ padding: '6px 0 4px', borderTop: '1px solid #f0f0f0' }}>
+                <div style={{ padding: '6px 16px 4px', fontSize: 10, fontWeight: 700, color: '#a0a8bc', letterSpacing: 0.8, textTransform: 'uppercase', fontFamily: '"Noto Sans", sans-serif' }}>Resources</div>
+                {[
+                  { emoji: '❓', title: 'Help Center', sub: 'FAQs, guides & support' },
+                  { emoji: '🧮', title: 'Rate Calculator', sub: 'Estimate freight costs' },
+                  { emoji: '📅', title: 'Book a Training Session', sub: 'Learn the platform with an expert' },
+                ].map((item, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 16px', cursor: 'pointer' }}
+                    onMouseEnter={e => e.currentTarget.style.background = '#fafafa'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                  >
+                    <div style={{ width: 28, height: 28, borderRadius: 6, background: '#f5f5f7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, flexShrink: 0 }}>{item.emoji}</div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>{item.title}</div>
+                      <div style={{ fontSize: 11, color: '#98a2bc', fontFamily: '"Noto Sans", sans-serif' }}>{item.sub}</div>
+                    </div>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#c8c8c8" strokeWidth="2.5" style={{ flexShrink: 0 }}><path d="M9 18l6-6-6-6"/></svg>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Support card (permanent) */}
+            <div style={{ background: '#fff', border: '1px solid #e8e8e8', borderRadius: 12, padding: '16px 18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <div style={{ width: 28, height: 28, borderRadius: 6, background: '#f3f0ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <IcoHeadset />
+                </div>
+                <span style={{ fontSize: 13, fontWeight: 600, color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>Support</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {[
+                  { count: 11, label: 'tickets need your input', cta: 'Respond', ctaColor: '#ed1b36' },
+                  { count: 3, label: 'nearing SLA breach', cta: 'Review', ctaColor: '#e07230' },
+                ].map((item, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f9f9fb', borderRadius: 7, padding: '8px 12px' }}>
+                    <span style={{ fontSize: 12, fontFamily: '"Noto Sans", sans-serif', color: '#454545' }}>
+                      <strong style={{ color: '#1a1a1a' }}>{item.count}</strong> {item.label}
+                    </span>
+                    <a style={{ fontSize: 12, fontWeight: 600, color: item.ctaColor, cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>{item.cta} →</a>
+                  </div>
+                ))}
+              </div>
+              <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+                <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'none', border: '1px solid #e6e6e6', borderRadius: 6, padding: '7px 0', fontSize: 12, fontWeight: 500, color: '#343c51', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>
+                  <span style={{ color: '#7C3AED' }}><IcoSpark /></span>Ask SmartAssist
+                </button>
+              </div>
             </div>
 
           </div>
@@ -1302,53 +1394,6 @@ export default function B2CContent({ role = 'owner' }) {
       </div>
 
 
-      {/* ── Quick links ── */}
-      <div style={{ height: 1, background: 'var(--rule)', margin: '8px 0 20px' }} />
-      <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
-        {[
-          {
-            icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>,
-            title: 'Help Center',
-            sub: 'FAQs, guides & support',
-          },
-          {
-            icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 7H6a2 2 0 00-2 2v9a2 2 0 002 2h12a2 2 0 002-2V9a2 2 0 00-2-2h-3"/><rect x="9" y="3" width="6" height="8" rx="1"/><path d="M9 12h6M9 16h4"/></svg>,
-            title: 'Rate Calculator',
-            sub: 'Estimate shipping costs',
-          },
-          {
-            icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>,
-            title: 'Book a Training Session',
-            sub: 'Learn the platform with an expert',
-          },
-        ].map((item, i) => (
-          <button key={i} style={{
-            flex: '1 1 0', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            gap: 12, padding: '14px 16px', background: '#fff',
-            border: '1px solid var(--rule)', borderRadius: 12, cursor: 'pointer',
-            textAlign: 'left', transition: 'box-shadow 150ms, border-color 150ms',
-          }}
-            onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor = '#ccc' }}
-            onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = 'var(--rule)' }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 40, height: 40, borderRadius: 10, background: '#f4f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#454545', flexShrink: 0 }}>
-                {item.icon}
-              </div>
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--ink)', fontFamily: '"Noto Sans", sans-serif' }}>{item.title}</div>
-                <div style={{ fontSize: 11, color: 'var(--ink-4)', fontFamily: '"Noto Sans", sans-serif', marginTop: 2 }}>{item.sub}</div>
-              </div>
-            </div>
-            <IcoChevR />
-          </button>
-        ))}
-      </div>
-
-      {/* Floating SmartAssist */}
-      <button style={{ position: 'fixed', bottom: 24, right: 24, height: 44, padding: '0 18px', background: 'var(--dark)', color: '#fff', border: 'none', borderRadius: 999, fontSize: 13, fontWeight: 600, fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', zIndex: 300, boxShadow: '0 4px 14px rgba(0,0,0,0.25)' }}>
-        <span style={{ color: '#7C3AED' }}><IcoSpark /></span>Ask SmartAssist
-      </button>
       </>}
     </div>
   )
