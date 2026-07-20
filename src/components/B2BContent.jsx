@@ -95,6 +95,21 @@ function B2BPipelineCard({ card }) {
   )
 }
 
+function RemittanceSuccessBanner() {
+  const [dismissed, setDismissed] = useState(false)
+  if (dismissed) return null
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#f0faf5', border: '1px solid #a8e0c4', borderRadius: 7, padding: '7px 10px', marginTop: 12 }}>
+      <span style={{ fontSize: 15, lineHeight: 1, flexShrink: 0 }}>🎉</span>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <span style={{ fontSize: 12, fontWeight: 600, color: '#1a7a4a', fontFamily: font }}>₹98,200 remitted</span>
+        <span style={{ fontSize: 11, color: '#2d8a5a', fontFamily: font }}> · Jul 18, 2026</span>
+      </div>
+      <button onClick={() => setDismissed(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6aaf8a', fontSize: 16, lineHeight: 1, padding: '0 2px', flexShrink: 0 }}>×</button>
+    </div>
+  )
+}
+
 function DateFilter() {
   const [open, setOpen] = useState(false)
   const [label, setLabel] = useState('Last 7 days')
@@ -488,8 +503,9 @@ export default function B2BContent() {
                 </div>
                 <a style={{ fontSize: 11, color: '#2396fb', cursor: 'pointer', fontFamily: font, display: 'flex', alignItems: 'center', gap: 2 }}>Details <IcoChevR /></a>
               </div>
-              <div style={{ fontSize: 11, color: '#98a2bc', fontFamily: font, marginBottom: 2 }}>Next payout · May 15, 2026</div>
+              <div style={{ fontSize: 11, color: '#98a2bc', fontFamily: font, marginBottom: 2 }}>Next payout · Jul 25, 2026</div>
               <div style={{ fontSize: 28, fontWeight: 700, color: '#1a1a1a', fontFamily: font, letterSpacing: -1, lineHeight: 1 }}>₹1,24,500</div>
+              <RemittanceSuccessBanner />
             </div>
 
             {/* What's New (includes quick links) */}

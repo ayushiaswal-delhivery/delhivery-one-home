@@ -1101,6 +1101,21 @@ function OrdersSummary2() {
 }
 
 // ── Alert carousel (finlock + support tickets) ────────────────────────────────
+function RemittanceSuccessBanner() {
+  const [dismissed, setDismissed] = useState(false)
+  if (dismissed) return null
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#f0faf5', border: '1px solid #a8e0c4', borderRadius: 7, padding: '7px 10px', marginTop: 12 }}>
+      <span style={{ fontSize: 15, lineHeight: 1, flexShrink: 0 }}>🎉</span>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <span style={{ fontSize: 12, fontWeight: 600, color: '#1a7a4a', fontFamily: '"Noto Sans", sans-serif' }}>₹98,200 remitted</span>
+        <span style={{ fontSize: 11, color: '#2d8a5a', fontFamily: '"Noto Sans", sans-serif' }}> · Jul 18, 2026</span>
+      </div>
+      <button onClick={() => setDismissed(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6aaf8a', fontSize: 16, lineHeight: 1, padding: '0 2px', flexShrink: 0 }}>×</button>
+    </div>
+  )
+}
+
 const B2C_ALERT_SLIDES = [
   { bg: '#fff3f4', border: '#f5c0c8', iconColor: '#ed1b36', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ed1b36" strokeWidth="2.5" style={{ flexShrink: 0 }}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>, title: 'Account finlock', titleColor: '#c0001a', desc: 'Pending KYC · shipments may be held.', cta: 'Resolve now', ctaColor: '#ed1b36' },
   { bg: '#f3f0ff', border: '#d4c8f8', iconColor: '#5b21b6', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5b21b6" strokeWidth="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3z"/><path d="M3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg>, title: 'Support tickets', titleColor: '#5b21b6', desc: '11 need your input · 1 nearing SLA.', cta: 'Respond', ctaColor: '#7c3aed' },
@@ -1327,8 +1342,9 @@ export default function B2CContent({ role = 'owner' }) {
                 </div>
                 <a style={{ fontSize: 11, color: '#2396fb', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 2 }}>Details <IcoChevR /></a>
               </div>
-              <div style={{ fontSize: 11, color: '#98a2bc', fontFamily: '"Noto Sans", sans-serif', marginBottom: 2 }}>Next payout · May 15, 2026</div>
+              <div style={{ fontSize: 11, color: '#98a2bc', fontFamily: '"Noto Sans", sans-serif', marginBottom: 2 }}>Next payout · Jul 25, 2026</div>
               <div style={{ fontSize: 28, fontWeight: 700, color: '#1a1a1a', fontFamily: '"Noto Sans", sans-serif', letterSpacing: -1, lineHeight: 1, marginBottom: 4 }}>₹1,24,500</div>
+              <RemittanceSuccessBanner />
             </div>
 
             {/* What's New */}
