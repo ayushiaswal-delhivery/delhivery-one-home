@@ -1116,25 +1116,37 @@ function RemittanceSuccessBanner() {
   )
 }
 
-const B2C_SYSTEM_BANNERS = [
-  { id: 'fuel', dot: '#e07230', bg: '#fffbf5', border: '#f5d3a8', text: <><strong>New fuel surcharge from 1 Jul</strong> — Domestic rates increase 2.4%. Review impact on your pricing before Jul 31.</>, cta: 'Review rates' },
-  { id: 'rto', dot: '#2396fb', bg: '#f0f8ff', border: '#bfdbfe', text: <><strong>RTO prediction model updated</strong> — Accuracy improved to 91%. Enable AI flagging to cut returns.</>, cta: 'Enable now' },
+const B2C_ALERT_SLIDES = [
+  { bg: '#fff3f4', border: '#f5c0c8', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ed1b36" strokeWidth="2.5" style={{ flexShrink: 0 }}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>, title: 'Account finlock', titleColor: '#c0001a', desc: 'Pending KYC · shipments may be held.', cta: 'Resolve now', ctaColor: '#ed1b36' },
+  { bg: '#fffbf5', border: '#f5d3a8', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e07230" strokeWidth="2.5" style={{ flexShrink: 0 }}><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>, title: 'New fuel surcharge from 1 Jul', titleColor: '#92400e', desc: 'Domestic rates increase 2.4%. Review impact on your pricing before Jul 31.', cta: 'Review rates', ctaColor: '#e07230' },
 ]
 
 function SystemBanners() {
-  const [dismissed, setDismissed] = useState([])
-  const visible = B2C_SYSTEM_BANNERS.filter(b => !dismissed.includes(b.id))
-  if (!visible.length) return null
+  const [idx, setIdx] = useState(0)
+
+  useEffect(() => {
+    const t = setInterval(() => setIdx(i => (i + 1) % B2C_ALERT_SLIDES.length), 4000)
+    return () => clearInterval(t)
+  }, [])
+
+  const a = B2C_ALERT_SLIDES[idx]
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 12 }}>
-      {visible.map(b => (
-        <div key={b.id} style={{ display: 'flex', alignItems: 'center', gap: 10, background: b.bg, border: `1px solid ${b.border}`, borderRadius: 7, padding: '8px 14px' }}>
-          <div style={{ width: 7, height: 7, borderRadius: '50%', background: b.dot, flexShrink: 0 }} />
-          <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif', flex: 1 }}>{b.text}</span>
-          <button style={{ fontSize: 12, fontWeight: 600, color: '#454545', background: '#fff', border: '1px solid #d0d5e0', borderRadius: 5, padding: '3px 10px', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>{b.cta}</button>
-          <span onClick={() => setDismissed(d => [...d, b.id])} style={{ color: '#c8c8c8', cursor: 'pointer', fontSize: 16, lineHeight: 1, flexShrink: 0, padding: '0 2px' }}>×</span>
+    <div style={{ marginBottom: 12 }}>
+      <div style={{ background: a.bg, border: `1px solid ${a.border}`, borderRadius: 8, padding: '9px 16px', transition: 'background 300ms, border-color 300ms' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+            {a.icon}
+            <span style={{ fontSize: 13, fontWeight: 600, color: a.titleColor, fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>{a.title}</span>
+            <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>{a.desc}</span>
+          </div>
+          <a style={{ fontSize: 12, fontWeight: 700, color: a.ctaColor, cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0 }}>{a.cta} <IcoChevR /></a>
         </div>
-      ))}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: 6 }}>
+        {B2C_ALERT_SLIDES.map((_, i) => (
+          <div key={i} onClick={() => setIdx(i)} style={{ width: i === idx ? 16 : 6, height: 6, borderRadius: 999, background: i === idx ? a.ctaColor : '#d0d5e0', cursor: 'pointer', transition: 'all 300ms' }} />
+        ))}
+      </div>
     </div>
   )
 }
