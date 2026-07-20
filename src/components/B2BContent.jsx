@@ -263,11 +263,6 @@ function B2BOrderSummary() {
   )
 }
 
-const SYSTEM_BANNERS = [
-  { id: 'fuel', dot: '#e07230', bg: '#fffbf5', border: '#f5d3a8', text: <><strong>New fuel surcharge from 1 Jun</strong> — Domestic rates increase 2.4%. Review impact on your pricing before May 31.</>, cta: 'Review rates' },
-  { id: 'hub', dot: '#2396fb', bg: '#f0f8ff', border: '#bfdbfe', text: <><strong>38 shipments stuck at Mumbai hub</strong> — Port congestion causing delays. Expected clearance by 8 May.</>, cta: 'View shipments' },
-]
-
 const ALERT_SLIDES = [
   { bg: '#fff3f4', border: '#f5c0c8', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ed1b36" strokeWidth="2.5" style={{ flexShrink: 0 }}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>, iconColor: '#ed1b36', title: 'Account finlock', desc: 'Pending KYC · shipments may be held.', cta: 'Resolve now', ctaColor: '#ed1b36', titleColor: '#c0001a' },
   { bg: '#f3f0ff', border: '#d4c8f8', icon: <IcoHeadset />, iconColor: '#5b21b6', title: 'Support tickets', desc: '11 need your input · 1 nearing SLA.', cta: 'Respond', ctaColor: '#7c3aed', titleColor: '#5b21b6' },
@@ -293,11 +288,11 @@ function AlertCarousel() {
           </div>
           <a style={{ fontSize: 12, fontWeight: 700, color: a.ctaColor, cursor: 'pointer', fontFamily: font, display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0 }}>{a.cta} <IcoChevR /></a>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: 8 }}>
-          {ALERT_SLIDES.map((_, i) => (
-            <div key={i} onClick={() => setIdx(i)} style={{ width: i === idx ? 16 : 6, height: 6, borderRadius: 999, background: i === idx ? a.ctaColor : '#d0d5e0', cursor: 'pointer', transition: 'all 300ms' }} />
-          ))}
-        </div>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: 6 }}>
+        {ALERT_SLIDES.map((_, i) => (
+          <div key={i} onClick={() => setIdx(i)} style={{ width: i === idx ? 16 : 6, height: 6, borderRadius: 999, background: i === idx ? a.ctaColor : '#d0d5e0', cursor: 'pointer', transition: 'all 300ms' }} />
+        ))}
       </div>
     </div>
   )
@@ -345,18 +340,6 @@ export default function B2BContent() {
 
           {/* LEFT */}
           <div>
-            {/* System banners */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 12 }}>
-              {SYSTEM_BANNERS.map(b => (
-                <div key={b.id} style={{ display: 'flex', alignItems: 'center', gap: 10, background: b.bg, border: `1px solid ${b.border}`, borderRadius: 7, padding: '8px 14px' }}>
-                  <div style={{ width: 7, height: 7, borderRadius: '50%', background: b.dot, flexShrink: 0 }} />
-                  <span style={{ fontSize: 12, color: '#454545', fontFamily: font, flex: 1 }}>{b.text}</span>
-                  <button style={{ fontSize: 12, fontWeight: 600, color: '#454545', background: '#fff', border: '1px solid #d0d5e0', borderRadius: 5, padding: '3px 10px', cursor: 'pointer', fontFamily: font, whiteSpace: 'nowrap' }}>{b.cta}</button>
-                  <span style={{ color: '#c8c8c8', cursor: 'pointer', fontSize: 16, lineHeight: 1, flexShrink: 0 }}>×</span>
-                </div>
-              ))}
-            </div>
-
             {/* Finlock carousel */}
             <AlertCarousel />
 
