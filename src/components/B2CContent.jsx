@@ -1271,6 +1271,34 @@ export default function B2CContent({ role = 'owner' }) {
         {!isSupport && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
 
+            {/* Support card (permanent) */}
+            <div style={{ background: '#fff', border: '1px solid #e8e8e8', borderRadius: 12, padding: '16px 18px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <div style={{ width: 28, height: 28, borderRadius: 6, background: '#f3f0ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <IcoHeadset />
+                </div>
+                <span style={{ fontSize: 13, fontWeight: 600, color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>Support</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {[
+                  { count: 11, label: 'tickets need your input', cta: 'Respond', ctaColor: '#ed1b36' },
+                  { count: 3, label: 'nearing SLA breach', cta: 'Review', ctaColor: '#e07230' },
+                ].map((item, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f9f9fb', borderRadius: 7, padding: '8px 12px' }}>
+                    <span style={{ fontSize: 12, fontFamily: '"Noto Sans", sans-serif', color: '#454545' }}>
+                      <strong style={{ color: '#1a1a1a' }}>{item.count}</strong> {item.label}
+                    </span>
+                    <a style={{ fontSize: 12, fontWeight: 600, color: item.ctaColor, cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>{item.cta} →</a>
+                  </div>
+                ))}
+              </div>
+              <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+                <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'none', border: '1px solid #e6e6e6', borderRadius: 6, padding: '7px 0', fontSize: 12, fontWeight: 500, color: '#343c51', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>
+                  <span style={{ color: '#7C3AED' }}><IcoSpark /></span>Ask SmartAssist
+                </button>
+              </div>
+            </div>
+
             {/* Wallet */}
             <div style={{ background: '#fff', border: '1px solid #e8e8e8', borderRadius: 12, padding: '16px 18px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
@@ -1362,34 +1390,6 @@ export default function B2CContent({ role = 'owner' }) {
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#c8c8c8" strokeWidth="2.5" style={{ flexShrink: 0 }}><path d="M9 18l6-6-6-6"/></svg>
                   </div>
                 ))}
-              </div>
-            </div>
-
-            {/* Support card (permanent) */}
-            <div style={{ background: '#fff', border: '1px solid #e8e8e8', borderRadius: 12, padding: '16px 18px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                <div style={{ width: 28, height: 28, borderRadius: 6, background: '#f3f0ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <IcoHeadset />
-                </div>
-                <span style={{ fontSize: 13, fontWeight: 600, color: '#2b2b2b', fontFamily: '"Noto Sans", sans-serif' }}>Support</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {[
-                  { count: 11, label: 'tickets need your input', cta: 'Respond', ctaColor: '#ed1b36' },
-                  { count: 3, label: 'nearing SLA breach', cta: 'Review', ctaColor: '#e07230' },
-                ].map((item, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f9f9fb', borderRadius: 7, padding: '8px 12px' }}>
-                    <span style={{ fontSize: 12, fontFamily: '"Noto Sans", sans-serif', color: '#454545' }}>
-                      <strong style={{ color: '#1a1a1a' }}>{item.count}</strong> {item.label}
-                    </span>
-                    <a style={{ fontSize: 12, fontWeight: 600, color: item.ctaColor, cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>{item.cta} →</a>
-                  </div>
-                ))}
-              </div>
-              <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-                <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: 'none', border: '1px solid #e6e6e6', borderRadius: 6, padding: '7px 0', fontSize: 12, fontWeight: 500, color: '#343c51', cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif' }}>
-                  <span style={{ color: '#7C3AED' }}><IcoSpark /></span>Ask SmartAssist
-                </button>
               </div>
             </div>
 
