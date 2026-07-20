@@ -3,6 +3,7 @@ import Sidebar from './components/Sidebar'
 import TopBar from './components/TopBar'
 import B2CContent from './components/B2CContent'
 import B2BContent from './components/B2BContent'
+import IntlContent from './components/IntlContent'
 
 export default function App() {
   const [persona, setPersona] = useState('all')
@@ -15,7 +16,9 @@ export default function App() {
         <TopBar activeService={service} onServiceChange={setService} />
         {service === 'b2b'
           ? <B2BContent />
-          : <B2CContent role={persona === 'support' ? 'support' : 'owner'} />
+          : service === 'intl'
+            ? <IntlContent />
+            : <B2CContent role={persona === 'support' ? 'support' : 'owner'} />
         }
       </div>
     </div>
