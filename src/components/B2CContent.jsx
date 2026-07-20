@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button, Badge, Chip, Alert, Card, Pill, ProgressBar, FilterDropdown, Divider, TabGroup, TabCell, TableHeaderCell, TableTextCell } from '@delhivery/tarmac'
 
 // ── Inline SVG icons (Tarmac icon set style) ──────────────────────────────────
@@ -1101,28 +1101,35 @@ function OrdersSummary2() {
 }
 
 // ── Alert carousel (finlock + support tickets) ────────────────────────────────
+const B2C_ALERT_SLIDES = [
+  { bg: '#fff3f4', border: '#f5c0c8', iconColor: '#ed1b36', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ed1b36" strokeWidth="2.5" style={{ flexShrink: 0 }}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>, title: 'Account finlock', titleColor: '#c0001a', desc: 'Pending KYC · shipments may be held.', cta: 'Resolve now', ctaColor: '#ed1b36' },
+  { bg: '#f3f0ff', border: '#d4c8f8', iconColor: '#5b21b6', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5b21b6" strokeWidth="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3z"/><path d="M3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg>, title: 'Support tickets', titleColor: '#5b21b6', desc: '11 need your input · 1 nearing SLA.', cta: 'Respond', ctaColor: '#7c3aed' },
+]
+
 function AlertCarousel() {
   const [idx, setIdx] = useState(0)
-  const alerts = [
-    { bg: '#fff3f4', border: '#f5c0c8', iconColor: '#ed1b36', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ed1b36" strokeWidth="2.5" style={{ flexShrink: 0 }}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>, title: 'Account finlock', titleColor: '#c0001a', desc: 'Pending KYC · shipments may be held.', cta: 'Resolve now', ctaColor: '#ed1b36' },
-    { bg: '#f3f0ff', border: '#d4c8f8', iconColor: '#5b21b6', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5b21b6" strokeWidth="2"><path d="M3 18v-6a9 9 0 0118 0v6"/><path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3z"/><path d="M3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"/></svg>, title: 'Support tickets', titleColor: '#5b21b6', desc: '11 need your input · 1 nearing SLA.', cta: 'Respond', ctaColor: '#7c3aed' },
-  ]
-  const a = alerts[idx]
+
+  useEffect(() => {
+    const t = setInterval(() => setIdx(i => (i + 1) % B2C_ALERT_SLIDES.length), 4000)
+    return () => clearInterval(t)
+  }, [])
+
+  const a = B2C_ALERT_SLIDES[idx]
   return (
     <div style={{ marginBottom: 12 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: a.bg, border: `1px solid ${a.border}`, borderRadius: 8, padding: '9px 16px', gap: 12 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
-          {a.icon}
-          <span style={{ fontSize: 13, fontWeight: 600, color: a.titleColor, fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>{a.title}</span>
-          <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>{a.desc}</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-          <a style={{ fontSize: 12, fontWeight: 700, color: a.ctaColor, cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 3 }}>{a.cta} <IcoChevR /></a>
-          <div style={{ display: 'flex', gap: 5, marginLeft: 4 }}>
-            {alerts.map((_, i) => (
-              <div key={i} onClick={() => setIdx(i)} style={{ width: 6, height: 6, borderRadius: '50%', background: i === idx ? '#454545' : '#d0d5e0', cursor: 'pointer', transition: 'background 150ms' }} />
-            ))}
+      <div style={{ background: a.bg, border: `1px solid ${a.border}`, borderRadius: 8, padding: '9px 16px', transition: 'background 300ms, border-color 300ms' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+            {a.icon}
+            <span style={{ fontSize: 13, fontWeight: 600, color: a.titleColor, fontFamily: '"Noto Sans", sans-serif', whiteSpace: 'nowrap' }}>{a.title}</span>
+            <span style={{ fontSize: 12, color: '#454545', fontFamily: '"Noto Sans", sans-serif' }}>{a.desc}</span>
           </div>
+          <a style={{ fontSize: 12, fontWeight: 700, color: a.ctaColor, cursor: 'pointer', fontFamily: '"Noto Sans", sans-serif', display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0 }}>{a.cta} <IcoChevR /></a>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: 8 }}>
+          {B2C_ALERT_SLIDES.map((_, i) => (
+            <div key={i} onClick={() => setIdx(i)} style={{ width: i === idx ? 16 : 6, height: 6, borderRadius: 999, background: i === idx ? a.ctaColor : '#d0d5e0', cursor: 'pointer', transition: 'all 300ms' }} />
+          ))}
         </div>
       </div>
     </div>

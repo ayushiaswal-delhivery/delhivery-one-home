@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button, Badge, Card, Divider } from '@delhivery/tarmac'
 
 const font = '"Noto Sans", sans-serif'
@@ -253,28 +253,35 @@ const SYSTEM_BANNERS = [
   { id: 'hub', dot: '#2396fb', bg: '#f0f8ff', border: '#bfdbfe', text: <><strong>38 shipments stuck at Mumbai hub</strong> — Port congestion causing delays. Expected clearance by 8 May.</>, cta: 'View shipments' },
 ]
 
+const ALERT_SLIDES = [
+  { bg: '#fff3f4', border: '#f5c0c8', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ed1b36" strokeWidth="2.5" style={{ flexShrink: 0 }}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>, iconColor: '#ed1b36', title: 'Account finlock', desc: 'Pending KYC · shipments may be held.', cta: 'Resolve now', ctaColor: '#ed1b36', titleColor: '#c0001a' },
+  { bg: '#f3f0ff', border: '#d4c8f8', icon: <IcoHeadset />, iconColor: '#5b21b6', title: 'Support tickets', desc: '11 need your input · 1 nearing SLA.', cta: 'Respond', ctaColor: '#7c3aed', titleColor: '#5b21b6' },
+]
+
 function AlertCarousel() {
   const [idx, setIdx] = useState(0)
-  const alerts = [
-    { bg: '#fff3f4', border: '#f5c0c8', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ed1b36" strokeWidth="2.5" style={{ flexShrink: 0 }}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>, iconColor: '#ed1b36', title: 'Account finlock', desc: 'Pending KYC · shipments may be held.', cta: 'Resolve now', ctaColor: '#ed1b36', titleColor: '#c0001a' },
-    { bg: '#f3f0ff', border: '#d4c8f8', icon: <IcoHeadset />, iconColor: '#5b21b6', title: 'Support tickets', desc: '11 need your input · 1 nearing SLA.', cta: 'Respond', ctaColor: '#7c3aed', titleColor: '#5b21b6' },
-  ]
-  const a = alerts[idx]
+
+  useEffect(() => {
+    const t = setInterval(() => setIdx(i => (i + 1) % ALERT_SLIDES.length), 4000)
+    return () => clearInterval(t)
+  }, [])
+
+  const a = ALERT_SLIDES[idx]
   return (
     <div style={{ marginBottom: 12 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: a.bg, border: `1px solid ${a.border}`, borderRadius: 8, padding: '9px 16px', gap: 12 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
-          <span style={{ color: a.iconColor, display: 'flex' }}>{a.icon}</span>
-          <span style={{ fontSize: 13, fontWeight: 600, color: a.titleColor, fontFamily: font, whiteSpace: 'nowrap' }}>{a.title}</span>
-          <span style={{ fontSize: 12, color: '#454545', fontFamily: font }}>{a.desc}</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-          <a style={{ fontSize: 12, fontWeight: 700, color: a.ctaColor, cursor: 'pointer', fontFamily: font, display: 'flex', alignItems: 'center', gap: 3 }}>{a.cta} <IcoChevR /></a>
-          <div style={{ display: 'flex', gap: 5, marginLeft: 4 }}>
-            {alerts.map((_, i) => (
-              <div key={i} onClick={() => setIdx(i)} style={{ width: 6, height: 6, borderRadius: '50%', background: i === idx ? '#454545' : '#d0d5e0', cursor: 'pointer', transition: 'background 150ms' }} />
-            ))}
+      <div style={{ background: a.bg, border: `1px solid ${a.border}`, borderRadius: 8, padding: '9px 16px', transition: 'background 300ms, border-color 300ms' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+            <span style={{ color: a.iconColor, display: 'flex' }}>{a.icon}</span>
+            <span style={{ fontSize: 13, fontWeight: 600, color: a.titleColor, fontFamily: font, whiteSpace: 'nowrap' }}>{a.title}</span>
+            <span style={{ fontSize: 12, color: '#454545', fontFamily: font }}>{a.desc}</span>
           </div>
+          <a style={{ fontSize: 12, fontWeight: 700, color: a.ctaColor, cursor: 'pointer', fontFamily: font, display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0 }}>{a.cta} <IcoChevR /></a>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginTop: 8 }}>
+          {ALERT_SLIDES.map((_, i) => (
+            <div key={i} onClick={() => setIdx(i)} style={{ width: i === idx ? 16 : 6, height: 6, borderRadius: 999, background: i === idx ? a.ctaColor : '#d0d5e0', cursor: 'pointer', transition: 'all 300ms' }} />
+          ))}
         </div>
       </div>
     </div>
